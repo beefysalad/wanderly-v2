@@ -9,3 +9,7 @@ apps/web/.clerk
 apps/api/dist
 apps/api/generated
 apps/api/src/generated
+apps/mobile/.expo
+apps/mobile/ios
+apps/mobile/android
+apps/mobile/node_modules

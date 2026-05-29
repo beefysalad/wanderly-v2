@@ -3,6 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "dependencies": {
+    "@workspace/shared": "*",
     "@expo/ui": "~56.0.15",
     "expo": "~56.0.7",
     "expo-constants": "~56.0.16",
@@ -34,12 +35,16 @@
     "typescript": "~6.0.3"
   },
   "scripts": {
+    "dev": "expo start",
     "start": "expo start",
-    "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "build": "echo 'Use EAS: eas build'",
+    "lint": "expo lint",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json}\"",
+    "typecheck": "tsc --noEmit",
+    "reset-project": "node ./scripts/reset-project.js"
   },
   "private": true
 }
