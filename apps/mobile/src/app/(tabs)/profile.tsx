@@ -2,14 +2,11 @@ import { useAuth } from "@clerk/expo"
 import { useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "expo-router"
 import { useState } from "react"
-import {
-  ActivityIndicator,
-  Alert,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native"
+import { Alert, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
+
+import { Button } from "@/components/ui/button"
+import { Text } from "@/components/ui/text"
 
 // Placeholder — will be built out in a later ticket
 export default function ProfileScreen() {
@@ -44,21 +41,14 @@ export default function ProfileScreen() {
             Account settings coming soon
           </Text>
         </View>
-        <TouchableOpacity
-          activeOpacity={0.85}
-          className="mt-2 min-h-12 w-full max-w-sm items-center justify-center rounded-xl bg-zinc-900 px-5 py-3 dark:bg-white"
-          disabled={isSigningOut}
+        <Button
+          className="mt-2 w-full max-w-sm"
+          loading={isSigningOut}
           onPress={handleSignOut}
-          style={{ opacity: isSigningOut ? 0.65 : 1 }}
+          variant="default"
         >
-          {isSigningOut ? (
-            <ActivityIndicator color="#208AEF" />
-          ) : (
-            <Text className="text-base font-bold text-white dark:text-zinc-950">
-              Log out
-            </Text>
-          )}
-        </TouchableOpacity>
+          <Text>Log out</Text>
+        </Button>
       </View>
     </SafeAreaView>
   )

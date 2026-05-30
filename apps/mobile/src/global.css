@@ -2,12 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --font-display:
-    Spline Sans, Inter, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,
-    Segoe UI Symbol, Noto Color Emoji;
-  --font-mono:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
-  --font-rounded: 'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif;
-  --font-serif: Georgia, 'Times New Roman', serif;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 12%;
+    --primary: 207 86% 53%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 208 100% 96%;
+    --secondary-foreground: 207 80% 24%;
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 21 100% 62%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 207 86% 53%;
+    --radius: 0.875rem;
+    --font-display:
+      Spline Sans, Inter, ui-sans-serif, system-ui, sans-serif,
+      Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    --font-mono:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono,
+      Courier New, monospace;
+    --font-rounded:
+      "SF Pro Rounded", "Hiragino Maru Gothic ProN", Meiryo, "MS PGothic",
+      sans-serif;
+    --font-serif: Georgia, "Times New Roman", serif;
+  }
+
+  .dark:root {
+    --background: 240 10% 4%;
+    --foreground: 0 0% 98%;
+    --card: 240 6% 10%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 6% 10%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 207 86% 57%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 207 49% 15%;
+    --secondary-foreground: 208 100% 94%;
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 65%;
+    --accent: 21 92% 60%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 207 86% 57%;
+  }
 }

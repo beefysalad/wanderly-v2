@@ -1,24 +1,22 @@
-import { useSignIn } from '@clerk/expo';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'expo-router';
-import { Controller, useForm } from 'react-hook-form';
-import {
-  ActivityIndicator,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { useState } from 'react';
+import { useSignIn } from "@clerk/expo"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "expo-router"
+import { Controller, useForm } from "react-hook-form"
+import { TouchableOpacity, View } from "react-native"
+import { useState } from "react"
 
-import { signInSchema, type SignInValues } from '@/lib/validations/auth';
-import { OAuthButtons } from '@/components/auth/oauth-buttons';
+import { OAuthButtons } from "@/components/auth/oauth-buttons"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
+import { Text } from "@/components/ui/text"
+import { signInSchema, type SignInValues } from "@/lib/validations/auth"
 
 export function SignInForm() {
-  const { signIn } = useSignIn();
-  const router = useRouter();
-  const [serverError, setServerError] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const { signIn } = useSignIn()
+  const router = useRouter()
+  const [serverError, setServerError] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
 
   const {
     control,
@@ -26,20 +24,22 @@ export function SignInForm() {
     formState: { errors, isSubmitting },
   } = useForm<SignInValues>({
     resolver: zodResolver(signInSchema),
-  });
+  })
 
   async function onSubmit(values: SignInValues) {
-    setServerError('');
+    setServerError("")
     try {
-      const r1 = await signIn.create({ identifier: values.email });
-      if (r1.error) throw r1.error;
-      const r2 = await signIn.password({ password: values.password });
-      if (r2.error) throw r2.error;
-      const r3 = await signIn.finalize();
-      if (r3.error) throw r3.error;
+      const r1 = await signIn.create({ identifier: values.email })
+      if (r1.error) throw r1.error
+      const r2 = await signIn.password({ password: values.password })
+      if (r2.error) throw r2.error
+      const r3 = await signIn.finalize()
+      if (r3.error) throw r3.error
     } catch (err: unknown) {
-      const e = err as { message?: string; longMessage?: string } | null;
-      setServerError(e?.longMessage ?? e?.message ?? 'Sign in failed. Try again.');
+      const e = err as { message?: string; longMessage?: string } | null
+      setServerError(
+        e?.longMessage ?? e?.message ?? "Sign in failed. Try again."
+      )
     }
   }
 
@@ -54,10 +54,8 @@ export function SignInForm() {
           control={control}
           name="email"
           render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              className="rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3.5 text-base text-zinc-900 dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
+            <Input
               placeholder="you@example.com"
-              placeholderTextColor="#a1a1aa"
               autoCapitalize="none"
               keyboardType="email-address"
               autoComplete="email"
@@ -69,7 +67,9 @@ export function SignInForm() {
           )}
         />
         {errors.email && (
-          <Text className="text-xs font-medium text-red-500">{errors.email.message}</Text>
+          <Text className="text-xs font-medium text-red-500">
+            {errors.email.message}
+          </Text>
         )}
       </View>
 
@@ -79,9 +79,12 @@ export function SignInForm() {
           <Text className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
             Password
           </Text>
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)} hitSlop={8}>
+          <TouchableOpacity
+            onPress={() => setShowPassword(!showPassword)}
+            hitSlop={8}
+          >
             <Text className="text-sm font-medium text-primary">
-              {showPassword ? 'Hide' : 'Show'}
+              {showPassword ? "Hide" : "Show"}
             </Text>
           </TouchableOpacity>
         </View>
@@ -89,10 +92,8 @@ export function SignInForm() {
           control={control}
           name="password"
           render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              className="rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-3.5 text-base text-zinc-900 dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
+            <Input
               placeholder="Your password"
-              placeholderTextColor="#a1a1aa"
               secureTextEntry={!showPassword}
               autoComplete="password"
               textContentType="password"
@@ -103,39 +104,33 @@ export function SignInForm() {
           )}
         />
         {errors.password && (
-          <Text className="text-xs font-medium text-red-500">{errors.password.message}</Text>
+          <Text className="text-xs font-medium text-red-500">
+            {errors.password.message}
+          </Text>
         )}
       </View>
 
       {/* Server error */}
       {serverError ? (
         <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-900/20">
-          <Text className="text-sm text-red-600 dark:text-red-400">{serverError}</Text>
+          <Text className="text-sm text-red-600 dark:text-red-400">
+            {serverError}
+          </Text>
         </View>
       ) : null}
 
       {/* Sign in button */}
-      <TouchableOpacity
-        onPress={handleSubmit(onSubmit)}
-        disabled={isSubmitting}
-        className="items-center justify-center rounded-xl bg-primary py-4"
-        activeOpacity={0.85}
-        style={{ opacity: isSubmitting ? 0.7 : 1 }}
-      >
-        {isSubmitting ? (
-          <ActivityIndicator color="white" />
-        ) : (
-          <Text className="text-base font-bold text-white">Sign In</Text>
-        )}
-      </TouchableOpacity>
+      <Button onPress={handleSubmit(onSubmit)} loading={isSubmitting} size="lg">
+        <Text>Sign In</Text>
+      </Button>
 
       {/* Divider */}
       <View className="flex-row items-center gap-4">
-        <View className="h-px flex-1 bg-zinc-200 dark:bg-zinc-800" />
+        <Separator className="flex-1" />
         <Text className="text-xs font-medium uppercase tracking-wider text-zinc-400">
           or continue with
         </Text>
-        <View className="h-px flex-1 bg-zinc-200 dark:bg-zinc-800" />
+        <Separator className="flex-1" />
       </View>
 
       <OAuthButtons onError={setServerError} />
@@ -145,10 +140,15 @@ export function SignInForm() {
         <Text className="text-sm text-zinc-500 dark:text-zinc-400">
           New to Wanderly?
         </Text>
-        <TouchableOpacity onPress={() => router.replace('/(auth)/sign-up')} hitSlop={8}>
-          <Text className="text-sm font-bold text-primary">Create an account</Text>
+        <TouchableOpacity
+          onPress={() => router.replace("/(auth)/sign-up")}
+          hitSlop={8}
+        >
+          <Text className="text-sm font-bold text-primary">
+            Create an account
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
-  );
+  )
 }

@@ -1,18 +1,20 @@
-import '@/global.css';
+import "@/global.css"
 
-import { ClerkLoaded, ClerkProvider } from '@clerk/expo';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import * as SecureStore from 'expo-secure-store';
-import { Slot } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
+import { ClerkLoaded, ClerkProvider } from "@clerk/expo"
+import { PortalHost } from "@rn-primitives/portal"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import * as SecureStore from "expo-secure-store"
+import { Slot } from "expo-router"
+import { StatusBar } from "expo-status-bar"
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient()
 
 const tokenCache = {
   getToken: (key: string) => SecureStore.getItemAsync(key),
-  saveToken: (key: string, value: string) => SecureStore.setItemAsync(key, value),
+  saveToken: (key: string, value: string) =>
+    SecureStore.setItemAsync(key, value),
   deleteToken: (key: string) => SecureStore.deleteItemAsync(key),
-};
+}
 
 export default function RootLayout() {
   return (
@@ -23,9 +25,10 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <ClerkLoaded>
           <Slot />
+          <PortalHost />
           <StatusBar style="auto" />
         </ClerkLoaded>
       </QueryClientProvider>
     </ClerkProvider>
-  );
+  )
 }
