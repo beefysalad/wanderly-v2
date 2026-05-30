@@ -1,0 +1,7 @@
+interface:
+  display_name: "Wanderly Feature Workflow"
+  short_description: "Stage Wanderly ideas into shipped work"
+  default_prompt: "Use $wanderly-feature-workflow to turn this Wanderly idea into a ticket, spec, implementation plan, verified implementation, and Obsidian knowledge notes."
+
+policy:
+  allow_implicit_invocation: true
