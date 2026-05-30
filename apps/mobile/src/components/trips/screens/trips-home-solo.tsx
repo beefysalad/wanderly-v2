@@ -1,3 +1,4 @@
+import { useUser } from "@clerk/expo"
 import { useRouter } from "expo-router"
 import {
   ArrowRight,
@@ -62,6 +63,9 @@ function CreateTile({
 /** 03 · Trips home — solo lead experience. */
 export function TripsHomeSolo() {
   const router = useRouter()
+  const { user } = useUser()
+  const firstName = user?.firstName ?? user?.fullName ?? "there"
+  const fullName = user?.fullName ?? firstName
 
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-background">
@@ -73,14 +77,14 @@ export function TripsHomeSolo() {
               Sunday, 31 May
             </Text>
             <Text className="mt-px text-2xl font-extrabold tracking-tight text-foreground">
-              Hey, Maya 👋
+              Hey, {firstName} 👋
             </Text>
           </View>
           <View className="flex-row gap-2.5">
             <View className="h-[42px] w-[42px] items-center justify-center rounded-[13px] border border-wl-border bg-wl-surface-2">
               <Icon as={Bell} size={20} className="text-foreground" />
             </View>
-            <GradientAvatar name="Maya Reyes" size={42} i={0} />
+            <GradientAvatar name={fullName} size={42} i={0} />
           </View>
         </View>
 

@@ -16,7 +16,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "@/components/ui/icon"
 import { Text } from "@/components/ui/text"
 
-import { Aurora } from "../ui/aurora"
+import { AccentFill } from "../ui/accent-fill"
 import { DayPill } from "../ui/day-pill"
 import { ItineraryItem } from "../ui/itinerary-item"
 import { OverlayIconButton } from "../ui/overlay-icon-button"
@@ -138,7 +138,7 @@ export function TripDetailSolo() {
       <Pressable
         style={{
           bottom: insets.bottom + 24,
-          shadowColor: "#7C6BFF",
+          shadowColor: "#FF6B5B",
           shadowOpacity: 0.5,
           shadowRadius: 16,
           shadowOffset: { width: 0, height: 10 },
@@ -146,7 +146,7 @@ export function TripDetailSolo() {
         }}
         className="absolute right-5 z-20"
       >
-        <Aurora
+        <AccentFill
           style={{
             width: 56,
             height: 56,
@@ -158,7 +158,7 @@ export function TripDetailSolo() {
           }}
         >
           <Icon as={Plus} size={26} className="text-white" />
-        </Aurora>
+        </AccentFill>
       </Pressable>
     </View>
   )

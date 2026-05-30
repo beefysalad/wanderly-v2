@@ -3,7 +3,7 @@ import { View } from "react-native"
 
 import { Icon } from "@/components/ui/icon"
 
-import { Aurora } from "./aurora"
+import { AccentFill } from "./accent-fill"
 
 type BrandMarkProps = {
   size?: number
@@ -12,7 +12,7 @@ type BrandMarkProps = {
 /** The Wanderly brand mark: an aurora-filled rounded square with a compass. */
 function BrandMark({ size = 40 }: BrandMarkProps) {
   return (
-    <Aurora
+    <AccentFill
       style={{
         width: size,
         height: size,
@@ -24,7 +24,7 @@ function BrandMark({ size = 40 }: BrandMarkProps) {
       }}
     >
       <Icon as={Compass} size={size * 0.56} className="text-white" />
-    </Aurora>
+    </AccentFill>
   )
 }
 

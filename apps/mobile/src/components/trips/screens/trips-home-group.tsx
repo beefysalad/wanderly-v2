@@ -1,3 +1,4 @@
+import { useUser } from "@clerk/expo"
 import { useRouter } from "expo-router"
 import {
   Bell,
@@ -29,6 +30,9 @@ const CREW = ["Jan Cruz", "Bea Lim", "Kiko Tan", "Rey Go"]
 /** 08 · Trips home — group + solo coexisting. Primary Trips tab. */
 export function TripsHomeGroup() {
   const router = useRouter()
+  const { user } = useUser()
+  const firstName = user?.firstName ?? user?.fullName ?? "there"
+  const fullName = user?.fullName ?? firstName
 
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-background">
@@ -40,7 +44,7 @@ export function TripsHomeGroup() {
               Sunday, 31 May
             </Text>
             <Text className="mt-px text-2xl font-extrabold tracking-tight text-foreground">
-              Hey, Maya 👋
+              Hey, {firstName} 👋
             </Text>
           </View>
           <View className="flex-row gap-2.5">
@@ -49,7 +53,7 @@ export function TripsHomeGroup() {
               <View className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full border-2 border-background bg-wl-accent-2" />
             </View>
             <Pressable onPress={() => router.push("/(tabs)/profile")}>
-              <GradientAvatar name="Maya Reyes" size={42} i={0} />
+              <GradientAvatar name={fullName} size={42} i={0} />
             </Pressable>
           </View>
         </View>

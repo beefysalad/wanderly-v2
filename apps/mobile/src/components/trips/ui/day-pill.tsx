@@ -2,7 +2,7 @@ import { View } from "react-native"
 
 import { Text } from "@/components/ui/text"
 
-import { Aurora } from "./aurora"
+import { AccentFill } from "./accent-fill"
 
 type DayPillProps = {
   weekday: string
@@ -37,7 +37,7 @@ function DayPill({ weekday, label, active }: DayPillProps) {
 
   if (active) {
     return (
-      <Aurora
+      <AccentFill
         style={{
           width: 58,
           height: 62,
@@ -48,7 +48,7 @@ function DayPill({ weekday, label, active }: DayPillProps) {
         }}
       >
         {inner}
-      </Aurora>
+      </AccentFill>
     )
   }
 

@@ -52,7 +52,7 @@ export function OnboardingStepName({ onNext, isLoading }: Props) {
         <View
           className="overflow-hidden rounded-2xl border border-white/10 bg-slate-800/50"
           style={{
-            borderColor: nameValue.length > 0 ? "#fbbf24" : undefined,
+            borderColor: nameValue.length > 0 ? "#FF7A6B" : undefined,
           }}
         >
           <Controller
@@ -86,14 +86,14 @@ export function OnboardingStepName({ onNext, isLoading }: Props) {
         {nameValue.length > 0 && (
           <View className="flex-row items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
             <Avatar alt={`${nameValue} avatar`}>
-              <AvatarFallback className="bg-violet-400">
+              <AvatarFallback className="bg-accent">
                 <AvatarFallbackText className="text-slate-950">
                   {nameValue.charAt(0).toUpperCase()}
                 </AvatarFallbackText>
               </AvatarFallback>
             </Avatar>
             <View>
-              <Text className="text-xs font-medium text-violet-300">
+              <Text className="text-xs font-medium text-accent">
                 You'll appear as
               </Text>
               <Text className="text-sm font-bold text-white">{nameValue}</Text>

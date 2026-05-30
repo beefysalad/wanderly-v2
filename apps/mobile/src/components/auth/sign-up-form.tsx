@@ -10,7 +10,6 @@ import { OAuthButtons } from "@/components/auth/oauth-buttons"
 import { Button } from "@/components/ui/button"
 import { Icon } from "@/components/ui/icon"
 import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
 import { Text } from "@/components/ui/text"
 import { signUpSchema, type SignUpValues } from "@/lib/validations/auth"
 
@@ -129,15 +128,15 @@ export function SignUpForm() {
     return (
       <View className="gap-5">
         {/* Email icon + instructions */}
-        <View className="items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-6 py-6">
-          <View className="h-14 w-14 items-center justify-center rounded-full bg-violet-400/10">
-            <Icon as={MailCheck} className="text-violet-300" size={26} />
+        <View className="items-center gap-3 rounded-2xl border border-neutral-200 bg-neutral-50 px-6 py-6">
+          <View className="h-14 w-14 items-center justify-center rounded-full bg-black">
+            <Icon as={MailCheck} className="text-white" size={26} />
           </View>
           <View className="items-center gap-1">
-            <Text className="text-base font-bold text-white">
+            <Text className="text-base font-bold text-black">
               Check your email
             </Text>
-            <Text className="text-center text-sm text-slate-400">
+            <Text className="text-center text-sm text-neutral-500">
               We sent a 6-digit verification code to your email address.
             </Text>
           </View>
@@ -145,11 +144,11 @@ export function SignUpForm() {
 
         {/* Code input */}
         <View className="gap-2">
-          <Text className="text-xs font-bold tracking-wider text-slate-400 uppercase">
+          <Text className="text-xs font-bold uppercase tracking-wider text-neutral-500">
             Verification code
           </Text>
           <Input
-            className="px-4 py-4 text-center text-2xl font-bold tracking-[0.4em]"
+            className="border-neutral-200 bg-neutral-50 px-4 py-4 text-center text-2xl font-bold tracking-[0.4em] text-black"
             placeholder="000000"
             keyboardType="number-pad"
             maxLength={6}
@@ -159,8 +158,8 @@ export function SignUpForm() {
         </View>
 
         {serverError ? (
-          <View className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3">
-            <Text className="text-sm font-medium text-red-300">
+          <View className="rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+            <Text className="text-sm font-medium text-red-700">
               {serverError}
             </Text>
           </View>
@@ -170,10 +169,12 @@ export function SignUpForm() {
           onPress={onVerify}
           disabled={!isLoaded || verifying || verifyCode.length < 6}
           loading={verifying}
+          loadingColor="#FFFFFF"
+          className="rounded-full bg-black"
           size="lg"
           variant="accent"
         >
-          <Text>Verify & Continue</Text>
+          <Text className="text-white">Verify & Continue</Text>
         </Button>
 
         <TouchableOpacity
@@ -181,7 +182,7 @@ export function SignUpForm() {
           className="items-center py-2"
           hitSlop={8}
         >
-          <Text className="text-sm font-medium text-slate-400">
+          <Text className="text-sm font-medium text-neutral-500">
             Use a different email
           </Text>
         </TouchableOpacity>
@@ -193,7 +194,7 @@ export function SignUpForm() {
     <View className="gap-5">
       {/* Email */}
       <View className="gap-2">
-        <Text className="text-xs font-bold text-slate-400 uppercase">
+        <Text className="text-xs font-bold uppercase text-neutral-500">
           Email address
         </Text>
         <Controller
@@ -201,6 +202,7 @@ export function SignUpForm() {
           name="email"
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              className="border-neutral-200 bg-neutral-50 text-black"
               placeholder="you@example.com"
               autoCapitalize="none"
               keyboardType="email-address"
@@ -213,7 +215,7 @@ export function SignUpForm() {
           )}
         />
         {errors.email && (
-          <Text className="text-xs font-medium text-red-500">
+          <Text className="text-xs font-medium text-red-600">
             {errors.email.message}
           </Text>
         )}
@@ -222,14 +224,14 @@ export function SignUpForm() {
       {/* Password */}
       <View className="gap-2">
         <View className="flex-row items-center justify-between">
-          <Text className="text-xs font-bold tracking-wider text-slate-400 uppercase">
+          <Text className="text-xs font-bold uppercase tracking-wider text-neutral-500">
             Password
           </Text>
           <TouchableOpacity
             onPress={() => setShowPassword(!showPassword)}
             hitSlop={8}
           >
-            <Text className="text-sm font-semibold text-violet-300">
+            <Text className="text-sm font-semibold text-black">
               {showPassword ? "Hide" : "Show"}
             </Text>
           </TouchableOpacity>
@@ -239,6 +241,7 @@ export function SignUpForm() {
           name="password"
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              className="border-neutral-200 bg-neutral-50 text-black"
               placeholder="Min. 8 characters"
               secureTextEntry={!showPassword}
               autoComplete="new-password"
@@ -250,15 +253,15 @@ export function SignUpForm() {
           )}
         />
         {errors.password && (
-          <Text className="text-xs font-medium text-red-500">
+          <Text className="text-xs font-medium text-red-600">
             {errors.password.message}
           </Text>
         )}
       </View>
 
       {serverError ? (
-        <View className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3">
-          <Text className="text-sm font-medium text-red-300">
+        <View className="rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+          <Text className="text-sm font-medium text-red-700">
             {serverError}
           </Text>
         </View>
@@ -268,29 +271,25 @@ export function SignUpForm() {
         onPress={handleSubmit(onSubmit)}
         disabled={!isLoaded}
         loading={isSubmitting}
+        loadingColor="#FFFFFF"
+        className="rounded-full bg-black"
         size="lg"
         variant="accent"
       >
-        <Text>Create Account</Text>
+        <Text className="text-white">Create Account</Text>
       </Button>
-
-      <View className="flex-row items-center gap-4">
-        <Separator className="flex-1" />
-        <Text className="text-xs font-medium tracking-wider text-slate-500 uppercase">
-          or continue with
-        </Text>
-        <Separator className="flex-1" />
-      </View>
 
       <OAuthButtons onError={setServerError} />
 
       <View className="flex-row items-center justify-center gap-1 pt-2">
-        <Text className="text-sm text-slate-400">Already have an account?</Text>
+        <Text className="text-sm text-neutral-500">
+          Already have an account?
+        </Text>
         <TouchableOpacity
           onPress={() => router.replace("/(auth)/sign-in")}
           hitSlop={8}
         >
-          <Text className="text-sm font-bold text-violet-300">Sign in</Text>
+          <Text className="text-sm font-bold text-black">Sign in</Text>
         </TouchableOpacity>
       </View>
     </View>

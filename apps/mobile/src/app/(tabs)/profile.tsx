@@ -1,4 +1,4 @@
-import { useAuth } from "@clerk/expo"
+import { useAuth, useUser } from "@clerk/expo"
 import { useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "expo-router"
 import {
@@ -11,7 +11,7 @@ import {
 } from "lucide-react-native"
 import { useState } from "react"
 import { Alert, Pressable, View } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { ThemeToggle } from "@/components/settings/theme-toggle"
 import { GlassCard } from "@/components/trips/ui/glass-card"
@@ -56,7 +56,13 @@ export default function ProfileScreen() {
   const router = useRouter()
   const queryClient = useQueryClient()
   const { signOut } = useAuth()
+  const { user } = useUser()
+  const insets = useSafeAreaInsets()
   const [isSigningOut, setIsSigningOut] = useState(false)
+
+  const displayName =
+    user?.fullName ?? user?.firstName ?? user?.username ?? "You"
+  const email = user?.primaryEmailAddress?.emailAddress ?? ""
 
   async function handleSignOut() {
     setIsSigningOut(true)
@@ -74,16 +80,19 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-background">
       <ScreenGlow />
-      <View className="flex-1 gap-5 px-5 pt-3.5">
+      <View
+        className="flex-1 gap-5 px-5 pt-3.5"
+        style={{ paddingBottom: insets.bottom + 96 }}
+      >
         <View className="flex-row items-center gap-3.5">
-          <GradientAvatar name="Maya Reyes" size={60} i={0} />
+          <GradientAvatar name={displayName} size={60} i={0} />
           <View className="flex-1">
             <Text className="text-xl font-extrabold tracking-tight text-foreground">
-              Maya Reyes
+              {displayName}
             </Text>
-            <Text className="text-[13.5px] text-wl-text-2">
-              mandal.johnpatrickryan@gmail.com
-            </Text>
+            {email !== "" && (
+              <Text className="text-[13.5px] text-wl-text-2">{email}</Text>
+            )}
           </View>
         </View>
 

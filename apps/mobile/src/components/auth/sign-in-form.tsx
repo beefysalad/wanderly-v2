@@ -8,7 +8,6 @@ import { useState } from "react"
 import { OAuthButtons } from "@/components/auth/oauth-buttons"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
 import { Text } from "@/components/ui/text"
 import { signInSchema, type SignInValues } from "@/lib/validations/auth"
 
@@ -81,7 +80,7 @@ export function SignInForm() {
     <View className="gap-5">
       {/* Email */}
       <View className="gap-2">
-        <Text className="text-xs font-bold text-slate-400 uppercase">
+        <Text className="text-xs font-bold uppercase text-neutral-500">
           Email address
         </Text>
         <Controller
@@ -89,6 +88,7 @@ export function SignInForm() {
           name="email"
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              className="border-neutral-200 bg-neutral-50 text-black"
               placeholder="you@example.com"
               autoCapitalize="none"
               keyboardType="email-address"
@@ -101,7 +101,7 @@ export function SignInForm() {
           )}
         />
         {errors.email && (
-          <Text className="text-xs font-medium text-red-500">
+          <Text className="text-xs font-medium text-red-600">
             {errors.email.message}
           </Text>
         )}
@@ -110,14 +110,14 @@ export function SignInForm() {
       {/* Password */}
       <View className="gap-2">
         <View className="flex-row items-center justify-between">
-          <Text className="text-xs font-bold tracking-wider text-slate-400 uppercase">
+          <Text className="text-xs font-bold uppercase tracking-wider text-neutral-500">
             Password
           </Text>
           <TouchableOpacity
             onPress={() => setShowPassword(!showPassword)}
             hitSlop={8}
           >
-            <Text className="text-sm font-semibold text-violet-300">
+            <Text className="text-sm font-semibold text-black">
               {showPassword ? "Hide" : "Show"}
             </Text>
           </TouchableOpacity>
@@ -127,6 +127,7 @@ export function SignInForm() {
           name="password"
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
+              className="border-neutral-200 bg-neutral-50 text-black"
               placeholder="Your password"
               secureTextEntry={!showPassword}
               autoComplete="password"
@@ -138,7 +139,7 @@ export function SignInForm() {
           )}
         />
         {errors.password && (
-          <Text className="text-xs font-medium text-red-500">
+          <Text className="text-xs font-medium text-red-600">
             {errors.password.message}
           </Text>
         )}
@@ -146,8 +147,8 @@ export function SignInForm() {
 
       {/* Server error */}
       {serverError ? (
-        <View className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3">
-          <Text className="text-sm font-medium text-red-300">
+        <View className="rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+          <Text className="text-sm font-medium text-red-700">
             {serverError}
           </Text>
         </View>
@@ -158,31 +159,24 @@ export function SignInForm() {
         onPress={handleSubmit(onSubmit)}
         disabled={!isLoaded}
         loading={isSubmitting}
+        loadingColor="#FFFFFF"
+        className="rounded-full bg-black"
         size="lg"
         variant="accent"
       >
-        <Text>Sign In</Text>
+        <Text className="text-white">Sign In</Text>
       </Button>
-
-      {/* Divider */}
-      <View className="flex-row items-center gap-4">
-        <Separator className="flex-1" />
-        <Text className="text-xs font-medium tracking-wider text-slate-500 uppercase">
-          or continue with
-        </Text>
-        <Separator className="flex-1" />
-      </View>
 
       <OAuthButtons onError={setServerError} />
 
       {/* Sign up link */}
       <View className="flex-row items-center justify-center gap-1 pt-2">
-        <Text className="text-sm text-slate-400">New to Wanderly?</Text>
+        <Text className="text-sm text-neutral-500">New to Wanderly?</Text>
         <TouchableOpacity
           onPress={() => router.replace("/(auth)/sign-up")}
           hitSlop={8}
         >
-          <Text className="text-sm font-bold text-violet-300">
+          <Text className="text-sm font-bold text-black">
             Create an account
           </Text>
         </TouchableOpacity>

@@ -6,7 +6,7 @@ import { Icon } from "@/components/ui/icon"
 import { Text } from "@/components/ui/text"
 import { cn } from "@/lib/utils"
 
-import { Aurora } from "./aurora"
+import { AccentFill } from "./accent-fill"
 
 type TripButtonVariant = "primary" | "solid" | "soft" | "glass" | "ghost"
 type TripButtonSize = "sm" | "md" | "lg"
@@ -94,7 +94,7 @@ function TripButton({
           {
             borderRadius: radius,
             alignSelf: full ? "stretch" : "flex-start",
-            shadowColor: "#7C6BFF",
+            shadowColor: "#FF6B5B",
             shadowOpacity: 0.5,
             shadowRadius: 18,
             shadowOffset: { width: 0, height: 10 },
@@ -104,7 +104,7 @@ function TripButton({
         ]}
         className={className}
       >
-        <Aurora
+        <AccentFill
           style={{
             ...base,
             alignSelf: "stretch",
@@ -113,7 +113,7 @@ function TripButton({
           }}
         >
           {content}
-        </Aurora>
+        </AccentFill>
       </Pressable>
     )
   }

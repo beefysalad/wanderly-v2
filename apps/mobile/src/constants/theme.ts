@@ -28,18 +28,6 @@ export const Colors = {
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 
-/**
- * The "aurora" signature gradient (violet → magenta → coral → peach),
- * reserved for hero moments: the AI generate CTA, the generation orb,
- * primary buttons, the budget balance card. Feed to expo-linear-gradient.
- */
-export const AuroraGradient = {
-  colors: ['#7C6BFF', '#B05CE6', '#FF6B8A', '#FF9A6B'] as const,
-  locations: [0, 0.42, 0.78, 1] as const,
-  start: { x: 0, y: 0 },
-  end: { x: 1, y: 1 },
-};
-
 /** Tinted mesh-gradient "photo" placeholders used for destinations. */
 export const PhotoTones = {
   sunset: ['#FFB36B', '#FF5C8A', '#6B3FA0'],

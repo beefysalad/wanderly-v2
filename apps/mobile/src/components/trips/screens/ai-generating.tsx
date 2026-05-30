@@ -15,7 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { Icon } from "@/components/ui/icon"
 import { Text } from "@/components/ui/text"
 
-import { Aurora } from "../ui/aurora"
+import { AccentFill } from "../ui/accent-fill"
 import { Photo } from "../ui/photo"
 
 type Step = { t: string; done?: boolean; active?: boolean }
@@ -88,10 +88,10 @@ export function AiGenerating() {
             style={glowStyle}
             className="absolute h-[150px] w-[150px] rounded-full"
           >
-            <Aurora style={{ flex: 1, borderRadius: 999 }} />
+            <AccentFill style={{ flex: 1, borderRadius: 999 }} />
           </Animated.View>
           <Animated.View style={orbStyle}>
-            <Aurora
+            <AccentFill
               style={{
                 width: 124,
                 height: 124,
@@ -101,7 +101,7 @@ export function AiGenerating() {
               }}
             >
               <Icon as={Wand2} size={44} className="text-white" />
-            </Aurora>
+            </AccentFill>
           </Animated.View>
           <Animated.View
             style={orbitStyle}

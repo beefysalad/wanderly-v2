@@ -8,14 +8,14 @@ import {
   Wand2,
   type LucideIcon,
 } from "lucide-react-native"
-import { Pressable, View } from "react-native"
+import { Pressable, useColorScheme, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { Icon } from "@/components/ui/icon"
 import { Text } from "@/components/ui/text"
 import { cn } from "@/lib/utils"
 
-import { Aurora } from "./ui/aurora"
+import { AccentFill } from "./ui/accent-fill"
 
 const TAB_META: Record<string, { icon: LucideIcon; label: string }> = {
   index: { icon: Compass, label: "Trips" },
@@ -31,6 +31,7 @@ const TAB_META: Record<string, { icon: LucideIcon; label: string }> = {
 function TripTabBar({ state, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets()
   const router = useRouter()
+  const scheme = useColorScheme()
   const left = state.routes.slice(0, 2)
   const right = state.routes.slice(2)
 
@@ -73,42 +74,58 @@ function TripTabBar({ state, navigation }: BottomTabBarProps) {
     )
   }
 
+  const barBg =
+    scheme === "dark" ? "rgba(18,20,28,0.82)" : "rgba(255,255,255,0.82)"
+
   return (
     <View
-      style={{ paddingBottom: insets.bottom + 8 }}
-      className="absolute inset-x-0 bottom-0 flex-row items-center justify-around border-t border-wl-border bg-background/95 pt-2"
+      pointerEvents="box-none"
+      style={{ paddingBottom: insets.bottom > 0 ? insets.bottom : 14 }}
+      className="absolute inset-x-0 bottom-0"
     >
-      {left.map((route) => renderTab(route, state.routes.indexOf(route)))}
+      <View
+        style={{
+          backgroundColor: barBg,
+          shadowColor: "#000",
+          shadowOpacity: 0.35,
+          shadowRadius: 24,
+          shadowOffset: { width: 0, height: 12 },
+          elevation: 16,
+        }}
+        className="mx-4 flex-row items-center justify-around rounded-[30px] border border-wl-border-2 px-2 py-2.5"
+      >
+        {left.map((route) => renderTab(route, state.routes.indexOf(route)))}
 
-      <View className="w-[60px] items-center">
-        <Pressable
-          onPress={() => router.push("/trips/ai")}
-          style={{
-            marginTop: -26,
-            shadowColor: "#7C6BFF",
-            shadowOpacity: 0.55,
-            shadowRadius: 16,
-            shadowOffset: { width: 0, height: 10 },
-            elevation: 8,
-          }}
-        >
-          <Aurora
+        <View className="w-[60px] items-center">
+          <Pressable
+            onPress={() => router.push("/trips/ai")}
             style={{
-              width: 56,
-              height: 56,
-              borderRadius: 20,
-              alignItems: "center",
-              justifyContent: "center",
-              borderWidth: 1,
-              borderColor: "rgba(255,255,255,0.25)",
+              marginTop: -30,
+              shadowColor: "#FF6B5B",
+              shadowOpacity: 0.55,
+              shadowRadius: 16,
+              shadowOffset: { width: 0, height: 8 },
+              elevation: 8,
             }}
           >
-            <Icon as={Wand2} size={24} className="text-white" />
-          </Aurora>
-        </Pressable>
-      </View>
+            <AccentFill
+              style={{
+                width: 56,
+                height: 56,
+                borderRadius: 19,
+                alignItems: "center",
+                justifyContent: "center",
+                borderWidth: 1,
+                borderColor: "rgba(255,255,255,0.25)",
+              }}
+            >
+              <Icon as={Wand2} size={24} className="text-white" />
+            </AccentFill>
+          </Pressable>
+        </View>
 
-      {right.map((route) => renderTab(route, state.routes.indexOf(route)))}
+        {right.map((route) => renderTab(route, state.routes.indexOf(route)))}
+      </View>
     </View>
   )
 }

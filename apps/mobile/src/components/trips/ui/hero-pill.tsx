@@ -5,7 +5,7 @@ import { View } from "react-native"
 import { Icon } from "@/components/ui/icon"
 import { Text } from "@/components/ui/text"
 
-import { Aurora } from "./aurora"
+import { AccentFill } from "./accent-fill"
 
 type HeroPillProps = {
   children: React.ReactNode
@@ -25,7 +25,7 @@ function HeroPill({ children, icon, tone = "glass" }: HeroPillProps) {
 
   if (tone === "aurora") {
     return (
-      <Aurora
+      <AccentFill
         style={{
           height: 30,
           borderRadius: 999,
@@ -36,7 +36,7 @@ function HeroPill({ children, icon, tone = "glass" }: HeroPillProps) {
         }}
       >
         {label}
-      </Aurora>
+      </AccentFill>
     )
   }
 

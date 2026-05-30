@@ -1,13 +1,11 @@
 import * as Linking from "expo-linking"
 import * as WebBrowser from "expo-web-browser"
 import { useSSO } from "@clerk/expo"
-import { View } from "react-native"
+import { ActivityIndicator, Pressable, View } from "react-native"
 import { useState } from "react"
 
 import { AppleLogo } from "@/components/auth/apple-logo"
-import { Button } from "@/components/ui/button"
 import { GoogleLogo } from "@/components/auth/google-logo"
-import { Text } from "@/components/ui/text"
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -17,12 +15,11 @@ type Props = {
 
 export function OAuthButtons({ onError }: Props) {
   const { startSSOFlow } = useSSO()
-  const [loadingGoogle, setLoadingGoogle] = useState(false)
-  const [loadingApple, setLoadingApple] = useState(false)
+  const [loading, setLoading] = useState<"google" | "apple" | null>(null)
 
   async function handleGoogle() {
     try {
-      setLoadingGoogle(true)
+      setLoading("google")
       const { createdSessionId, setActive } = await startSSOFlow({
         strategy: "oauth_google",
         redirectUrl: Linking.createURL("/"),
@@ -32,13 +29,13 @@ export function OAuthButtons({ onError }: Props) {
     } catch {
       onError?.("Google sign in failed. Please try again.")
     } finally {
-      setLoadingGoogle(false)
+      setLoading(null)
     }
   }
 
   async function handleApple() {
     try {
-      setLoadingApple(true)
+      setLoading("apple")
       const { createdSessionId, setActive } = await startSSOFlow({
         strategy: "oauth_apple",
         redirectUrl: Linking.createURL("/"),
@@ -48,34 +45,37 @@ export function OAuthButtons({ onError }: Props) {
     } catch {
       onError?.("Apple sign in failed. Please try again.")
     } finally {
-      setLoadingApple(false)
+      setLoading(null)
     }
   }
 
   return (
-    <View className="flex-row gap-3">
-      <Button
-        className="flex-1"
+    <View className="flex-row items-center justify-center gap-3">
+      <Pressable
+        accessibilityLabel="Continue with Google"
+        disabled={loading !== null}
         onPress={handleGoogle}
-        loading={loadingGoogle}
-        loadingColor="#208AEF"
-        size="sm"
-        variant="outline"
+        className="h-12 w-12 items-center justify-center rounded-full border border-neutral-200 bg-neutral-50"
       >
-        <GoogleLogo />
-        {/* <Text>Google</Text> */}
-      </Button>
+        {loading === "google" ? (
+          <ActivityIndicator color="#208AEF" />
+        ) : (
+          <GoogleLogo size={20} />
+        )}
+      </Pressable>
 
-      <Button
-        className="flex-1"
+      <Pressable
+        accessibilityLabel="Continue with Apple"
+        disabled={loading !== null}
         onPress={handleApple}
-        loading={loadingApple}
-        size="sm"
-        variant="default"
+        className="h-12 w-12 items-center justify-center rounded-full bg-black"
       >
-        <AppleLogo />
-        {/* <Text>Apple</Text> */}
-      </Button>
+        {loading === "apple" ? (
+          <ActivityIndicator color="#FFFFFF" />
+        ) : (
+          <AppleLogo color="#FFFFFF" size={20} />
+        )}
+      </Pressable>
     </View>
   )
 }

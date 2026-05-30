@@ -14,7 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { Icon } from "@/components/ui/icon"
 import { Text } from "@/components/ui/text"
 
-import { Aurora } from "../ui/aurora"
+import { AccentFill } from "../ui/accent-fill"
 import { GlassCard } from "../ui/glass-card"
 import { GradientAvatar } from "../ui/gradient-avatar"
 import { ScreenGlow } from "../ui/screen-glow"
@@ -67,7 +67,7 @@ export function Budget() {
           contentContainerClassName="px-5 pb-32"
           showsVerticalScrollIndicator={false}
         >
-          <Aurora style={{ borderRadius: 24, padding: 18 }}>
+          <AccentFill style={{ borderRadius: 24, padding: 18 }}>
             <Text className="text-[13px] font-semibold text-white opacity-90">
               You&apos;re owed overall
             </Text>
@@ -79,9 +79,9 @@ export function Budget() {
                 <Icon
                   as={CheckCircle2}
                   size={16}
-                  className="text-[#7C3AED]"
+                  className="text-[#E0533F]"
                 />
-                <Text className="text-sm font-bold text-[#7C3AED]">
+                <Text className="text-sm font-bold text-[#E0533F]">
                   Settle up
                 </Text>
               </Pressable>
@@ -95,7 +95,7 @@ export function Budget() {
                 </Text>
               </Pressable>
             </View>
-          </Aurora>
+          </AccentFill>
 
           <Text className="mb-2.5 mt-4 text-[14.5px] font-bold text-foreground">
             Who owes whom
@@ -152,7 +152,7 @@ export function Budget() {
               </Text>
             </View>
             <View className="mt-2.5 h-[9px] overflow-hidden rounded-md bg-wl-surface-2">
-              <Aurora style={{ width: "61%", height: "100%" }} />
+              <AccentFill style={{ width: "61%", height: "100%" }} />
             </View>
             <View className="mt-3.5 flex-row gap-4">
               {CATEGORIES.map(([label, amount, icon]) => (
