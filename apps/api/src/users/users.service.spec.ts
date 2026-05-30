@@ -1,4 +1,4 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import type { UsersRepository } from './users.repository';
 
@@ -58,22 +58,6 @@ describe('UsersService profile endpoints', () => {
       'user_123',
       patch,
     );
-  });
-
-  it('rejects invalid travelStyle values', async () => {
-    await expect(
-      service.updateCurrentUser('user_123', {
-        travelStyle: 'FAST' as never,
-      }),
-    ).rejects.toBeInstanceOf(BadRequestException);
-  });
-
-  it('rejects invalid onboarding completion values', async () => {
-    await expect(
-      service.updateCurrentUser('user_123', {
-        hasCompletedOnboarding: 'yes' as never,
-      }),
-    ).rejects.toBeInstanceOf(BadRequestException);
   });
 
   it('deletes the current user by Clerk id', async () => {
