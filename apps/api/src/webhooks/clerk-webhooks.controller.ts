@@ -11,38 +11,11 @@ import { Webhook } from 'standardwebhooks';
 import type { RawBodyRequest } from '@nestjs/common';
 import type { Request } from 'express';
 import { UsersRepository } from '../users/users.repository';
-
-type ClerkEmailAddress = {
-  id: string;
-  email_address: string;
-};
-
-type ClerkUserData = {
-  id: string;
-  email_addresses?: ClerkEmailAddress[];
-  first_name?: string | null;
-  image_url?: string | null;
-  last_name?: string | null;
-  primary_email_address_id?: string | null;
-  username?: string | null;
-};
-
-type ClerkDeletedUserData = {
-  id?: string;
-  deleted?: boolean;
-};
-
-type ClerkUserEvent = {
-  data: ClerkUserData;
-  type: 'user.created' | 'user.updated';
-};
-
-type ClerkDeletedUserEvent = {
-  data: ClerkDeletedUserData;
-  type: 'user.deleted';
-};
-
-type ClerkWebhookEvent = ClerkUserEvent | ClerkDeletedUserEvent;
+import {
+  clerkWebhookEventSchema,
+  type ClerkUserData,
+  type ClerkWebhookEvent,
+} from './dto/clerk-webhook-event.dto';
 
 @Controller('webhooks/clerk')
 export class ClerkWebhooksController {
@@ -112,12 +85,24 @@ export class ClerkWebhooksController {
     const payload = request.rawBody ?? JSON.stringify(body);
 
     try {
-      return new Webhook(secret).verify(payload, {
+      const verifiedEvent = new Webhook(secret).verify(payload, {
         'webhook-id': headers['webhook-id'],
         'webhook-timestamp': headers['webhook-timestamp'],
         'webhook-signature': headers['webhook-signature'],
-      }) as ClerkWebhookEvent;
-    } catch {
+      });
+
+      const parsedEvent = clerkWebhookEventSchema.safeParse(verifiedEvent);
+
+      if (!parsedEvent.success) {
+        throw new BadRequestException('Invalid Clerk webhook payload');
+      }
+
+      return parsedEvent.data;
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
       throw new BadRequestException('Invalid Clerk webhook signature');
     }
   }

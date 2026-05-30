@@ -1,6 +1,5 @@
 import { existsSync } from 'node:fs';
 
-import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
@@ -11,12 +10,6 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule, { rawBody: true });
   const corsOrigin = process.env.CORS_ORIGIN;
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-    }),
-  );
 
   if (corsOrigin) {
     app.enableCors({

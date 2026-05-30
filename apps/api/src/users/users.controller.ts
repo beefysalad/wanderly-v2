@@ -19,7 +19,11 @@ import {
   type CurrentUser as CurrentUserPayload,
 } from '../common/decorators/current-user.decorator';
 import { ClerkGuard } from '../common/guards/clerk.guard';
-import { UpdateUserProfileDto } from './dto/update-user-profile.dto';
+import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
+import {
+  updateUserProfileSchema,
+  type UpdateUserProfileDto,
+} from './dto/update-user-profile.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -44,7 +48,8 @@ export class UsersController {
   @Patch('me')
   updateCurrentUser(
     @CurrentUser() currentUser: CurrentUserPayload,
-    @Body() input: UpdateUserProfileDto,
+    @Body(new ZodValidationPipe(updateUserProfileSchema))
+    input: UpdateUserProfileDto,
   ): Promise<UserProfile> {
     return this.usersService.updateCurrentUser(currentUser.clerkId, input);
   }

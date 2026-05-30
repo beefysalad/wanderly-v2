@@ -7,13 +7,10 @@ import { createClerkClient } from '@clerk/backend';
 import type {
   CurrentUserResponse,
   GetAllUsersResponse,
-  TravelStyle,
   UpdateUserProfileRequest,
   UserProfile,
 } from '@workspace/shared';
 import { UsersRepository } from './users.repository';
-
-const travelStyles = new Set<TravelStyle>(['BUDGET', 'MID_RANGE', 'LUXURY']);
 
 @Injectable()
 export class UsersService {
@@ -68,8 +65,6 @@ export class UsersService {
     clerkId: string,
     input: UpdateUserProfileRequest,
   ): Promise<UserProfile> {
-    this.validateUpdateProfileInput(input);
-
     const user = await this.usersRepository.updateProfileByClerkId(
       clerkId,
       input,
@@ -84,22 +79,5 @@ export class UsersService {
 
   async deleteCurrentUser(clerkId: string): Promise<void> {
     await this.usersRepository.deleteByClerkId(clerkId);
-  }
-
-  private validateUpdateProfileInput(input: UpdateUserProfileRequest): void {
-    if (
-      input.travelStyle !== undefined &&
-      !travelStyles.has(input.travelStyle)
-    ) {
-      throw new BadRequestException('Invalid travelStyle');
-    }
-
-    if (
-      input.interests !== undefined &&
-      (!Array.isArray(input.interests) ||
-        input.interests.some((interest) => typeof interest !== 'string'))
-    ) {
-      throw new BadRequestException('interests must be an array of strings');
-    }
   }
 }

@@ -1,4 +1,4 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import type { UsersRepository } from './users.repository';
 
@@ -12,6 +12,7 @@ describe('UsersService profile endpoints', () => {
     bio: null,
     travelStyle: 'BUDGET' as const,
     interests: [],
+    hasCompletedOnboarding: false,
   };
 
   let usersRepository: jest.Mocked<
@@ -46,6 +47,7 @@ describe('UsersService profile endpoints', () => {
   it('updates only provided profile fields', async () => {
     const patch = {
       bio: 'Updated',
+      hasCompletedOnboarding: true,
       interests: ['museums'],
     };
 
@@ -56,14 +58,6 @@ describe('UsersService profile endpoints', () => {
       'user_123',
       patch,
     );
-  });
-
-  it('rejects invalid travelStyle values', async () => {
-    await expect(
-      service.updateCurrentUser('user_123', {
-        travelStyle: 'FAST' as never,
-      }),
-    ).rejects.toBeInstanceOf(BadRequestException);
   });
 
   it('deletes the current user by Clerk id', async () => {

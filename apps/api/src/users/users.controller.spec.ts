@@ -16,6 +16,7 @@ describe('UsersController', () => {
     bio: 'Traveler',
     travelStyle: 'BUDGET' as const,
     interests: ['food', 'beaches'],
+    hasCompletedOnboarding: true,
   };
 
   let usersService: jest.Mocked<
