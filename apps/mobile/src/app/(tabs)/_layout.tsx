@@ -1,15 +1,5 @@
-import { Tabs } from 'expo-router';
+import AppTabs from "@/components/app-tabs"
 
 export default function TabsLayout() {
-  return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: '#208AEF',
-      }}
-    >
-      <Tabs.Screen name="index" options={{ title: 'Home' }} />
-      <Tabs.Screen name="profile" options={{ title: 'Profile' }} />
-    </Tabs>
-  );
+  return <AppTabs />
 }
