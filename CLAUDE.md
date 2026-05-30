@@ -4,81 +4,94 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Authoritative Conventions
 
-`AGENTS.md` at the repo root is the primary instruction file for AI agents and contains the full set of repository, frontend, backend, and dependency rules. Read it before non-trivial changes. The notes below summarize what is most useful in day-to-day work and do not replace it.
+`AGENTS.md` at the repo root is the primary instruction file and contains the full ruleset. Read it before non-trivial changes. The notes below are the most important day-to-day rules.
+
+## Commits & PRs (hard rules)
+
+- **Never commit or push without an explicit request.** Do not run `git commit`, `git push`, `git stash`, or any state-changing git operation without being asked in the current turn.
+- **Never include Claude attribution** in commit messages or PR descriptions. No `Co-Authored-By: Claude` trailer. No `🤖 Generated with Claude Code` footer. The user authors all commits.
 
 ## Repository Shape
 
-npm-workspaces monorepo (Node 20+) driven by Turborepo:
+npm-workspaces monorepo driven by Turborepo:
 
-- `apps/web` — Next.js App Router frontend. Routes under `app/`, feature components under `components/`, TanStack Query hooks under `hooks/`, Axios wrappers under `lib/api/`, Zod schemas under `lib/validations/`. Protected routes live under `app/(protected)/**`.
-- `apps/api` — NestJS backend. Feature modules under `src/<feature>/` (e.g. `users`, `inventory`, `webhooks`). Prisma client is generated into `src/generated/`. Uses `@clerk/backend` for auth and Postgres via `@prisma/adapter-pg`.
-- `packages/shared` — shared HTTP contract types imported as `@workspace/shared` (type-only consumption preferred). Do not put runtime app code here.
-- `packages/ui` — shared shadcn/ui components imported as `@workspace/ui` (e.g. `@workspace/ui/components/button`). New shadcn components are added with `npx shadcn@latest add <name> -c apps/web`.
+- `apps/mobile` — Expo React Native (primary product). Expo Router screens under `src/app/`, feature components under `src/components/`, TanStack Query hooks under `src/hooks/`, Axios wrappers under `src/lib/api/`, Zod schemas under `src/lib/validations/`.
+- `apps/api` — NestJS backend. Feature modules under `src/<feature>/`. Prisma client generated into `src/generated/`. Uses `@clerk/backend` for auth and Postgres via `@prisma/adapter-pg`.
+- `apps/web` — Next.js App Router (web dashboard / admin, secondary).
+- `packages/shared` — shared HTTP contract types (`@workspace/shared`). Type-only consumption preferred.
+- `packages/ui` — shared shadcn/ui components (`@workspace/ui`). Web only.
 - `packages/eslint-config`, `packages/typescript-config` — shared tool configs.
-
-Workspace boundaries matter: app code stays in `apps/*`; only genuinely shared UI/contracts move into `packages/*`. Never create nested lockfiles — install from the root.
 
 ## Common Commands
 
-Run from the repo root unless noted.
-
 ```bash
 # Dev
-npm run dev                 # turbo dev across all workspaces
-npm run dev -w web          # frontend only
-npm run dev -w api          # backend only (runs `prisma generate` first)
+npm run dev                  # turbo dev — all workspaces
+npm run dev:mobile           # mobile only (expo start)
+npm run dev:api              # api only
+npm run dev:web              # web only
 
-# Verification (prefer narrowest first)
-npm run typecheck -w web
-npm run build -w web
-npm run build -w api        # runs `prisma generate` then `nest build`
-npm run test -w api         # Jest; tests are `*.spec.ts` under apps/api/src
-npm run test -w api -- <pattern>   # run a single test file/name
+# Mobile
+npm run start -w mobile -- --clear   # clear cache on restart
 
-# Full-repo
+# Verification (narrowest first)
+npm run typecheck -w mobile
+npm run typecheck -w api
+npm run build -w api         # runs prisma generate + nest build
+npm run test -w api          # Jest *.spec.ts
+
+# Full repo
 npm run lint
 npm run typecheck
 npm run build
-npm run format              # turbo format
-npm run prettier            # repo-wide prettier write
 
 # Prisma (api workspace)
 npm run db:generate
-npm run db:migrate:deploy   # do not run unless the user asks
-npm run db:seed
+npm run db:migrate:deploy    # do not run unless user asks
 ```
 
-Do not run `npm install` or Prisma migrations unless the user explicitly asks — instead, tell them the exact command.
+Do not run `npm install` or Prisma migrations unless explicitly asked. Provide the exact command instead.
 
-Installing deps: `npm install <pkg> -w web | -w api | -w @workspace/ui | -w @workspace/shared`; root tooling with `npm install -D <pkg>` at the root.
+Installing deps: `npm install <pkg> -w mobile` · `-w api` · `-w web` · `-w @workspace/shared`; root tooling with `npm install -D <pkg>`.
 
 ## Environment Variables
 
-Templates are committed in `.env.example`, `apps/web/.env.example`, `apps/api/.env.example`. Local files: `apps/web/.env.local`, `apps/api/.env`, and root `.env` for Docker Compose. Browser-exposed vars must be `NEXT_PUBLIC_`-prefixed; backend secrets must never be. Update the matching `.env.example` whenever a new required var is added.
+| File | Purpose |
+|---|---|
+| `.env` | Docker Compose / root |
+| `apps/mobile/.env.local` | Expo mobile (`EXPO_PUBLIC_` prefix required) |
+| `apps/api/.env` | NestJS + Prisma |
+| `apps/web/.env.local` | Next.js web |
 
-`DATABASE_URL` differs by host:
-- Host-run API → `localhost:5433` (Docker Postgres is published on 5433).
-- Inside Docker Compose → hostname `postgres:5432`.
+Always update the matching `.env.example` when adding a required var. Never commit real `.env` files.
 
-## Frontend Patterns (enforced)
+## Mobile Patterns (strictly enforced)
 
-- Forms: React Hook Form + Zod (`apps/web/lib/validations/`).
-- HTTP: shared Axios client at `apps/web/lib/axios.ts`; wrappers in `apps/web/lib/api/`.
-- Server state: TanStack Query hooks in `apps/web/hooks/`; components rendering query data must handle `isPending`/`isLoading` explicitly.
-- UI primitives: prefer `@workspace/ui` shadcn components over native HTML. Don't add a new shadcn component without asking.
-- Always design for both light and dark mode; prefer shared theme tokens over ad hoc tinted utilities (`bg-muted/30`, `bg-green-50`, etc.).
-- Protected pages share an intro pattern: muted eyebrow, `font-heading` title with `text-3xl font-semibold tracking-normal md:text-4xl`, optional muted description.
+**One component per file.** Every component gets its own file. No component defined inside another component's file unless it is a tiny, truly local sub-element (< 20 lines, used nowhere else).
 
-## Backend Patterns (enforced)
+**TanStack Query always in hooks.** Never declare `useQuery`, `useMutation`, or `useInfiniteQuery` inside a screen or component file. Every query and mutation lives in `src/hooks/<domain>/use-<resource>.ts`.
 
-- Thin controllers → injectable services → repository/provider classes for data access. Don't pile features into `app.service.ts`.
-- DTOs for all request shapes; avoid `any`; explicit return types across controller/service/repository boundaries.
-- Prisma calls belong in repositories, business decisions in services.
+**Never call Axios directly in components or screens.** All HTTP calls go through API wrapper functions in `src/lib/api/<domain>.ts`, which screens call via hooks.
+
+**Auth token only through `useAuthedClient()`.** Never call `useAuth().getToken()` directly in a component or hook. Token injection is centralized in `src/lib/auth.ts`.
+
+**Screens stay thin.** `src/app/**/*.tsx` files import and render a feature component. No business logic, no queries, no long JSX trees inline in a screen file.
+
+**Always handle loading, error, and empty states** from TanStack Query before rendering data. Never assume `data` is immediately available.
+
+**NativeWind classes over StyleSheet.** Use Tailwind utility classes via NativeWind. Do not use `StyleSheet.create({})` unless there is a documented reason a class cannot do it.
+
+**Forms use React Hook Form + Zod.** Validation schemas go in `src/lib/validations/`. Never build a form with ad hoc `useState` when RHF is appropriate.
+
+## Backend Patterns (strictly enforced)
+
+Thin controllers → injectable services → repository classes for data access.
+
+- Controllers validate and route only — delegate everything to services.
+- Business logic in services; Prisma calls in repositories.
+- DTOs for all request shapes; avoid `any`; explicit return types at every layer boundary.
+- Private helpers in a class are prefixed with `_` (e.g. `_buildJoinCode`).
 
 ## API Boundary
 
-HTTP request/response types shared by web and api live in `packages/shared` and are imported type-only as `@workspace/shared`. Do not duplicate the same contract types in both apps.
-
-## Docker
-
-`docker compose up --build` brings up `postgres` (host port 5433), `api` (3001), and `web` (3000). The `Dockerfile` has separate `web` and `api` targets. Vercel deploys from source, not these images. Don't remove the `postgres_data` volume unless the user is resetting local DB state.
+HTTP request/response types shared by mobile and api live in `packages/shared` and are imported type-only. Do not duplicate contract types. Do not put app code in `packages/shared`.
