@@ -8,44 +8,14 @@ import {
   Req,
 } from '@nestjs/common';
 import { Webhook } from 'standardwebhooks';
-import { z } from 'zod';
 import type { RawBodyRequest } from '@nestjs/common';
 import type { Request } from 'express';
 import { UsersRepository } from '../users/users.repository';
-
-const clerkEmailAddressSchema = z.object({
-  id: z.string(),
-  email_address: z.string().email(),
-});
-
-const clerkUserDataSchema = z.object({
-  id: z.string(),
-  email_addresses: z.array(clerkEmailAddressSchema).optional(),
-  first_name: z.string().nullable().optional(),
-  image_url: z.string().nullable().optional(),
-  last_name: z.string().nullable().optional(),
-  primary_email_address_id: z.string().nullable().optional(),
-  username: z.string().nullable().optional(),
-});
-
-const clerkDeletedUserDataSchema = z.object({
-  id: z.string().optional(),
-  deleted: z.boolean().optional(),
-});
-
-const clerkWebhookEventSchema = z.discriminatedUnion('type', [
-  z.object({
-    data: clerkUserDataSchema,
-    type: z.enum(['user.created', 'user.updated']),
-  }),
-  z.object({
-    data: clerkDeletedUserDataSchema,
-    type: z.literal('user.deleted'),
-  }),
-]);
-
-type ClerkUserData = z.infer<typeof clerkUserDataSchema>;
-type ClerkWebhookEvent = z.infer<typeof clerkWebhookEventSchema>;
+import {
+  clerkWebhookEventSchema,
+  type ClerkUserData,
+  type ClerkWebhookEvent,
+} from './dto/clerk-webhook-event.dto';
 
 @Controller('webhooks/clerk')
 export class ClerkWebhooksController {
