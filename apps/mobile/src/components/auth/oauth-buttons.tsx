@@ -1,12 +1,12 @@
 import * as Linking from "expo-linking"
 import * as WebBrowser from "expo-web-browser"
 import { useSSO } from "@clerk/expo"
-import { Apple } from "lucide-react-native"
 import { View } from "react-native"
 import { useState } from "react"
 
+import { AppleLogo } from "@/components/auth/apple-logo"
 import { Button } from "@/components/ui/button"
-import { Icon } from "@/components/ui/icon"
+import { GoogleLogo } from "@/components/auth/google-logo"
 import { Text } from "@/components/ui/text"
 
 WebBrowser.maybeCompleteAuthSession()
@@ -53,24 +53,28 @@ export function OAuthButtons({ onError }: Props) {
   }
 
   return (
-    <View className="gap-3">
-      {/* Google */}
+    <View className="flex-row gap-3">
       <Button
+        className="flex-1"
         onPress={handleGoogle}
         loading={loadingGoogle}
         loadingColor="#208AEF"
+        size="sm"
         variant="outline"
       >
-        <View className="h-5 w-5 items-center justify-center rounded-full bg-[#4285F4]">
-          <Text className="text-[10px] font-bold text-white">G</Text>
-        </View>
-        <Text className="text-sm font-semibold">Continue with Google</Text>
+        <GoogleLogo />
+        <Text>Google</Text>
       </Button>
 
-      {/* Apple */}
-      <Button onPress={handleApple} loading={loadingApple} variant="default">
-        <Icon as={Apple} className="text-primary-foreground" size={18} />
-        <Text className="text-sm font-semibold">Continue with Apple</Text>
+      <Button
+        className="flex-1"
+        onPress={handleApple}
+        loading={loadingApple}
+        size="sm"
+        variant="default"
+      >
+        <AppleLogo />
+        <Text>Apple</Text>
       </Button>
     </View>
   )
