@@ -1,4 +1,4 @@
-import { useSignIn } from "@clerk/expo"
+import { useAuth, useSignIn } from "@clerk/expo"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "expo-router"
 import { Controller, useForm } from "react-hook-form"
@@ -13,6 +13,7 @@ import { Text } from "@/components/ui/text"
 import { signInSchema, type SignInValues } from "@/lib/validations/auth"
 
 export function SignInForm() {
+  const { isLoaded } = useAuth()
   const { signIn } = useSignIn()
   const router = useRouter()
   const [serverError, setServerError] = useState("")
@@ -33,18 +34,18 @@ export function SignInForm() {
   async function onSubmit(values: SignInValues) {
     setServerError("")
     try {
-      const createResult = await signIn.create({ identifier: values.email })
-
-      if (createResult.error) {
-        throw createResult.error
+      if (!isLoaded || !signIn) {
+        setServerError("Auth is still loading. Try again.")
+        return
       }
 
-      const passwordResult = await signIn.password({
+      const createResult = await signIn.create({
+        identifier: values.email,
         password: values.password,
       })
 
-      if (passwordResult.error) {
-        throw passwordResult.error
+      if (createResult.error) {
+        throw createResult.error
       }
 
       if (signIn.status !== "complete") {
@@ -155,6 +156,7 @@ export function SignInForm() {
       {/* Sign in button */}
       <Button
         onPress={handleSubmit(onSubmit)}
+        disabled={!isLoaded}
         loading={isSubmitting}
         size="lg"
         variant="accent"

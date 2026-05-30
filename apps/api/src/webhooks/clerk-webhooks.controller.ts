@@ -7,7 +7,7 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
-import { Webhook } from 'standardwebhooks';
+import { verifyWebhook } from '@clerk/backend/webhooks';
 import type { RawBodyRequest } from '@nestjs/common';
 import type { Request } from 'express';
 import { UsersRepository } from '../users/users.repository';
@@ -32,23 +32,25 @@ export class ClerkWebhooksController {
     @Headers('svix-timestamp') svixTimestamp?: string,
     @Headers('svix-signature') svixSignature?: string,
   ): Promise<{ received: true }> {
-    const event = this.verifyWebhookEvent(request, body, {
+    const event = await this.verifyWebhookEvent(request, body, {
       'webhook-id': webhookId ?? svixId,
       'webhook-timestamp': webhookTimestamp ?? svixTimestamp,
       'webhook-signature': webhookSignature ?? svixSignature,
     });
 
     if (event.type === 'user.deleted') {
-      if (event.data.id) {
+      const deletedClerkId = event.data.id;
+
+      if (deletedClerkId) {
         await this.persistWebhookChange(() =>
-          this.usersRepository.deleteByClerkId(event.data.id!),
+          this.usersRepository.deleteByClerkId(deletedClerkId),
         );
       }
 
       return { received: true };
     }
 
-    if (event.type === 'user.created') {
+    if (event.type === 'user.created' || event.type === 'user.updated') {
       await this.persistWebhookChange(() =>
         this.usersRepository.upsertClerkUser(this.toUpsertInput(event.data)),
       );
@@ -57,7 +59,7 @@ export class ClerkWebhooksController {
     return { received: true };
   }
 
-  private verifyWebhookEvent(
+  private async verifyWebhookEvent(
     request: RawBodyRequest<Request>,
     body: unknown,
     headers: {
@@ -65,7 +67,7 @@ export class ClerkWebhooksController {
       'webhook-timestamp'?: string;
       'webhook-signature'?: string;
     },
-  ): ClerkWebhookEvent {
+  ): Promise<ClerkWebhookEvent> {
     const secret =
       process.env.CLERK_WEBHOOK_SIGNING_SECRET ??
       process.env.CLERK_WEBHOOK_SECRET;
@@ -82,14 +84,23 @@ export class ClerkWebhooksController {
       throw new BadRequestException('Missing Clerk webhook signature headers');
     }
 
-    const payload = request.rawBody ?? JSON.stringify(body);
+    const payload = request.rawBody
+      ? new Uint8Array(request.rawBody)
+      : JSON.stringify(body);
 
     try {
-      const verifiedEvent = new Webhook(secret).verify(payload, {
-        'webhook-id': headers['webhook-id'],
-        'webhook-timestamp': headers['webhook-timestamp'],
-        'webhook-signature': headers['webhook-signature'],
-      });
+      const verifiedEvent = await verifyWebhook(
+        new Request('https://wanderly.local/webhooks/clerk', {
+          method: 'POST',
+          headers: {
+            'webhook-id': headers['webhook-id'],
+            'webhook-timestamp': headers['webhook-timestamp'],
+            'webhook-signature': headers['webhook-signature'],
+          },
+          body: payload,
+        }),
+        { signingSecret: secret },
+      );
 
       const parsedEvent = clerkWebhookEventSchema.safeParse(verifiedEvent);
 

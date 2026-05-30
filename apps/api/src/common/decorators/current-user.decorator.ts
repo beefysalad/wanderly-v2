@@ -3,11 +3,12 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
-import type { CurrentUserRequest } from '../guards/clerk.guard';
+import type {
+  AuthenticatedUser,
+  CurrentUserRequest,
+} from '../guards/clerk.guard';
 
-export type CurrentUser = {
-  clerkId: string;
-};
+export type CurrentUser = AuthenticatedUser;
 
 export const CurrentUser = createParamDecorator(
   (_data: unknown, context: ExecutionContext): CurrentUser => {

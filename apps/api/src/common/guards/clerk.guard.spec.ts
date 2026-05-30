@@ -57,7 +57,7 @@ describe('ClerkGuard', () => {
     );
   });
 
-  it('attaches the Clerk subject as currentUser.clerkId', async () => {
+  it('attaches the Clerk subject and default admin access to currentUser', async () => {
     mockVerifyToken.mockResolvedValueOnce({ sub: 'user_123' } as never);
 
     const guard = new ClerkGuard();
@@ -70,6 +70,27 @@ describe('ClerkGuard', () => {
     expect(request).toMatchObject({
       currentUser: {
         clerkId: 'user_123',
+        isAdmin: false,
+      },
+    });
+  });
+
+  it('marks users with an admin Clerk claim as admins', async () => {
+    mockVerifyToken.mockResolvedValueOnce({
+      public_metadata: {
+        role: 'admin',
+      },
+      sub: 'user_123',
+    } as never);
+
+    const guard = new ClerkGuard();
+    const { context, request } = createContext('Bearer valid.jwt');
+
+    await expect(guard.canActivate(context as never)).resolves.toBe(true);
+    expect(request).toMatchObject({
+      currentUser: {
+        clerkId: 'user_123',
+        isAdmin: true,
       },
     });
   });

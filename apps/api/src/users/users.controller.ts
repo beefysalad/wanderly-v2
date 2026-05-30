@@ -31,6 +31,7 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  // Authenticated self-healing fallback for first-session webhook races.
   @Post('me/sync')
   syncCurrentUser(
     @CurrentUser() currentUser: CurrentUserPayload,
@@ -63,7 +64,9 @@ export class UsersController {
   }
 
   @Get('all')
-  async getAllUsers(): Promise<GetAllUsersResponse> {
-    return await this.usersService.getAllUsers();
+  async getAllUsers(
+    @CurrentUser() currentUser: CurrentUserPayload,
+  ): Promise<GetAllUsersResponse> {
+    return await this.usersService.getAllUsers(currentUser);
   }
 }

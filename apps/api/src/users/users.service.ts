@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -10,6 +11,7 @@ import type {
   UpdateUserProfileRequest,
   UserProfile,
 } from '@workspace/shared';
+import type { CurrentUser } from '../common/decorators/current-user.decorator';
 import { UsersRepository } from './users.repository';
 
 @Injectable()
@@ -47,7 +49,11 @@ export class UsersService {
     });
   }
 
-  async getAllUsers(): Promise<GetAllUsersResponse> {
+  async getAllUsers(currentUser: CurrentUser): Promise<GetAllUsersResponse> {
+    if (!currentUser.isAdmin) {
+      throw new ForbiddenException('Admin access is required');
+    }
+
     return await this.usersRepository.getAllUsers();
   }
 

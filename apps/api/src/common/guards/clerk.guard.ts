@@ -7,11 +7,16 @@ import {
 import { verifyToken } from '@clerk/backend';
 import type { Request } from 'express';
 
-export type CurrentUserRequest = Request & {
-  currentUser?: {
-    clerkId: string;
-  };
+export type AuthenticatedUser = {
+  clerkId: string;
+  isAdmin: boolean;
 };
+
+export type CurrentUserRequest = Request & {
+  currentUser?: AuthenticatedUser;
+};
+
+const ADMIN_ROLES = new Set(['admin', 'org:admin']);
 
 function getBearerToken(request: Request): string | null {
   const header = request.headers.authorization;
@@ -27,6 +32,37 @@ function getBearerToken(request: Request): string | null {
   }
 
   return token;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function hasAdminRole(value: unknown): boolean {
+  return typeof value === 'string' && ADMIN_ROLES.has(value);
+}
+
+function hasAdminMetadata(payload: Record<string, unknown>): boolean {
+  const metadataClaims = [
+    payload.metadata,
+    payload.public_metadata,
+    payload.publicMetadata,
+  ];
+
+  return metadataClaims.some(
+    (metadata) =>
+      isRecord(metadata) &&
+      (metadata.admin === true || hasAdminRole(metadata.role)),
+  );
+}
+
+function hasAdminAccess(payload: Record<string, unknown>): boolean {
+  return (
+    payload.admin === true ||
+    hasAdminRole(payload.role) ||
+    hasAdminRole(payload.org_role) ||
+    hasAdminMetadata(payload)
+  );
 }
 
 @Injectable()
@@ -54,6 +90,7 @@ export class ClerkGuard implements CanActivate {
 
       request.currentUser = {
         clerkId: payload.sub,
+        isAdmin: hasAdminAccess(payload),
       };
 
       return true;

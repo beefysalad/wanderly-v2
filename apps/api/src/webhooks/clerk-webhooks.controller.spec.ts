@@ -2,19 +2,20 @@ import {
   BadRequestException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Webhook } from 'standardwebhooks';
+import { verifyWebhook } from '@clerk/backend/webhooks';
 import { ClerkWebhooksController } from './clerk-webhooks.controller';
 import type { UsersRepository } from '../users/users.repository';
 
-const webhookSecret = `whsec_${Buffer.from('unit_test_secret').toString(
-  'base64',
-)}`;
+jest.mock('@clerk/backend/webhooks', () => ({
+  verifyWebhook: jest.fn(),
+}));
 
-function createSignedWebhookRequest(body: unknown) {
+const mockVerifyWebhook = jest.mocked(verifyWebhook);
+const webhookSecret = 'whsec_unit_test_secret';
+
+function createWebhookRequest(body: unknown) {
   const payload = JSON.stringify(body);
   const msgId = 'msg_unit_test';
-  const timestamp = new Date();
-  const signature = new Webhook(webhookSecret).sign(msgId, timestamp, payload);
 
   return {
     request: {
@@ -23,8 +24,8 @@ function createSignedWebhookRequest(body: unknown) {
     body,
     headers: {
       'webhook-id': msgId,
-      'webhook-signature': signature,
-      'webhook-timestamp': Math.floor(timestamp.getTime() / 1000).toString(),
+      'webhook-signature': 'sig_unit_test',
+      'webhook-timestamp': '1700000000',
     },
   };
 }
@@ -40,6 +41,7 @@ describe('ClerkWebhooksController', () => {
   beforeEach(() => {
     process.env.CLERK_WEBHOOK_SECRET = webhookSecret;
     delete process.env.CLERK_WEBHOOK_SIGNING_SECRET;
+    mockVerifyWebhook.mockReset();
 
     usersRepository = {
       deleteByClerkId: jest.fn().mockResolvedValue(undefined),
@@ -62,7 +64,7 @@ describe('ClerkWebhooksController', () => {
   });
 
   it('upserts a User for a valid user.created event', async () => {
-    const { request, body, headers } = createSignedWebhookRequest({
+    const event = {
       type: 'user.created',
       data: {
         id: 'user_123',
@@ -78,7 +80,10 @@ describe('ClerkWebhooksController', () => {
         primary_email_address_id: 'email_1',
         username: null,
       },
-    });
+    };
+    mockVerifyWebhook.mockResolvedValueOnce(event as never);
+
+    const { request, body, headers } = createWebhookRequest(event);
 
     await expect(
       controller.handleClerkWebhook(
@@ -99,17 +104,67 @@ describe('ClerkWebhooksController', () => {
       imageUrl: 'https://example.com/avatar.png',
       name: 'Patrick',
     });
+    expect(mockVerifyWebhook).toHaveBeenCalledWith(expect.anything(), {
+      signingSecret: webhookSecret,
+    });
+    expect(usersRepository.deleteByClerkId).not.toHaveBeenCalled();
+  });
+
+  it('upserts a User for a valid user.updated event', async () => {
+    const event = {
+      type: 'user.updated',
+      data: {
+        id: 'user_123',
+        email_addresses: [
+          {
+            id: 'email_1',
+            email_address: 'updated@example.com',
+          },
+        ],
+        first_name: 'Updated',
+        image_url: null,
+        last_name: 'User',
+        primary_email_address_id: 'email_1',
+        username: null,
+      },
+    };
+    mockVerifyWebhook.mockResolvedValueOnce(event as never);
+
+    const { request, body, headers } = createWebhookRequest(event);
+
+    await expect(
+      controller.handleClerkWebhook(
+        request as never,
+        body,
+        undefined,
+        undefined,
+        undefined,
+        headers['webhook-id'],
+        headers['webhook-timestamp'],
+        headers['webhook-signature'],
+      ),
+    ).resolves.toEqual({ received: true });
+
+    expect(usersRepository.upsertClerkUser).toHaveBeenCalledWith({
+      clerkId: 'user_123',
+      email: 'updated@example.com',
+      imageUrl: null,
+      name: 'Updated User',
+    });
     expect(usersRepository.deleteByClerkId).not.toHaveBeenCalled();
   });
 
   it('deletes a User for a valid user.deleted event', async () => {
-    const { request, body, headers } = createSignedWebhookRequest({
+    const event = {
       type: 'user.deleted',
       data: {
         deleted: true,
         id: 'user_123',
       },
-    });
+    };
+    mockVerifyWebhook.mockResolvedValueOnce(event as never);
+
+    const { request, body, headers } = createWebhookRequest(event);
 
     await expect(
       controller.handleClerkWebhook(
@@ -129,13 +184,16 @@ describe('ClerkWebhooksController', () => {
   });
 
   it('returns 400 for an invalid svix signature', async () => {
-    const { request, body, headers } = createSignedWebhookRequest({
+    const event = {
       type: 'user.deleted',
       data: {
         deleted: true,
         id: 'user_123',
       },
-    });
+    };
+    mockVerifyWebhook.mockRejectedValueOnce(new Error('invalid signature'));
+
+    const { request, body, headers } = createWebhookRequest(event);
 
     await expect(
       controller.handleClerkWebhook(
@@ -146,7 +204,7 @@ describe('ClerkWebhooksController', () => {
         undefined,
         headers['webhook-id'],
         headers['webhook-timestamp'],
-        'invalid',
+        headers['webhook-signature'],
       ),
     ).rejects.toBeInstanceOf(BadRequestException);
   });
@@ -154,7 +212,7 @@ describe('ClerkWebhooksController', () => {
   it('returns 500 when user.created persistence fails', async () => {
     usersRepository.upsertClerkUser.mockRejectedValueOnce(new Error('db down'));
 
-    const { request, body, headers } = createSignedWebhookRequest({
+    const event = {
       type: 'user.created',
       data: {
         id: 'user_123',
@@ -166,7 +224,10 @@ describe('ClerkWebhooksController', () => {
         ],
         primary_email_address_id: 'email_1',
       },
-    });
+    };
+    mockVerifyWebhook.mockResolvedValueOnce(event as never);
+
+    const { request, body, headers } = createWebhookRequest(event);
 
     await expect(
       controller.handleClerkWebhook(

@@ -5,10 +5,11 @@ import type { GetAllUsersResponse } from "@workspace/shared"
 import { getAllUsers } from "@/lib/api/users"
 
 export function useAllUsers() {
-  const { getToken } = useAuth()
+  const { getToken, isLoaded, isSignedIn } = useAuth()
 
   return useQuery<GetAllUsersResponse>({
     queryKey: ["users", "all"],
+    enabled: isLoaded && isSignedIn,
     queryFn: async () => {
       const token = await getToken()
       if (!token) throw new Error("No token found")

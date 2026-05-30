@@ -1,4 +1,4 @@
-import { useSignUp } from "@clerk/expo"
+import { useAuth, useSignUp } from "@clerk/expo"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "expo-router"
 import { MailCheck } from "lucide-react-native"
@@ -15,6 +15,7 @@ import { Text } from "@/components/ui/text"
 import { signUpSchema, type SignUpValues } from "@/lib/validations/auth"
 
 export function SignUpForm() {
+  const { isLoaded } = useAuth()
   const { signUp } = useSignUp()
   const router = useRouter()
   const [serverError, setServerError] = useState("")
@@ -38,6 +39,11 @@ export function SignUpForm() {
   async function onSubmit(values: SignUpValues) {
     setServerError("")
     try {
+      if (!isLoaded || !signUp) {
+        setServerError("Auth is still loading. Try again.")
+        return
+      }
+
       const createResult = await signUp.create({
         emailAddress: values.email,
         password: values.password,
@@ -75,6 +81,11 @@ export function SignUpForm() {
     setVerifying(true)
     setServerError("")
     try {
+      if (!isLoaded || !signUp) {
+        setServerError("Auth is still loading. Try again.")
+        return
+      }
+
       const verifyResult = await signUp.verifications.verifyEmailCode({
         code: verifyCode,
       })
@@ -157,7 +168,7 @@ export function SignUpForm() {
 
         <Button
           onPress={onVerify}
-          disabled={verifying || verifyCode.length < 6}
+          disabled={!isLoaded || verifying || verifyCode.length < 6}
           loading={verifying}
           size="lg"
           variant="accent"
@@ -255,6 +266,7 @@ export function SignUpForm() {
 
       <Button
         onPress={handleSubmit(onSubmit)}
+        disabled={!isLoaded}
         loading={isSubmitting}
         size="lg"
         variant="accent"
