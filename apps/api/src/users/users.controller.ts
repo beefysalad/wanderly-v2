@@ -1,33 +1,36 @@
-import { Controller, Get, Post, UseGuards } from "@nestjs/common"
+import { Controller, Get, Post, UseGuards } from '@nestjs/common';
 import type {
   CurrentUserResponse,
   GetAllUsersResponse,
-} from "@workspace/shared"
-import { ClerkUserId } from "../common/decorators/clerk-user-id.decorator"
-import { ClerkAuthGuard } from "../common/guards/clerk-auth.guard"
-import { UsersService } from "./users.service"
+} from '@workspace/shared';
+import {
+  CurrentUser,
+  type CurrentUser as CurrentUserPayload,
+} from '../common/decorators/current-user.decorator';
+import { ClerkGuard } from '../common/guards/clerk.guard';
+import { UsersService } from './users.service';
 
-@Controller("users")
-@UseGuards(ClerkAuthGuard)
+@Controller('users')
+@UseGuards(ClerkGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post("me/sync")
+  @Post('me/sync')
   syncCurrentUser(
-    @ClerkUserId() clerkUserId: string
+    @CurrentUser() currentUser: CurrentUserPayload,
   ): Promise<CurrentUserResponse> {
-    return this.usersService.syncCurrentUser(clerkUserId)
+    return this.usersService.syncCurrentUser(currentUser.clerkId);
   }
 
-  @Get("me")
+  @Get('me')
   getCurrentUser(
-    @ClerkUserId() clerkUserId: string
+    @CurrentUser() currentUser: CurrentUserPayload,
   ): Promise<CurrentUserResponse> {
-    return this.usersService.syncCurrentUser(clerkUserId)
+    return this.usersService.syncCurrentUser(currentUser.clerkId);
   }
 
-  @Get("all")
+  @Get('all')
   async getAllUsers(): Promise<GetAllUsersResponse> {
-    return await this.usersService.getAllUsers()
+    return await this.usersService.getAllUsers();
   }
 }

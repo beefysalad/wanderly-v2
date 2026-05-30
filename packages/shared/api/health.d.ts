@@ -1,4 +1,4 @@
 export type ApiHealthResponse = {
   status: "ok"
-  message: string
+  timestamp: string
 }

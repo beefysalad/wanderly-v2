@@ -1,12 +1,12 @@
-import { Injectable } from "@nestjs/common"
-import type { ApiHealthResponse } from "@workspace/shared"
+import { Injectable } from '@nestjs/common';
+import type { ApiHealthResponse } from '@workspace/shared';
 
 @Injectable()
 export class AppService {
-  getHello(): ApiHealthResponse {
+  getHealth(): ApiHealthResponse {
     return {
-      status: "ok",
-      message: "Hello World!",
-    }
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+    };
   }
 }

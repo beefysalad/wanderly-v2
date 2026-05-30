@@ -1,11 +1,12 @@
-import { Module } from "@nestjs/common"
-import { AppController } from "./app.controller"
-import { AppService } from "./app.service"
-import { UsersModule } from "./users/users.module"
-import { WebhooksModule } from "./webhooks/webhooks.module"
+import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { PrismaModule } from './prisma/prisma.module';
+import { UsersModule } from './users/users.module';
+import { WebhooksModule } from './webhooks/webhooks.module';
 
 @Module({
-  imports: [UsersModule, WebhooksModule],
+  imports: [PrismaModule, UsersModule, WebhooksModule],
   controllers: [AppController],
   providers: [AppService],
 })
