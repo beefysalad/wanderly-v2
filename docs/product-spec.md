@@ -22,7 +22,7 @@
 | Sign up / Sign in (email + password) | 🟢 | Clerk |
 | Google OAuth | 🟢 | Clerk |
 | Apple Sign In | 🟢 | Required for iOS App Store |
-| Onboarding flow (name only) | 🟢 | 1-step. Photo optional, prompted later. Travel style + interests collected at first AI use — not at signup |
+| Onboarding flow (name, travel style, interests) | 🟢 | 3-step. Step 1: name + optional photo. Step 2: travel style (Budget/Mid-range/Luxury). Step 3: interests multi-select. All saved in one PATCH call at completion |
 | Push notification opt-in | 🟢 | Ask after first group join or first expense, not cold during onboarding |
 | Biometric unlock (Face ID / Touch ID) | 🔵 | Polish, not MVP |
 
