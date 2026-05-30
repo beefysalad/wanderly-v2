@@ -1,24 +1,30 @@
 import '@/global.css';
 
-import { ClerkProvider } from '@clerk/expo';
+import { ClerkLoaded, ClerkProvider } from '@clerk/expo';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import { useColorScheme } from 'react-native';
-
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+import * as SecureStore from 'expo-secure-store';
+import { Slot } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 
 const queryClient = new QueryClient();
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+const tokenCache = {
+  getToken: (key: string) => SecureStore.getItemAsync(key),
+  saveToken: (key: string, value: string) => SecureStore.setItemAsync(key, value),
+  deleteToken: (key: string) => SecureStore.deleteItemAsync(key),
+};
+
+export default function RootLayout() {
   return (
-    <ClerkProvider publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!}>
+    <ClerkProvider
+      publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!}
+      tokenCache={tokenCache}
+    >
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <AnimatedSplashOverlay />
-          <AppTabs />
-        </ThemeProvider>
+        <ClerkLoaded>
+          <Slot />
+          <StatusBar style="auto" />
+        </ClerkLoaded>
       </QueryClientProvider>
     </ClerkProvider>
   );
