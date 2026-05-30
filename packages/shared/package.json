@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "type": "module",
   "private": true,
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "scripts": {
     "format": "prettier --write \"**/*.ts\"",
     "typecheck": "tsc --noEmit"
