@@ -24,21 +24,54 @@ export function SignInForm() {
     formState: { errors, isSubmitting },
   } = useForm<SignInValues>({
     resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   })
 
   async function onSubmit(values: SignInValues) {
     setServerError("")
     try {
-      const r1 = await signIn.create({ identifier: values.email })
-      if (r1.error) throw r1.error
-      const r2 = await signIn.password({ password: values.password })
-      if (r2.error) throw r2.error
-      const r3 = await signIn.finalize()
-      if (r3.error) throw r3.error
+      const createResult = await signIn.create({ identifier: values.email })
+
+      if (createResult.error) {
+        throw createResult.error
+      }
+
+      const passwordResult = await signIn.password({
+        password: values.password,
+      })
+
+      if (passwordResult.error) {
+        throw passwordResult.error
+      }
+
+      if (signIn.status !== "complete") {
+        setServerError("Sign in incomplete. Additional steps required.")
+        return
+      }
+
+      const finalizeResult = await signIn.finalize()
+
+      if (finalizeResult.error) {
+        throw finalizeResult.error
+      }
+
+      router.replace("/")
     } catch (err: unknown) {
-      const e = err as { message?: string; longMessage?: string } | null
+      const e = err as {
+        errors?: { message?: string; longMessage?: string }[]
+        message?: string
+        longMessage?: string
+      } | null
+      const firstError = e?.errors?.[0]
       setServerError(
-        e?.longMessage ?? e?.message ?? "Sign in failed. Try again."
+        firstError?.longMessage ??
+          firstError?.message ??
+          e?.longMessage ??
+          e?.message ??
+          "Sign in failed. Try again."
       )
     }
   }
@@ -47,7 +80,7 @@ export function SignInForm() {
     <View className="gap-5">
       {/* Email */}
       <View className="gap-2">
-        <Text className="text-xs font-bold uppercase tracking-wider text-slate-400">
+        <Text className="text-xs font-bold tracking-wider text-slate-400 uppercase">
           Email address
         </Text>
         <Controller
@@ -76,7 +109,7 @@ export function SignInForm() {
       {/* Password */}
       <View className="gap-2">
         <View className="flex-row items-center justify-between">
-          <Text className="text-xs font-bold uppercase tracking-wider text-slate-400">
+          <Text className="text-xs font-bold tracking-wider text-slate-400 uppercase">
             Password
           </Text>
           <TouchableOpacity
@@ -132,7 +165,7 @@ export function SignInForm() {
       {/* Divider */}
       <View className="flex-row items-center gap-4">
         <Separator className="flex-1" />
-        <Text className="text-xs font-medium uppercase tracking-wider text-slate-500">
+        <Text className="text-xs font-medium tracking-wider text-slate-500 uppercase">
           or continue with
         </Text>
         <Separator className="flex-1" />

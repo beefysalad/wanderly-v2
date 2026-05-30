@@ -5,4 +5,4 @@ ALTER TABLE "User" ADD COLUMN "hasCompletedOnboarding" BOOLEAN NOT NULL DEFAULT 
 UPDATE "User"
 SET "hasCompletedOnboarding" = true
 WHERE "name" IS NOT NULL
-  AND array_length("interests", 1) > 0;
+  AND cardinality("interests") > 0;

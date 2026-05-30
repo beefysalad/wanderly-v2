@@ -30,6 +30,9 @@ export function OnboardingStepName({ onNext, isLoading }: Props) {
     formState: { errors },
   } = useForm<OnboardingNameValues>({
     resolver: zodResolver(onboardingNameSchema),
+    defaultValues: {
+      name: "",
+    },
   })
 
   const nameValue = watch("name") ?? ""

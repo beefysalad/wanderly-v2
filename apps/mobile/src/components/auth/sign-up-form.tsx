@@ -1,6 +1,7 @@
 import { useSignUp } from "@clerk/expo"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "expo-router"
+import { MailCheck } from "lucide-react-native"
 import { Controller, useForm } from "react-hook-form"
 import { TouchableOpacity, View } from "react-native"
 import { useState } from "react"
@@ -12,7 +13,6 @@ import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Text } from "@/components/ui/text"
 import { signUpSchema, type SignUpValues } from "@/lib/validations/auth"
-import { MailCheck } from "lucide-react-native"
 
 export function SignUpForm() {
   const { signUp } = useSignUp()
@@ -29,21 +29,44 @@ export function SignUpForm() {
     formState: { errors, isSubmitting },
   } = useForm<SignUpValues>({
     resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   })
 
   async function onSubmit(values: SignUpValues) {
     setServerError("")
     try {
-      const r = await signUp.create({
+      const createResult = await signUp.create({
         emailAddress: values.email,
         password: values.password,
       })
-      if (r.error) throw r.error
+
+      if (createResult.error) {
+        throw createResult.error
+      }
+
+      const codeResult = await signUp.verifications.sendEmailCode()
+
+      if (codeResult.error) {
+        throw codeResult.error
+      }
+
       setPendingVerification(true)
     } catch (err: unknown) {
-      const e = err as { message?: string; longMessage?: string } | null
+      const e = err as {
+        errors?: { message?: string; longMessage?: string }[]
+        message?: string
+        longMessage?: string
+      } | null
+      const firstError = e?.errors?.[0]
       setServerError(
-        e?.longMessage ?? e?.message ?? "Sign up failed. Try again."
+        firstError?.longMessage ??
+          firstError?.message ??
+          e?.longMessage ??
+          e?.message ??
+          "Sign up failed. Try again."
       )
     }
   }
@@ -52,13 +75,40 @@ export function SignUpForm() {
     setVerifying(true)
     setServerError("")
     try {
-      const r = await signUp.verifications.verifyEmailCode({ code: verifyCode })
-      if (r.error) throw r.error
-      const fin = await signUp.finalize()
-      if (fin.error) throw fin.error
+      const verifyResult = await signUp.verifications.verifyEmailCode({
+        code: verifyCode,
+      })
+
+      if (verifyResult.error) {
+        throw verifyResult.error
+      }
+
+      if (signUp.status !== "complete") {
+        setServerError("Verification incomplete. Additional steps required.")
+        return
+      }
+
+      const finalizeResult = await signUp.finalize()
+
+      if (finalizeResult.error) {
+        throw finalizeResult.error
+      }
+
+      router.replace("/")
     } catch (err: unknown) {
-      const e = err as { message?: string; longMessage?: string } | null
-      setServerError(e?.longMessage ?? e?.message ?? "Invalid code. Try again.")
+      const e = err as {
+        errors?: { message?: string; longMessage?: string }[]
+        message?: string
+        longMessage?: string
+      } | null
+      const firstError = e?.errors?.[0]
+      setServerError(
+        firstError?.longMessage ??
+          firstError?.message ??
+          e?.longMessage ??
+          e?.message ??
+          "Invalid code. Try again."
+      )
     } finally {
       setVerifying(false)
     }
@@ -84,7 +134,7 @@ export function SignUpForm() {
 
         {/* Code input */}
         <View className="gap-2">
-          <Text className="text-xs font-bold uppercase tracking-wider text-slate-400">
+          <Text className="text-xs font-bold tracking-wider text-slate-400 uppercase">
             Verification code
           </Text>
           <Input
@@ -132,7 +182,7 @@ export function SignUpForm() {
     <View className="gap-5">
       {/* Email */}
       <View className="gap-2">
-        <Text className="text-xs font-bold uppercase tracking-wider text-slate-400">
+        <Text className="text-xs font-bold tracking-wider text-slate-400 uppercase">
           Email address
         </Text>
         <Controller
@@ -161,7 +211,7 @@ export function SignUpForm() {
       {/* Password */}
       <View className="gap-2">
         <View className="flex-row items-center justify-between">
-          <Text className="text-xs font-bold uppercase tracking-wider text-slate-400">
+          <Text className="text-xs font-bold tracking-wider text-slate-400 uppercase">
             Password
           </Text>
           <TouchableOpacity
@@ -214,7 +264,7 @@ export function SignUpForm() {
 
       <View className="flex-row items-center gap-4">
         <Separator className="flex-1" />
-        <Text className="text-xs font-medium uppercase tracking-wider text-slate-500">
+        <Text className="text-xs font-medium tracking-wider text-slate-500 uppercase">
           or continue with
         </Text>
         <Separator className="flex-1" />

@@ -8,41 +8,44 @@ import {
   Req,
 } from '@nestjs/common';
 import { Webhook } from 'standardwebhooks';
+import { z } from 'zod';
 import type { RawBodyRequest } from '@nestjs/common';
 import type { Request } from 'express';
 import { UsersRepository } from '../users/users.repository';
 
-type ClerkEmailAddress = {
-  id: string;
-  email_address: string;
-};
+const clerkEmailAddressSchema = z.object({
+  id: z.string(),
+  email_address: z.string().email(),
+});
 
-type ClerkUserData = {
-  id: string;
-  email_addresses?: ClerkEmailAddress[];
-  first_name?: string | null;
-  image_url?: string | null;
-  last_name?: string | null;
-  primary_email_address_id?: string | null;
-  username?: string | null;
-};
+const clerkUserDataSchema = z.object({
+  id: z.string(),
+  email_addresses: z.array(clerkEmailAddressSchema).optional(),
+  first_name: z.string().nullable().optional(),
+  image_url: z.string().nullable().optional(),
+  last_name: z.string().nullable().optional(),
+  primary_email_address_id: z.string().nullable().optional(),
+  username: z.string().nullable().optional(),
+});
 
-type ClerkDeletedUserData = {
-  id?: string;
-  deleted?: boolean;
-};
+const clerkDeletedUserDataSchema = z.object({
+  id: z.string().optional(),
+  deleted: z.boolean().optional(),
+});
 
-type ClerkUserEvent = {
-  data: ClerkUserData;
-  type: 'user.created' | 'user.updated';
-};
+const clerkWebhookEventSchema = z.discriminatedUnion('type', [
+  z.object({
+    data: clerkUserDataSchema,
+    type: z.enum(['user.created', 'user.updated']),
+  }),
+  z.object({
+    data: clerkDeletedUserDataSchema,
+    type: z.literal('user.deleted'),
+  }),
+]);
 
-type ClerkDeletedUserEvent = {
-  data: ClerkDeletedUserData;
-  type: 'user.deleted';
-};
-
-type ClerkWebhookEvent = ClerkUserEvent | ClerkDeletedUserEvent;
+type ClerkUserData = z.infer<typeof clerkUserDataSchema>;
+type ClerkWebhookEvent = z.infer<typeof clerkWebhookEventSchema>;
 
 @Controller('webhooks/clerk')
 export class ClerkWebhooksController {
@@ -112,12 +115,24 @@ export class ClerkWebhooksController {
     const payload = request.rawBody ?? JSON.stringify(body);
 
     try {
-      return new Webhook(secret).verify(payload, {
+      const verifiedEvent = new Webhook(secret).verify(payload, {
         'webhook-id': headers['webhook-id'],
         'webhook-timestamp': headers['webhook-timestamp'],
         'webhook-signature': headers['webhook-signature'],
-      }) as ClerkWebhookEvent;
-    } catch {
+      });
+
+      const parsedEvent = clerkWebhookEventSchema.safeParse(verifiedEvent);
+
+      if (!parsedEvent.success) {
+        throw new BadRequestException('Invalid Clerk webhook payload');
+      }
+
+      return parsedEvent.data;
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
       throw new BadRequestException('Invalid Clerk webhook signature');
     }
   }

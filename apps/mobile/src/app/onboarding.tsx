@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router"
 import { Check, Heart, Luggage, UserRound } from "lucide-react-native"
-import { ScrollView, View } from "react-native"
+import { Alert, ScrollView, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { useState } from "react"
 
@@ -39,13 +39,20 @@ export default function OnboardingScreen() {
   }
 
   async function handleFinish(interests: string[]) {
-    await updateUser({
-      name,
-      travelStyle: travelStyle!,
-      interests,
-      hasCompletedOnboarding: true,
-    })
-    router.replace("/(tabs)")
+    try {
+      await updateUser({
+        name,
+        travelStyle: travelStyle!,
+        interests,
+        hasCompletedOnboarding: true,
+      })
+      router.replace("/(tabs)")
+    } catch {
+      Alert.alert(
+        "Onboarding failed",
+        "Could not save your profile. Please try again."
+      )
+    }
   }
 
   const currentStepInfo = STEPS[step - 1]
