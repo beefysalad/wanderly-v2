@@ -193,7 +193,7 @@ export function SignUpForm() {
     <View className="gap-5">
       {/* Email */}
       <View className="gap-2">
-        <Text className="text-xs font-bold tracking-wider text-slate-400 uppercase">
+        <Text className="text-xs font-bold text-slate-400 uppercase">
           Email address
         </Text>
         <Controller

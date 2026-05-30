@@ -8,8 +8,10 @@ import {
   Req,
 } from '@nestjs/common';
 import { verifyWebhook } from '@clerk/backend/webhooks';
+import { Throttle } from '@nestjs/throttler';
 import type { RawBodyRequest } from '@nestjs/common';
 import type { Request } from 'express';
+import { createThrottleOverride } from '../common/rate-limit/rate-limit.config';
 import { UsersRepository } from '../users/users.repository';
 import {
   clerkWebhookEventSchema,
@@ -22,6 +24,14 @@ export class ClerkWebhooksController {
   constructor(private readonly usersRepository: UsersRepository) {}
 
   @Post()
+  @Throttle(
+    createThrottleOverride(
+      'API_CLERK_WEBHOOK_RATE_LIMIT_MAX_REQUESTS',
+      'API_CLERK_WEBHOOK_RATE_LIMIT_TTL_MS',
+      60,
+      60000,
+    ),
+  )
   async handleClerkWebhook(
     @Req() request: RawBodyRequest<Request>,
     @Body() body: unknown,

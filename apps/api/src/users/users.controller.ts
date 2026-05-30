@@ -9,6 +9,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import type {
   CurrentUserResponse,
   GetAllUsersResponse,
@@ -20,6 +21,7 @@ import {
 } from '../common/decorators/current-user.decorator';
 import { ClerkGuard } from '../common/guards/clerk.guard';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
+import { createThrottleOverride } from '../common/rate-limit/rate-limit.config';
 import {
   updateUserProfileSchema,
   type UpdateUserProfileDto,
@@ -33,6 +35,14 @@ export class UsersController {
 
   // Authenticated self-healing fallback for first-session webhook races.
   @Post('me/sync')
+  @Throttle(
+    createThrottleOverride(
+      'API_USER_SYNC_RATE_LIMIT_MAX_REQUESTS',
+      'API_USER_SYNC_RATE_LIMIT_TTL_MS',
+      20,
+      60000,
+    ),
+  )
   syncCurrentUser(
     @CurrentUser() currentUser: CurrentUserPayload,
   ): Promise<CurrentUserResponse> {
