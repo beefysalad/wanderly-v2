@@ -19,20 +19,27 @@ export class UsersRepository {
   async upsertClerkUser(
     input: UpsertClerkUserInput
   ): Promise<CurrentUserResponse> {
+    const userData = {
+      clerkId: input.clerkId,
+      email: input.email,
+      name: input.name,
+      photoUrl: input.imageUrl,
+    }
+
     const user = await this.prisma.db.user.upsert({
       where: {
         clerkId: input.clerkId,
       },
-      update: input,
-      create: input,
+      update: userData,
+      create: userData,
     })
 
     return {
       id: user.id,
       clerkId: input.clerkId,
       email: user.email,
-      name: user.name,
-      imageUrl: user.imageUrl,
+      name: user.name ?? "",
+      imageUrl: user.photoUrl,
     }
   }
 
@@ -45,27 +52,22 @@ export class UsersRepository {
   }
   async getAllUsers(): Promise<GetAllUsersResponse> {
     const users = await this.prisma.db.user.findMany({
-      where: {
-        clerkId: {
-          not: null,
-        },
-      },
       select: {
         id: true,
         clerkId: true,
         email: true,
         name: true,
-        imageUrl: true,
+        photoUrl: true,
       },
     })
 
     return {
       users: users.map((user) => ({
         id: user.id,
-        clerkId: user.clerkId!,
+        clerkId: user.clerkId,
         email: user.email,
-        name: user.name,
-        imageUrl: user.imageUrl,
+        name: user.name ?? "",
+        imageUrl: user.photoUrl,
       })),
     }
   }
