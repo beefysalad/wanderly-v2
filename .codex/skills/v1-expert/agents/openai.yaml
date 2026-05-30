@@ -1,0 +1,4 @@
+interface:
+  display_name: "V1 Expert"
+  short_description: "Assess Wanderly v1 code for v2 reuse"
+  default_prompt: "Use $v1-expert to inspect Wanderly v1 code and advise whether this feature or pattern should be ported to v2."
