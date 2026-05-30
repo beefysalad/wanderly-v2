@@ -86,14 +86,14 @@ export function OnboardingStepName({ onNext, isLoading }: Props) {
         {nameValue.length > 0 && (
           <View className="flex-row items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
             <Avatar alt={`${nameValue} avatar`}>
-              <AvatarFallback className="bg-amber-400">
+              <AvatarFallback className="bg-violet-400">
                 <AvatarFallbackText className="text-slate-950">
                   {nameValue.charAt(0).toUpperCase()}
                 </AvatarFallbackText>
               </AvatarFallback>
             </Avatar>
             <View>
-              <Text className="text-xs font-medium text-amber-300">
+              <Text className="text-xs font-medium text-violet-300">
                 You'll appear as
               </Text>
               <Text className="text-sm font-bold text-white">{nameValue}</Text>

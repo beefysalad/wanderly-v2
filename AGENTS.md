@@ -43,7 +43,8 @@ Use npm from the repository root. Do not create nested lockfiles.
 - Prefer existing project patterns over inventing new ones.
 - Reuse components, hooks, API wrappers, services, and repositories whenever practical.
 - **Keep files focused.** If a file is growing, split it. Do not leave unrelated logic buried in a component or screen.
-- Avoid `any`. Prefer explicit, narrow TypeScript types everywhere.
+- **Never use TypeScript `any`.** Prefer explicit, narrow types, `unknown` plus validation/narrowing, generics, or local interfaces.
+- **Never use the `Sparkles` icon** from any icon set. Choose a domain-specific icon instead, or omit the icon when no specific symbol fits.
 - Do not run destructive git commands unless the user explicitly asks.
 
 ## Dependency Rules
@@ -233,7 +234,7 @@ apps/api/src/
 
 ### Backend typing
 
-- Avoid `any`. Use explicit DTOs for request shapes and explicit return types at every controller/service/repository boundary.
+- Never use TypeScript `any`. Use explicit DTOs for request shapes and explicit return types at every controller/service/repository boundary.
 - Repository-local types (narrow DB payload shapes) stay in the repository file. Shared HTTP contract types go in `packages/shared`.
 - Private helper methods in a class are prefixed with `_` (e.g. `_buildJoinCode`, `_calculateBalance`).
 - Do not put business logic or unrelated helpers in repositories. A repository is a persistence layer, not a second service.

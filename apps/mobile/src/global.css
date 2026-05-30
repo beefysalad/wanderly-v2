@@ -2,31 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   Wanderly — "Aurora" design system
+   Cool neutral dark base · Electric-violet → coral aurora accent.
+   Dark-first; light surfaces provided for the same system.
+   ============================================================ */
+
 @layer base {
   :root {
-    --background: 220 42% 96%;
-    --foreground: 226 33% 16%;
+    /* ---- shadcn semantic tokens (HSL channels, alpha-capable) ---- */
+    --background: 240 27% 96%; /* #F4F4F8 */
+    --foreground: 228 14% 9%; /* #14151B */
     --card: 0 0% 100%;
-    --card-foreground: 226 33% 16%;
+    --card-foreground: 228 14% 9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 226 33% 16%;
-    --primary: 228 38% 22%;
-    --primary-foreground: 220 40% 98%;
-    --secondary: 220 50% 92%;
-    --secondary-foreground: 228 38% 22%;
-    --muted: 216 32% 92%;
-    --muted-foreground: 221 14% 44%;
-    --accent: 15 88% 63%;
-    --accent-foreground: 220 40% 98%;
-    --destructive: 4 80% 60%;
-    --destructive-foreground: 220 40% 98%;
-    --border: 220 26% 88%;
-    --input: 220 26% 88%;
-    --ring: 223 66% 62%;
-    --radius: 1.25rem;
+    --popover-foreground: 228 14% 9%;
+    --primary: 252 82% 67%; /* violet (strong, readable on light) #8466F0 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 20% 95%;
+    --secondary-foreground: 228 14% 9%;
+    --muted: 240 20% 95%;
+    --muted-foreground: 233 9% 39%; /* #5B5D6B */
+    --accent: 252 82% 67%; /* violet */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 347 100% 71%; /* coral-pink #FF6B8A */
+    --destructive-foreground: 0 0% 100%;
+    --border: 228 28% 90%;
+    --input: 228 28% 90%;
+    --ring: 252 82% 67%;
+    --radius: 1.375rem;
+
+    /* ---- Aurora raw tokens (full values, alpha-capable) ---- */
+    --wl-bg: #f4f4f8;
+    --wl-surface: rgba(255, 255, 255, 0.75);
+    --wl-surface-2: #ffffff;
+    --wl-surface-solid: #ffffff;
+    --wl-border: rgba(18, 20, 33, 0.08);
+    --wl-border-2: rgba(18, 20, 33, 0.13);
+    --wl-text: #14151b;
+    --wl-text-2: #5b5d6b;
+    --wl-text-3: #9092a0;
+    --wl-accent: #8466f0; /* readable on light surfaces */
+    --wl-accent-2: #ff6b8a;
+    --wl-accent-soft: rgba(132, 102, 240, 0.12);
+    --wl-accent-line: rgba(132, 102, 240, 0.28);
+    --wl-on-accent: #ffffff;
+
     --font-display:
-      Spline Sans, Inter, ui-sans-serif, system-ui, sans-serif,
-      Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+      Onest, Inter, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji,
+      Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
     --font-mono:
       ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono,
       Courier New, monospace;
@@ -37,24 +61,40 @@
   }
 
   .dark:root {
-    --background: 226 34% 10%;
-    --foreground: 220 35% 96%;
-    --card: 225 31% 14%;
-    --card-foreground: 220 35% 96%;
-    --popover: 225 31% 14%;
-    --popover-foreground: 220 35% 96%;
-    --primary: 220 35% 96%;
-    --primary-foreground: 228 38% 22%;
-    --secondary: 225 24% 21%;
-    --secondary-foreground: 220 35% 96%;
-    --muted: 225 24% 21%;
-    --muted-foreground: 221 12% 68%;
-    --accent: 18 82% 65%;
-    --accent-foreground: 228 38% 16%;
-    --destructive: 4 70% 58%;
-    --destructive-foreground: 220 35% 96%;
-    --border: 226 19% 24%;
-    --input: 226 19% 24%;
-    --ring: 223 66% 62%;
+    --background: 228 18% 5%; /* #0B0C10 */
+    --foreground: 240 27% 96%; /* #F4F4F8 */
+    --card: 229 20% 10%; /* #14161E */
+    --card-foreground: 240 27% 96%;
+    --popover: 229 20% 10%;
+    --popover-foreground: 240 27% 96%;
+    --primary: 255 100% 74%; /* violet #9B7CFF */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 230 13% 16%;
+    --secondary-foreground: 240 27% 96%;
+    --muted: 230 13% 16%;
+    --muted-foreground: 232 7% 65%; /* #9FA0AD */
+    --accent: 255 100% 74%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 347 100% 71%; /* #FF6B8A */
+    --destructive-foreground: 0 0% 100%;
+    --border: 228 28% 90%;
+    --input: 228 28% 90%;
+    --ring: 255 100% 74%;
+
+    /* Aurora raw tokens — dark */
+    --wl-bg: #0b0c10;
+    --wl-surface: rgba(255, 255, 255, 0.05);
+    --wl-surface-2: rgba(255, 255, 255, 0.09);
+    --wl-surface-solid: #14161e;
+    --wl-border: rgba(255, 255, 255, 0.1);
+    --wl-border-2: rgba(255, 255, 255, 0.16);
+    --wl-text: #f4f4f8;
+    --wl-text-2: #9fa0ad;
+    --wl-text-3: #65666f;
+    --wl-accent: #9b7cff;
+    --wl-accent-2: #ff6b8a;
+    --wl-accent-soft: rgba(155, 124, 255, 0.15);
+    --wl-accent-line: rgba(155, 124, 255, 0.32);
+    --wl-on-accent: #ffffff;
   }
 }

@@ -1,9 +1,8 @@
-import { Compass } from "lucide-react-native"
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import { PremiumBackground } from "@/components/shared/premium-background"
-import { Icon } from "@/components/ui/icon"
+import { BrandMark } from "@/components/trips/ui/brand-mark"
 import { Separator } from "@/components/ui/separator"
 import { Text } from "@/components/ui/text"
 
@@ -35,11 +34,9 @@ export function AuthScreenShell({
         >
           <View className="flex-1 justify-center">
             <View className="mb-10 gap-5">
-              <View className="h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/10">
-                <Icon as={Compass} className="text-amber-300" size={28} />
-              </View>
+              <BrandMark size={56} />
               <View className="gap-3">
-                <Text className="text-xs font-bold uppercase tracking-[0.28em] text-amber-300">
+                <Text className="text-xs font-bold uppercase tracking-[0.28em] text-violet-300">
                   {eyebrow}
                 </Text>
                 <Text className="text-4xl font-bold leading-tight tracking-normal text-white">

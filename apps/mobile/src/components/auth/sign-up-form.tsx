@@ -130,8 +130,8 @@ export function SignUpForm() {
       <View className="gap-5">
         {/* Email icon + instructions */}
         <View className="items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-6 py-6">
-          <View className="h-14 w-14 items-center justify-center rounded-full bg-amber-400/10">
-            <Icon as={MailCheck} className="text-amber-300" size={26} />
+          <View className="h-14 w-14 items-center justify-center rounded-full bg-violet-400/10">
+            <Icon as={MailCheck} className="text-violet-300" size={26} />
           </View>
           <View className="items-center gap-1">
             <Text className="text-base font-bold text-white">
@@ -229,7 +229,7 @@ export function SignUpForm() {
             onPress={() => setShowPassword(!showPassword)}
             hitSlop={8}
           >
-            <Text className="text-sm font-semibold text-amber-300">
+            <Text className="text-sm font-semibold text-violet-300">
               {showPassword ? "Hide" : "Show"}
             </Text>
           </TouchableOpacity>
@@ -290,7 +290,7 @@ export function SignUpForm() {
           onPress={() => router.replace("/(auth)/sign-in")}
           hitSlop={8}
         >
-          <Text className="text-sm font-bold text-amber-300">Sign in</Text>
+          <Text className="text-sm font-bold text-violet-300">Sign in</Text>
         </TouchableOpacity>
       </View>
     </View>

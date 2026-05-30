@@ -63,7 +63,7 @@ export function OAuthButtons({ onError }: Props) {
         variant="outline"
       >
         <GoogleLogo />
-        <Text>Google</Text>
+        {/* <Text>Google</Text> */}
       </Button>
 
       <Button
@@ -74,7 +74,7 @@ export function OAuthButtons({ onError }: Props) {
         variant="default"
       >
         <AppleLogo />
-        <Text>Apple</Text>
+        {/* <Text>Apple</Text> */}
       </Button>
     </View>
   )

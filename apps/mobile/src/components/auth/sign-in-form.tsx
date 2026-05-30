@@ -117,7 +117,7 @@ export function SignInForm() {
             onPress={() => setShowPassword(!showPassword)}
             hitSlop={8}
           >
-            <Text className="text-sm font-semibold text-amber-300">
+            <Text className="text-sm font-semibold text-violet-300">
               {showPassword ? "Hide" : "Show"}
             </Text>
           </TouchableOpacity>
@@ -182,7 +182,7 @@ export function SignInForm() {
           onPress={() => router.replace("/(auth)/sign-up")}
           hitSlop={8}
         >
-          <Text className="text-sm font-bold text-amber-300">
+          <Text className="text-sm font-bold text-violet-300">
             Create an account
           </Text>
         </TouchableOpacity>

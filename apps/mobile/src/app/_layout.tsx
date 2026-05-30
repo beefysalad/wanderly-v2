@@ -4,8 +4,10 @@ import { ClerkLoaded, ClerkProvider } from "@clerk/expo"
 import { PortalHost } from "@rn-primitives/portal"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import * as SecureStore from "expo-secure-store"
-import { Slot } from "expo-router"
+import { Stack } from "expo-router"
 import { StatusBar } from "expo-status-bar"
+
+import { ThemeProvider } from "@/hooks/use-theme-preference"
 
 const queryClient = new QueryClient()
 
@@ -24,9 +26,11 @@ export default function RootLayout() {
     >
       <QueryClientProvider client={queryClient}>
         <ClerkLoaded>
-          <Slot />
-          <PortalHost />
-          <StatusBar style="auto" />
+          <ThemeProvider>
+            <Stack screenOptions={{ headerShown: false }} />
+            <PortalHost />
+            <StatusBar style="auto" />
+          </ThemeProvider>
         </ClerkLoaded>
       </QueryClientProvider>
     </ClerkProvider>

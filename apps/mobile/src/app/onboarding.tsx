@@ -75,7 +75,7 @@ export default function OnboardingScreen() {
                 className={[
                   "flex-row items-center gap-1.5 rounded-full border px-3 py-1.5",
                   isActive
-                    ? "border-amber-400/40 bg-amber-400/15"
+                    ? "border-violet-400/40 bg-violet-400/15"
                     : isDone
                       ? "border-white/10 bg-white/10"
                       : "border-white/5 bg-white/5",
@@ -84,7 +84,7 @@ export default function OnboardingScreen() {
                 <View
                   className={[
                     "h-5 w-5 items-center justify-center rounded-full",
-                    isActive || isDone ? "bg-amber-300" : "bg-white/10",
+                    isActive || isDone ? "bg-violet-300" : "bg-white/10",
                   ].join(" ")}
                 >
                   {isDone ? (
@@ -109,7 +109,7 @@ export default function OnboardingScreen() {
 
         {/* Step heading */}
         <View className="mt-6 gap-2">
-          <Text className="text-xs font-bold tracking-[0.25em] text-amber-300 uppercase">
+          <Text className="text-xs font-bold tracking-[0.25em] text-violet-300 uppercase">
             Step {step} of {STEPS.length}
           </Text>
           <View className="flex-row items-center gap-2">

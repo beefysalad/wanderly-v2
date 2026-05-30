@@ -76,7 +76,7 @@ export function OnboardingStepTravelStyle({ onNext }: Props) {
               className={[
                 "rounded-2xl border p-4",
                 isSelected
-                  ? "border-amber-400/50 bg-slate-800/80"
+                  ? "border-violet-400/50 bg-slate-800/80"
                   : "border-white/10 bg-white/5",
               ].join(" ")}
               style={{
@@ -105,7 +105,7 @@ export function OnboardingStepTravelStyle({ onNext }: Props) {
                     <Text className="text-lg font-bold text-white">
                       {option.label}
                     </Text>
-                    <Text className="text-xs font-semibold uppercase tracking-wider text-amber-200/80">
+                    <Text className="text-xs font-semibold uppercase tracking-wider text-violet-200/80">
                       {option.tagline}
                     </Text>
                     <Text className="text-sm leading-relaxed text-slate-400">
@@ -115,7 +115,7 @@ export function OnboardingStepTravelStyle({ onNext }: Props) {
                 </View>
 
                 {isSelected && (
-                  <View className="h-7 w-7 items-center justify-center rounded-full bg-amber-300">
+                  <View className="h-7 w-7 items-center justify-center rounded-full bg-violet-300">
                     <Icon as={Check} className="text-slate-950" size={14} />
                   </View>
                 )}
