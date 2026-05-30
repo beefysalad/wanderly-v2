@@ -1,24 +1,26 @@
-import { useAuth } from '@clerk/expo';
-import { Redirect } from 'expo-router';
+import { useAuth } from "@clerk/expo"
+import { Redirect } from "expo-router"
 
-import { useCurrentUser } from '@/hooks/users/use-current-user';
-import { LoadingSpinner } from '@/components/shared/loading-spinner';
+import { useCurrentUser } from "@/hooks/users/use-current-user"
+import { LoadingSpinner } from "@/components/shared/loading-spinner"
 
 export default function Index() {
-  const { isSignedIn, isLoaded } = useAuth();
-  const { data: user, isPending } = useCurrentUser({ enabled: isLoaded && !!isSignedIn });
+  const { isSignedIn, isLoaded } = useAuth()
+  const { data: user, isPending } = useCurrentUser({
+    enabled: isLoaded && !!isSignedIn,
+  })
 
   if (!isLoaded || (isSignedIn && isPending)) {
-    return <LoadingSpinner />;
+    return <LoadingSpinner />
   }
 
   if (!isSignedIn) {
-    return <Redirect href="/(auth)/sign-in" />;
+    return <Redirect href="/(auth)/sign-in" />
   }
 
-  if (!user?.travelStyle) {
-    return <Redirect href="/onboarding" />;
+  if (!user?.hasCompletedOnboarding) {
+    return <Redirect href="/onboarding" />
   }
 
-  return <Redirect href="/(tabs)" />;
+  return <Redirect href="/(tabs)" />
 }

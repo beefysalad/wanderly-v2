@@ -101,5 +101,12 @@ export class UsersService {
     ) {
       throw new BadRequestException('interests must be an array of strings');
     }
+
+    if (
+      input.hasCompletedOnboarding !== undefined &&
+      typeof input.hasCompletedOnboarding !== 'boolean'
+    ) {
+      throw new BadRequestException('hasCompletedOnboarding must be a boolean');
+    }
   }
 }

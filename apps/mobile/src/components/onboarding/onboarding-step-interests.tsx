@@ -1,80 +1,83 @@
+import {
+  Bike,
+  Check,
+  Landmark,
+  Moon,
+  Mountain,
+  ShoppingBag,
+  Trees,
+  Utensils,
+  Waves,
+} from "lucide-react-native"
 import { TouchableOpacity, View } from "react-native"
 import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
+import { Icon } from "@/components/ui/icon"
 import { Text } from "@/components/ui/text"
 
 const INTERESTS: {
   value: string
-  emoji: string
+  icon: typeof Utensils
   label: string
-  bgClass: string
-  activeBgClass: string
-  activeTextClass: string
+  activeClass: string
+  iconClass: string
 }[] = [
   {
     value: "food",
-    emoji: "🍜",
+    icon: Utensils,
     label: "Food",
-    bgClass: "bg-orange-50 dark:bg-orange-900/20",
-    activeBgClass: "bg-orange-500",
-    activeTextClass: "text-white",
+    activeClass: "border-orange-400/60 bg-orange-500/20",
+    iconClass: "text-orange-300",
   },
   {
     value: "nature",
-    emoji: "🌿",
+    icon: Trees,
     label: "Nature",
-    bgClass: "bg-green-50 dark:bg-green-900/20",
-    activeBgClass: "bg-green-500",
-    activeTextClass: "text-white",
+    activeClass: "border-emerald-400/60 bg-emerald-500/20",
+    iconClass: "text-emerald-300",
   },
   {
     value: "culture",
-    emoji: "🏛️",
+    icon: Landmark,
     label: "Culture",
-    bgClass: "bg-amber-50 dark:bg-amber-900/20",
-    activeBgClass: "bg-amber-500",
-    activeTextClass: "text-white",
+    activeClass: "border-amber-400/60 bg-amber-500/20",
+    iconClass: "text-amber-300",
   },
   {
     value: "nightlife",
-    emoji: "🌙",
+    icon: Moon,
     label: "Nightlife",
-    bgClass: "bg-indigo-50 dark:bg-indigo-900/20",
-    activeBgClass: "bg-indigo-600",
-    activeTextClass: "text-white",
+    activeClass: "border-indigo-400/60 bg-indigo-500/20",
+    iconClass: "text-indigo-300",
   },
   {
     value: "adventure",
-    emoji: "🏄",
+    icon: Bike,
     label: "Adventure",
-    bgClass: "bg-red-50 dark:bg-red-900/20",
-    activeBgClass: "bg-red-500",
-    activeTextClass: "text-white",
+    activeClass: "border-red-400/60 bg-red-500/20",
+    iconClass: "text-red-300",
   },
   {
     value: "beach",
-    emoji: "🏖️",
+    icon: Waves,
     label: "Beach",
-    bgClass: "bg-sky-50 dark:bg-sky-900/20",
-    activeBgClass: "bg-sky-500",
-    activeTextClass: "text-white",
+    activeClass: "border-sky-400/60 bg-sky-500/20",
+    iconClass: "text-sky-300",
   },
   {
     value: "history",
-    emoji: "🏺",
+    icon: Mountain,
     label: "History",
-    bgClass: "bg-yellow-50 dark:bg-yellow-900/20",
-    activeBgClass: "bg-yellow-600",
-    activeTextClass: "text-white",
+    activeClass: "border-yellow-400/60 bg-yellow-500/20",
+    iconClass: "text-yellow-300",
   },
   {
     value: "shopping",
-    emoji: "🛍️",
+    icon: ShoppingBag,
     label: "Shopping",
-    bgClass: "bg-pink-50 dark:bg-pink-900/20",
-    activeBgClass: "bg-pink-500",
-    activeTextClass: "text-white",
+    activeClass: "border-pink-400/60 bg-pink-500/20",
+    iconClass: "text-pink-300",
   },
 ]
 
@@ -100,10 +103,10 @@ export function OnboardingStepInterests({ onFinish, isLoading }: Props) {
   return (
     <View className="gap-8">
       <View className="gap-2">
-        <Text className="text-3xl font-bold text-zinc-900 dark:text-white">
+        <Text className="text-3xl font-bold text-white">
           What are you into?
         </Text>
-        <Text className="text-base leading-relaxed text-zinc-500 dark:text-zinc-400">
+        <Text className="text-base leading-relaxed text-slate-400">
           Pick at least one. Your AI itineraries will be tailored to these.
         </Text>
       </View>
@@ -118,35 +121,30 @@ export function OnboardingStepInterests({ onFinish, isLoading }: Props) {
               onPress={() => toggle(interest.value)}
               activeOpacity={0.8}
               className={[
-                "flex-row items-center gap-2.5 rounded-2xl px-4 py-3",
-                "border-2",
+                "min-w-[45%] flex-row items-center gap-2.5 rounded-2xl border px-4 py-3",
                 isSelected
-                  ? `${interest.activeBgClass} border-transparent`
-                  : `${interest.bgClass} border-transparent`,
+                  ? interest.activeClass
+                  : "border-white/10 bg-white/5",
               ].join(" ")}
               style={{
-                shadowColor: isSelected ? "#000" : "transparent",
+                shadowColor: isSelected ? "#f59e0b" : "transparent",
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: isSelected ? 0.12 : 0,
                 shadowRadius: 4,
                 elevation: isSelected ? 3 : 0,
-                transform: [{ scale: isSelected ? 1.04 : 1 }],
               }}
             >
-              <Text className="text-xl">{interest.emoji}</Text>
-              <Text
-                className={[
-                  "text-sm font-semibold",
-                  isSelected
-                    ? interest.activeTextClass
-                    : "text-zinc-700 dark:text-zinc-300",
-                ].join(" ")}
-              >
+              <Icon
+                as={interest.icon}
+                className={interest.iconClass}
+                size={18}
+              />
+              <Text className="text-sm font-semibold text-white">
                 {interest.label}
               </Text>
               {isSelected && (
-                <View className="ml-auto h-4 w-4 items-center justify-center rounded-full bg-white/30">
-                  <Text className="text-[8px] font-bold text-white">✓</Text>
+                <View className="ml-auto h-4 w-4 items-center justify-center rounded-full bg-white/20">
+                  <Icon as={Check} className="text-amber-200" size={10} />
                 </View>
               )}
             </TouchableOpacity>
@@ -157,8 +155,8 @@ export function OnboardingStepInterests({ onFinish, isLoading }: Props) {
       {/* Selection count */}
       {selected.size > 0 && (
         <View className="flex-row items-center gap-2">
-          <View className="h-2 w-2 rounded-full bg-primary" />
-          <Text className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+          <View className="h-2 w-2 rounded-full bg-amber-300" />
+          <Text className="text-sm font-medium text-slate-400">
             {selected.size} interest{selected.size > 1 ? "s" : ""} selected
           </Text>
         </View>
@@ -169,8 +167,9 @@ export function OnboardingStepInterests({ onFinish, isLoading }: Props) {
         disabled={!canFinish || isLoading}
         loading={isLoading}
         size="lg"
+        variant="accent"
       >
-        <Text>Let's go! 🚀</Text>
+        <Text>Finish onboarding</Text>
       </Button>
     </View>
   )

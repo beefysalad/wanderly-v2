@@ -6,4 +6,5 @@ export class UpdateUserProfileDto implements UpdateUserProfileRequest {
   bio?: string | null;
   travelStyle?: UpdateUserProfileRequest['travelStyle'];
   interests?: string[];
+  hasCompletedOnboarding?: boolean;
 }

@@ -35,6 +35,14 @@ const buttonVariants = cva(
           "bg-destructive active:bg-destructive/90",
           Platform.select({ web: "hover:bg-destructive/90" })
         ),
+        accent: cn(
+          "bg-accent active:bg-accent/90",
+          Platform.select({ web: "hover:bg-accent/90" })
+        ),
+        brand: cn(
+          "bg-brand active:bg-brand-dark",
+          Platform.select({ web: "hover:bg-brand-dark" })
+        ),
         link: "min-h-0 px-0 py-0",
       },
       size: {
@@ -59,6 +67,8 @@ const buttonTextVariants = cva("text-base font-bold", {
       outline: "text-foreground",
       ghost: "text-foreground",
       destructive: "text-destructive-foreground",
+      accent: "text-accent-foreground",
+      brand: "text-brand-foreground",
       link: "text-primary",
     },
     size: {
@@ -77,12 +87,14 @@ const buttonTextVariants = cva("text-base font-bold", {
 type ButtonProps = React.ComponentPropsWithoutRef<typeof Pressable> &
   VariantProps<typeof buttonVariants> & {
     loading?: boolean
+    loadingColor?: string
   }
 
 function Button({
   className,
   disabled,
   loading,
+  loadingColor = "#FFFFFF",
   size,
   variant,
   children,
@@ -100,7 +112,7 @@ function Button({
         role="button"
         {...props}
       >
-        {loading ? <ActivityIndicator color="#FFFFFF" /> : children}
+        {loading ? <ActivityIndicator color={loadingColor} /> : children}
       </Pressable>
     </TextClassContext.Provider>
   )

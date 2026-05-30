@@ -117,6 +117,7 @@ export class UsersRepository {
   private toUpdateData(input: UpdateUserProfileRequest) {
     const data: {
       bio?: string | null;
+      hasCompletedOnboarding?: boolean;
       interests?: string[];
       name?: string | null;
       photoUrl?: string | null;
@@ -125,6 +126,13 @@ export class UsersRepository {
 
     if ('bio' in input) {
       data.bio = input.bio ?? null;
+    }
+
+    if (
+      'hasCompletedOnboarding' in input &&
+      input.hasCompletedOnboarding !== undefined
+    ) {
+      data.hasCompletedOnboarding = input.hasCompletedOnboarding;
     }
 
     if ('interests' in input && input.interests !== undefined) {
@@ -150,6 +158,7 @@ export class UsersRepository {
     bio: string | null;
     clerkId: string;
     email: string;
+    hasCompletedOnboarding: boolean;
     id: string;
     interests: string[];
     name: string | null;
@@ -165,6 +174,7 @@ export class UsersRepository {
       bio: user.bio,
       travelStyle: user.travelStyle,
       interests: user.interests,
+      hasCompletedOnboarding: user.hasCompletedOnboarding,
     };
   }
 }

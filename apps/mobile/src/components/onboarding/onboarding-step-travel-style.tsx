@@ -1,47 +1,48 @@
-import { LinearGradient } from "expo-linear-gradient"
+import { Backpack, Check, Gem, Luggage } from "lucide-react-native"
 import { TouchableOpacity, View } from "react-native"
 import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
+import { Icon } from "@/components/ui/icon"
 import { Text } from "@/components/ui/text"
 
 type TravelStyle = "BUDGET" | "MID_RANGE" | "LUXURY"
 
 const OPTIONS: {
   value: TravelStyle
-  emoji: string
+  icon: typeof Backpack
   label: string
   tagline: string
   description: string
-  gradientColors: [string, string]
-  textColor: string
+  iconClass: string
+  toneClass: string
 }[] = [
   {
     value: "BUDGET",
-    emoji: "🎒",
+    icon: Backpack,
     label: "Budget Explorer",
     tagline: "Make every peso count",
     description: "Hostels, street food, habal-habal rides",
-    gradientColors: ["#FF9A3C", "#FF5722"],
-    textColor: "#7C2D0E",
+    iconClass: "text-orange-300",
+    toneClass: "text-orange-300 bg-orange-500/10 border-orange-500/20",
   },
   {
     value: "MID_RANGE",
-    emoji: "🧳",
+    icon: Luggage,
     label: "Comfortable Traveller",
     tagline: "Best of both worlds",
     description: "Hotels, sit-down meals, Grab rides",
-    gradientColors: ["#208AEF", "#0A4F8A"],
-    textColor: "#0A2647",
+    iconClass: "text-blue-300",
+    toneClass: "text-blue-300 bg-blue-500/10 border-blue-500/20",
   },
   {
     value: "LUXURY",
-    emoji: "✨",
+    icon: Gem,
     label: "Luxury Wanderer",
     tagline: "No compromises",
     description: "Resorts, fine dining, private transfers",
-    gradientColors: ["#7C3AED", "#4C1D95"],
-    textColor: "#1E0A47",
+    iconClass: "text-purple-300",
+    toneClass: "text-purple-300 bg-purple-500/10 border-purple-500/20",
   },
 ]
 
@@ -55,10 +56,10 @@ export function OnboardingStepTravelStyle({ onNext }: Props) {
   return (
     <View className="gap-8">
       <View className="gap-2">
-        <Text className="text-3xl font-bold text-zinc-900 dark:text-white">
+        <Text className="text-3xl font-bold text-white">
           How do you travel?
         </Text>
-        <Text className="text-base leading-relaxed text-zinc-500 dark:text-zinc-400">
+        <Text className="text-base leading-relaxed text-slate-400">
           This shapes your AI itineraries and budget estimates.
         </Text>
       </View>
@@ -72,50 +73,53 @@ export function OnboardingStepTravelStyle({ onNext }: Props) {
               key={option.value}
               onPress={() => setSelected(option.value)}
               activeOpacity={0.9}
-              className="overflow-hidden rounded-2xl"
+              className={[
+                "rounded-2xl border p-4",
+                isSelected
+                  ? "border-amber-400/50 bg-slate-800/80"
+                  : "border-white/10 bg-white/5",
+              ].join(" ")}
               style={{
-                shadowColor: isSelected ? option.gradientColors[0] : "#000",
+                shadowColor: isSelected ? "#f59e0b" : "#000",
                 shadowOffset: { width: 0, height: isSelected ? 8 : 2 },
-                shadowOpacity: isSelected ? 0.3 : 0.06,
+                shadowOpacity: isSelected ? 0.22 : 0.06,
                 shadowRadius: isSelected ? 16 : 4,
                 elevation: isSelected ? 8 : 2,
-                transform: [{ scale: isSelected ? 1.02 : 1 }],
               }}
             >
-              <LinearGradient
-                colors={option.gradientColors}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                className="p-5"
-              >
-                <View className="flex-row items-start justify-between">
-                  <View className="gap-1.5">
-                    <View className="flex-row items-center gap-2">
-                      <Text className="text-2xl">{option.emoji}</Text>
-                      <Text className="text-lg font-bold text-white">
-                        {option.label}
-                      </Text>
-                    </View>
-                    <Text className="text-xs font-semibold uppercase tracking-wider text-white/70">
+              <View className="flex-row items-start justify-between gap-4">
+                <View className="flex-1 flex-row items-start gap-3">
+                  <View
+                    className={[
+                      "h-12 w-12 items-center justify-center rounded-2xl border",
+                      option.toneClass,
+                    ].join(" ")}
+                  >
+                    <Icon
+                      as={option.icon}
+                      className={option.iconClass}
+                      size={23}
+                    />
+                  </View>
+                  <View className="flex-1 gap-1">
+                    <Text className="text-lg font-bold text-white">
+                      {option.label}
+                    </Text>
+                    <Text className="text-xs font-semibold uppercase tracking-wider text-amber-200/80">
                       {option.tagline}
                     </Text>
-                    <Text className="mt-1 text-sm text-white/80">
+                    <Text className="text-sm leading-relaxed text-slate-400">
                       {option.description}
                     </Text>
                   </View>
-
-                  {isSelected && (
-                    <View className="h-7 w-7 items-center justify-center rounded-full bg-white">
-                      <Text
-                        className="text-xs font-bold"
-                        style={{ color: option.gradientColors[0] }}
-                      >
-                        ✓
-                      </Text>
-                    </View>
-                  )}
                 </View>
-              </LinearGradient>
+
+                {isSelected && (
+                  <View className="h-7 w-7 items-center justify-center rounded-full bg-amber-300">
+                    <Icon as={Check} className="text-slate-950" size={14} />
+                  </View>
+                )}
+              </View>
             </TouchableOpacity>
           )
         })}
@@ -125,8 +129,9 @@ export function OnboardingStepTravelStyle({ onNext }: Props) {
         onPress={() => selected && onNext(selected)}
         disabled={!selected}
         size="lg"
+        variant="accent"
       >
-        <Text>Continue →</Text>
+        <Text>Continue</Text>
       </Button>
     </View>
   )

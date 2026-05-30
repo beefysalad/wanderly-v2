@@ -9,6 +9,7 @@ export type UserProfile = {
   bio: string | null
   travelStyle: TravelStyle
   interests: string[]
+  hasCompletedOnboarding: boolean
 }
 
 export type UpdateUserProfileRequest = {
@@ -17,6 +18,7 @@ export type UpdateUserProfileRequest = {
   bio?: string | null
   travelStyle?: TravelStyle
   interests?: string[]
+  hasCompletedOnboarding?: boolean
 }
 
 export type CurrentUserResponse = {

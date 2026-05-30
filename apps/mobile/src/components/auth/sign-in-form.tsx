@@ -47,7 +47,7 @@ export function SignInForm() {
     <View className="gap-5">
       {/* Email */}
       <View className="gap-2">
-        <Text className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+        <Text className="text-xs font-bold uppercase tracking-wider text-slate-400">
           Email address
         </Text>
         <Controller
@@ -76,14 +76,14 @@ export function SignInForm() {
       {/* Password */}
       <View className="gap-2">
         <View className="flex-row items-center justify-between">
-          <Text className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+          <Text className="text-xs font-bold uppercase tracking-wider text-slate-400">
             Password
           </Text>
           <TouchableOpacity
             onPress={() => setShowPassword(!showPassword)}
             hitSlop={8}
           >
-            <Text className="text-sm font-medium text-primary">
+            <Text className="text-sm font-semibold text-amber-300">
               {showPassword ? "Hide" : "Show"}
             </Text>
           </TouchableOpacity>
@@ -112,22 +112,27 @@ export function SignInForm() {
 
       {/* Server error */}
       {serverError ? (
-        <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-900/20">
-          <Text className="text-sm text-red-600 dark:text-red-400">
+        <View className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3">
+          <Text className="text-sm font-medium text-red-300">
             {serverError}
           </Text>
         </View>
       ) : null}
 
       {/* Sign in button */}
-      <Button onPress={handleSubmit(onSubmit)} loading={isSubmitting} size="lg">
+      <Button
+        onPress={handleSubmit(onSubmit)}
+        loading={isSubmitting}
+        size="lg"
+        variant="accent"
+      >
         <Text>Sign In</Text>
       </Button>
 
       {/* Divider */}
       <View className="flex-row items-center gap-4">
         <Separator className="flex-1" />
-        <Text className="text-xs font-medium uppercase tracking-wider text-zinc-400">
+        <Text className="text-xs font-medium uppercase tracking-wider text-slate-500">
           or continue with
         </Text>
         <Separator className="flex-1" />
@@ -137,14 +142,12 @@ export function SignInForm() {
 
       {/* Sign up link */}
       <View className="flex-row items-center justify-center gap-1 pt-2">
-        <Text className="text-sm text-zinc-500 dark:text-zinc-400">
-          New to Wanderly?
-        </Text>
+        <Text className="text-sm text-slate-400">New to Wanderly?</Text>
         <TouchableOpacity
           onPress={() => router.replace("/(auth)/sign-up")}
           hitSlop={8}
         >
-          <Text className="text-sm font-bold text-primary">
+          <Text className="text-sm font-bold text-amber-300">
             Create an account
           </Text>
         </TouchableOpacity>

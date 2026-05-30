@@ -12,6 +12,7 @@ describe('UsersService profile endpoints', () => {
     bio: null,
     travelStyle: 'BUDGET' as const,
     interests: [],
+    hasCompletedOnboarding: false,
   };
 
   let usersRepository: jest.Mocked<
@@ -46,6 +47,7 @@ describe('UsersService profile endpoints', () => {
   it('updates only provided profile fields', async () => {
     const patch = {
       bio: 'Updated',
+      hasCompletedOnboarding: true,
       interests: ['museums'],
     };
 
@@ -62,6 +64,14 @@ describe('UsersService profile endpoints', () => {
     await expect(
       service.updateCurrentUser('user_123', {
         travelStyle: 'FAST' as never,
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+  });
+
+  it('rejects invalid onboarding completion values', async () => {
+    await expect(
+      service.updateCurrentUser('user_123', {
+        hasCompletedOnboarding: 'yes' as never,
       }),
     ).rejects.toBeInstanceOf(BadRequestException);
   });

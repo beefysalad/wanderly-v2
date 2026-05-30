@@ -7,10 +7,12 @@ import { useState } from "react"
 
 import { OAuthButtons } from "@/components/auth/oauth-buttons"
 import { Button } from "@/components/ui/button"
+import { Icon } from "@/components/ui/icon"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Text } from "@/components/ui/text"
 import { signUpSchema, type SignUpValues } from "@/lib/validations/auth"
+import { MailCheck } from "lucide-react-native"
 
 export function SignUpForm() {
   const { signUp } = useSignUp()
@@ -66,15 +68,15 @@ export function SignUpForm() {
     return (
       <View className="gap-5">
         {/* Email icon + instructions */}
-        <View className="items-center gap-3 rounded-2xl bg-blue-50 px-6 py-6 dark:bg-blue-900/20">
-          <View className="h-14 w-14 items-center justify-center rounded-full bg-primary/10">
-            <Text className="text-2xl">📬</Text>
+        <View className="items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-6 py-6">
+          <View className="h-14 w-14 items-center justify-center rounded-full bg-amber-400/10">
+            <Icon as={MailCheck} className="text-amber-300" size={26} />
           </View>
           <View className="items-center gap-1">
-            <Text className="text-base font-bold text-zinc-900 dark:text-white">
+            <Text className="text-base font-bold text-white">
               Check your email
             </Text>
-            <Text className="text-center text-sm text-zinc-500 dark:text-zinc-400">
+            <Text className="text-center text-sm text-slate-400">
               We sent a 6-digit verification code to your email address.
             </Text>
           </View>
@@ -82,11 +84,11 @@ export function SignUpForm() {
 
         {/* Code input */}
         <View className="gap-2">
-          <Text className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+          <Text className="text-xs font-bold uppercase tracking-wider text-slate-400">
             Verification code
           </Text>
           <Input
-            className="rounded-xl border border-zinc-200 bg-zinc-50 px-4 py-4 text-center text-2xl font-bold tracking-[0.4em] text-zinc-900 dark:border-zinc-800 dark:bg-zinc-900 dark:text-white"
+            className="px-4 py-4 text-center text-2xl font-bold tracking-[0.4em]"
             placeholder="000000"
             keyboardType="number-pad"
             maxLength={6}
@@ -96,8 +98,8 @@ export function SignUpForm() {
         </View>
 
         {serverError ? (
-          <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-900/20">
-            <Text className="text-sm text-red-600 dark:text-red-400">
+          <View className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3">
+            <Text className="text-sm font-medium text-red-300">
               {serverError}
             </Text>
           </View>
@@ -108,6 +110,7 @@ export function SignUpForm() {
           disabled={verifying || verifyCode.length < 6}
           loading={verifying}
           size="lg"
+          variant="accent"
         >
           <Text>Verify & Continue</Text>
         </Button>
@@ -117,8 +120,8 @@ export function SignUpForm() {
           className="items-center py-2"
           hitSlop={8}
         >
-          <Text className="text-sm text-zinc-500 dark:text-zinc-400">
-            ← Use a different email
+          <Text className="text-sm font-medium text-slate-400">
+            Use a different email
           </Text>
         </TouchableOpacity>
       </View>
@@ -129,7 +132,7 @@ export function SignUpForm() {
     <View className="gap-5">
       {/* Email */}
       <View className="gap-2">
-        <Text className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+        <Text className="text-xs font-bold uppercase tracking-wider text-slate-400">
           Email address
         </Text>
         <Controller
@@ -158,14 +161,14 @@ export function SignUpForm() {
       {/* Password */}
       <View className="gap-2">
         <View className="flex-row items-center justify-between">
-          <Text className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+          <Text className="text-xs font-bold uppercase tracking-wider text-slate-400">
             Password
           </Text>
           <TouchableOpacity
             onPress={() => setShowPassword(!showPassword)}
             hitSlop={8}
           >
-            <Text className="text-sm font-medium text-primary">
+            <Text className="text-sm font-semibold text-amber-300">
               {showPassword ? "Hide" : "Show"}
             </Text>
           </TouchableOpacity>
@@ -193,20 +196,25 @@ export function SignUpForm() {
       </View>
 
       {serverError ? (
-        <View className="rounded-xl bg-red-50 px-4 py-3 dark:bg-red-900/20">
-          <Text className="text-sm text-red-600 dark:text-red-400">
+        <View className="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3">
+          <Text className="text-sm font-medium text-red-300">
             {serverError}
           </Text>
         </View>
       ) : null}
 
-      <Button onPress={handleSubmit(onSubmit)} loading={isSubmitting} size="lg">
+      <Button
+        onPress={handleSubmit(onSubmit)}
+        loading={isSubmitting}
+        size="lg"
+        variant="accent"
+      >
         <Text>Create Account</Text>
       </Button>
 
       <View className="flex-row items-center gap-4">
         <Separator className="flex-1" />
-        <Text className="text-xs font-medium uppercase tracking-wider text-zinc-400">
+        <Text className="text-xs font-medium uppercase tracking-wider text-slate-500">
           or continue with
         </Text>
         <Separator className="flex-1" />
@@ -215,14 +223,12 @@ export function SignUpForm() {
       <OAuthButtons onError={setServerError} />
 
       <View className="flex-row items-center justify-center gap-1 pt-2">
-        <Text className="text-sm text-zinc-500 dark:text-zinc-400">
-          Already have an account?
-        </Text>
+        <Text className="text-sm text-slate-400">Already have an account?</Text>
         <TouchableOpacity
           onPress={() => router.replace("/(auth)/sign-in")}
           hitSlop={8}
         >
-          <Text className="text-sm font-bold text-primary">Sign in</Text>
+          <Text className="text-sm font-bold text-amber-300">Sign in</Text>
         </TouchableOpacity>
       </View>
     </View>

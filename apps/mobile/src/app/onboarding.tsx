@@ -1,122 +1,139 @@
-import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
-import { ScrollView, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState } from 'react';
+import { useRouter } from "expo-router"
+import { Check, Heart, Luggage, UserRound } from "lucide-react-native"
+import { ScrollView, View } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
+import { useState } from "react"
 
-import { OnboardingStepName } from '@/components/onboarding/onboarding-step-name';
-import { OnboardingStepTravelStyle } from '@/components/onboarding/onboarding-step-travel-style';
-import { OnboardingStepInterests } from '@/components/onboarding/onboarding-step-interests';
-import { useUpdateUser } from '@/hooks/users/use-update-user';
+import { OnboardingStepInterests } from "@/components/onboarding/onboarding-step-interests"
+import { OnboardingStepName } from "@/components/onboarding/onboarding-step-name"
+import { OnboardingStepTravelStyle } from "@/components/onboarding/onboarding-step-travel-style"
+import { PremiumBackground } from "@/components/shared/premium-background"
+import { Icon } from "@/components/ui/icon"
+import { Text } from "@/components/ui/text"
+import { useUpdateUser } from "@/hooks/users/use-update-user"
 
-type TravelStyle = 'BUDGET' | 'MID_RANGE' | 'LUXURY';
+type TravelStyle = "BUDGET" | "MID_RANGE" | "LUXURY"
 
 const STEPS = [
-  { label: 'About you', emoji: '👋' },
-  { label: 'Travel style', emoji: '🧳' },
-  { label: 'Interests', emoji: '🌟' },
-];
+  { label: "About you", icon: UserRound },
+  { label: "Travel style", icon: Luggage },
+  { label: "Interests", icon: Heart },
+]
 
 export default function OnboardingScreen() {
-  const router = useRouter();
-  const { mutateAsync: updateUser, isPending } = useUpdateUser();
+  const router = useRouter()
+  const { mutateAsync: updateUser, isPending } = useUpdateUser()
 
-  const [step, setStep] = useState(1);
-  const [name, setName] = useState('');
-  const [travelStyle, setTravelStyle] = useState<TravelStyle | null>(null);
+  const [step, setStep] = useState(1)
+  const [name, setName] = useState("")
+  const [travelStyle, setTravelStyle] = useState<TravelStyle | null>(null)
 
   function handleNameNext(value: string) {
-    setName(value);
-    setStep(2);
+    setName(value)
+    setStep(2)
   }
 
   function handleStyleNext(value: TravelStyle) {
-    setTravelStyle(value);
-    setStep(3);
+    setTravelStyle(value)
+    setStep(3)
   }
 
   async function handleFinish(interests: string[]) {
-    await updateUser({ name, travelStyle: travelStyle!, interests });
-    router.replace('/(tabs)');
+    await updateUser({
+      name,
+      travelStyle: travelStyle!,
+      interests,
+      hasCompletedOnboarding: true,
+    })
+    router.replace("/(tabs)")
   }
 
-  const currentStepInfo = STEPS[step - 1];
+  const currentStepInfo = STEPS[step - 1]
+  const CurrentStepIcon = currentStepInfo?.icon
 
   return (
-    <SafeAreaView className="flex-1 bg-white dark:bg-zinc-950">
-      {/* Top progress header */}
-      <LinearGradient
-        colors={['#208AEF', '#0A4F8A']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        className="px-6 pb-5 pt-4"
-      >
+    <SafeAreaView className="flex-1 bg-slate-950">
+      <PremiumBackground variant="orange" />
+      <View className="px-6 pt-4 pb-5">
         {/* Step pills */}
         <View className="flex-row items-center gap-2">
           {STEPS.map((s, i) => {
-            const num = i + 1;
-            const isDone = num < step;
-            const isActive = num === step;
+            const num = i + 1
+            const isDone = num < step
+            const isActive = num === step
+            const StepIcon = s.icon
             return (
               <View
                 key={num}
                 className={[
-                  'flex-row items-center gap-1.5 rounded-full px-3 py-1.5',
+                  "flex-row items-center gap-1.5 rounded-full border px-3 py-1.5",
                   isActive
-                    ? 'bg-white/25'
+                    ? "border-amber-400/40 bg-amber-400/15"
                     : isDone
-                      ? 'bg-white/15'
-                      : 'bg-white/8',
-                ].join(' ')}
+                      ? "border-white/10 bg-white/10"
+                      : "border-white/5 bg-white/5",
+                ].join(" ")}
               >
                 <View
                   className={[
-                    'h-5 w-5 items-center justify-center rounded-full',
-                    isActive || isDone ? 'bg-white' : 'bg-white/30',
-                  ].join(' ')}
+                    "h-5 w-5 items-center justify-center rounded-full",
+                    isActive || isDone ? "bg-amber-300" : "bg-white/10",
+                  ].join(" ")}
                 >
                   {isDone ? (
-                    <Text className="text-[10px] font-bold text-primary">✓</Text>
+                    <Icon as={Check} className="text-slate-950" size={12} />
                   ) : (
-                    <Text className="text-[10px] font-bold text-primary">{num}</Text>
+                    <Icon
+                      as={StepIcon}
+                      className={isActive ? "text-slate-950" : "text-slate-400"}
+                      size={11}
+                    />
                   )}
                 </View>
                 {isActive && (
-                  <Text className="text-xs font-semibold text-white">{s.label}</Text>
+                  <Text className="text-xs font-semibold text-white">
+                    {s.label}
+                  </Text>
                 )}
               </View>
-            );
+            )
           })}
         </View>
 
         {/* Step heading */}
-        <View className="mt-4 gap-0.5">
-          <Text className="text-xs font-semibold uppercase tracking-widest text-white/60">
+        <View className="mt-6 gap-2">
+          <Text className="text-xs font-bold tracking-[0.25em] text-amber-300 uppercase">
             Step {step} of {STEPS.length}
           </Text>
           <View className="flex-row items-center gap-2">
-            <Text className="text-xl">{currentStepInfo?.emoji}</Text>
+            {CurrentStepIcon && (
+              <Icon as={CurrentStepIcon} className="text-white" size={22} />
+            )}
             <Text className="text-xl font-bold text-white">
               {currentStepInfo?.label}
             </Text>
           </View>
         </View>
-      </LinearGradient>
+      </View>
 
       {/* Content */}
       <ScrollView
-        className="flex-1 rounded-t-[28px] bg-white dark:bg-zinc-950"
-        contentContainerClassName="px-6 pt-6 pb-12"
+        className="flex-1"
+        contentContainerClassName="px-6 pb-12 pt-2"
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        style={{ marginTop: -12 }}
       >
-        {step === 1 && <OnboardingStepName onNext={handleNameNext} />}
-        {step === 2 && <OnboardingStepTravelStyle onNext={handleStyleNext} />}
-        {step === 3 && (
-          <OnboardingStepInterests onFinish={handleFinish} isLoading={isPending} />
-        )}
+        <View className="rounded-3xl border border-white/10 bg-slate-900/70 p-5">
+          {step === 1 && <OnboardingStepName onNext={handleNameNext} />}
+          {step === 2 && <OnboardingStepTravelStyle onNext={handleStyleNext} />}
+          {step === 3 && (
+            <OnboardingStepInterests
+              onFinish={handleFinish}
+              isLoading={isPending}
+            />
+          )}
+        </View>
       </ScrollView>
     </SafeAreaView>
-  );
+  )
 }

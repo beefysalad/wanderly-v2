@@ -13,7 +13,7 @@ function Input({
   return (
     <TextInput
       className={cn(
-        "min-h-12 rounded-xl border border-input bg-background px-4 py-3.5 text-base text-foreground",
+        "min-h-12 rounded-xl border border-input bg-card/80 px-4 py-3.5 text-base text-foreground",
         "placeholder:text-muted-foreground",
         className
       )}
