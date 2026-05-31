@@ -14,7 +14,11 @@ const decimalStringSchema = z
 const budgetSchema = z
   .union([
     decimalStringSchema,
-    z.number().nonnegative().transform((value) => value.toString()),
+    z
+      .number()
+      .nonnegative()
+      .transform((value) => value.toString())
+      .pipe(decimalStringSchema),
   ])
   .nullable()
   .optional();

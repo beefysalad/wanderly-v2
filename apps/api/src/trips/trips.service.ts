@@ -95,7 +95,7 @@ export class TripsService {
 
     await this.assertTripAccess(trip, user.id);
 
-    const data = this.toUpdateTripData(input);
+    const data = this.toUpdateTripData(input, trip);
     const updatedTrip = await this.tripsRepository.updateTrip(tripId, data);
 
     return this.toTrip(updatedTrip);
@@ -276,10 +276,17 @@ export class TripsService {
     }
   }
 
-  private toUpdateTripData(input: UpdateTripRequest): UpdateTripData {
+  private toUpdateTripData(
+    input: UpdateTripRequest,
+    existingTrip: TripRecord,
+  ): UpdateTripData {
     const startDate = this.parseDateOrUndefined(input.startDate, 'startDate');
     const endDate = this.parseDateOrUndefined(input.endDate, 'endDate');
-    this.assertDateRange(startDate, endDate);
+    const resolvedStartDate =
+      startDate !== undefined ? startDate : existingTrip.startDate;
+    const resolvedEndDate =
+      endDate !== undefined ? endDate : existingTrip.endDate;
+    this.assertDateRange(resolvedStartDate, resolvedEndDate);
 
     const data: UpdateTripData = {};
 

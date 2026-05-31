@@ -174,6 +174,16 @@ describe('TripsService', () => {
     expect(tripsRepository.updateTrip).not.toHaveBeenCalled();
   });
 
+  it('validates updated startDate against the existing endDate', async () => {
+    await expect(
+      service.updateTrip('clerk_user_1', 'trip_solo_1', {
+        startDate: '2026-06-20',
+      }),
+    ).rejects.toBeInstanceOf(BadRequestException);
+
+    expect(tripsRepository.updateTrip).not.toHaveBeenCalled();
+  });
+
   it('upserts the authenticated user RSVP for a group trip', async () => {
     tripsRepository.findTripById.mockResolvedValueOnce(groupTripRecord);
     tripsRepository.findGroupMembership.mockResolvedValueOnce({
