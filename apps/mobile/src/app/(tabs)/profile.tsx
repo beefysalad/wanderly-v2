@@ -85,7 +85,12 @@ export default function ProfileScreen() {
         style={{ paddingBottom: insets.bottom + 96 }}
       >
         <View className="flex-row items-center gap-3.5">
-          <GradientAvatar name={displayName} size={60} i={0} />
+          <GradientAvatar
+            name={displayName}
+            size={60}
+            i={0}
+            imageUrl={user?.hasImage ? user.imageUrl : undefined}
+          />
           <View className="flex-1">
             <Text className="text-xl font-extrabold tracking-tight text-foreground">
               {displayName}

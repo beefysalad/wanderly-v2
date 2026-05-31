@@ -1,3 +1,4 @@
+import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { View } from "react-native"
 
@@ -20,10 +21,18 @@ type GradientAvatarProps = {
   i?: number
   /** Draw a ring (bg-colored border) for stacked/overlapping avatars. */
   ring?: boolean
+  /** Profile photo URL — when set, renders the image instead of initials. */
+  imageUrl?: string | null
 }
 
-/** Circular avatar with initials over a deterministic gradient. */
-function GradientAvatar({ name = "", size = 34, i = 0, ring }: GradientAvatarProps) {
+/** Circular avatar: profile photo when available, else initials on a gradient. */
+function GradientAvatar({
+  name = "",
+  size = 34,
+  i = 0,
+  ring,
+  imageUrl,
+}: GradientAvatarProps) {
   const initials = name
     .split(" ")
     .map((s) => s[0])
@@ -37,19 +46,29 @@ function GradientAvatar({ name = "", size = 34, i = 0, ring }: GradientAvatarPro
       className={cn("overflow-hidden", ring && "border-2 border-background")}
       style={{ width: size, height: size, borderRadius: size / 2 }}
     >
-      <LinearGradient
-        colors={colors}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-      >
-        <Text
-          style={{ fontSize: size * 0.36 }}
-          className="font-bold text-white"
+      {imageUrl ? (
+        <Image
+          source={{ uri: imageUrl }}
+          contentFit="cover"
+          cachePolicy="memory-disk"
+          transition={150}
+          style={{ width: size, height: size }}
+        />
+      ) : (
+        <LinearGradient
+          colors={colors}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
-          {initials}
-        </Text>
-      </LinearGradient>
+          <Text
+            style={{ fontSize: size * 0.36 }}
+            className="font-bold text-white"
+          >
+            {initials}
+          </Text>
+        </LinearGradient>
+      )}
     </View>
   )
 }

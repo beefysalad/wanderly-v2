@@ -53,7 +53,12 @@ export function TripsHomeGroup() {
               <View className="absolute right-2.5 top-2.5 h-2 w-2 rounded-full border-2 border-background bg-wl-accent-2" />
             </View>
             <Pressable onPress={() => router.push("/(tabs)/profile")}>
-              <GradientAvatar name={fullName} size={42} i={0} />
+              <GradientAvatar
+                name={fullName}
+                size={42}
+                i={0}
+                imageUrl={user?.hasImage ? user.imageUrl : undefined}
+              />
             </Pressable>
           </View>
         </View>

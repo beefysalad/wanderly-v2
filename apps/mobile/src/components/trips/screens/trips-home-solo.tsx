@@ -84,7 +84,12 @@ export function TripsHomeSolo() {
             <View className="h-[42px] w-[42px] items-center justify-center rounded-[13px] border border-wl-border bg-wl-surface-2">
               <Icon as={Bell} size={20} className="text-foreground" />
             </View>
-            <GradientAvatar name={fullName} size={42} i={0} />
+            <GradientAvatar
+              name={fullName}
+              size={42}
+              i={0}
+              imageUrl={user?.hasImage ? user.imageUrl : undefined}
+            />
           </View>
         </View>
 
