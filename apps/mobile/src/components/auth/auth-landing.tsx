@@ -6,6 +6,7 @@ import * as WebBrowser from "expo-web-browser"
 import { ArrowRight } from "lucide-react-native"
 import { useState } from "react"
 import { ActivityIndicator, Pressable, View } from "react-native"
+import Animated, { FadeIn, FadeInDown } from "react-native-reanimated"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import { AuthLandingImageCarousel } from "@/components/auth/auth-landing-image-carousel"
@@ -56,14 +57,17 @@ export function AuthLanding() {
 
       <SafeAreaView edges={["top", "bottom"]} className="flex-1">
         <View className="flex-1 justify-between px-6 pb-7 pt-14">
-          <View>
+          <Animated.View entering={FadeIn.duration(700)}>
             <Text className="text-[58px] font-extrabold leading-[0.92] text-white">
               Wanderly
             </Text>
-          </View>
+          </Animated.View>
 
           <View>
-            <View className="mb-6">
+            <Animated.View
+              entering={FadeInDown.duration(650).delay(150)}
+              className="mb-6"
+            >
               <Text className="max-w-[330px] text-[31px] font-extrabold leading-[1.08] text-white">
                 Plan the trip. Keep the story.
               </Text>
@@ -71,9 +75,12 @@ export function AuthLanding() {
                 Build solo plans, group itineraries, budgets, and travel
                 memories from one place.
               </Text>
-            </View>
+            </Animated.View>
 
-            <View className="gap-3">
+            <Animated.View
+              entering={FadeInDown.duration(650).delay(320)}
+              className="gap-3"
+            >
               <Pressable
                 onPress={() => router.push("/(auth)/sign-up")}
                 disabled={loading !== null}
@@ -130,7 +137,7 @@ export function AuthLanding() {
                   <Text className="font-bold text-white">Log in</Text>
                 </Text>
               </Pressable>
-            </View>
+            </Animated.View>
           </View>
         </View>
       </SafeAreaView>
