@@ -1,6 +1,6 @@
 "use client"
 
-import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs"
+import { Show, UserButton } from "@clerk/nextjs"
 
 import { Button } from "@workspace/ui/components/button"
 import Link from "next/link"
@@ -16,19 +16,17 @@ function AuthHeader() {
   return (
     <header className="border-border bg-background/80 fixed inset-x-0 top-0 z-50 border-b px-6 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4">
-        <Link href="/" className="text-sm font-semibold tracking-tight">
-          Nexion
+        <Link href="/" className="text-sm font-semibold tracking-normal">
+          Wanderly Admin
         </Link>
         <div className="flex items-center gap-2">
           <Show when="signed-out">
-            <SignInButton mode="modal" fallbackRedirectUrl="/dashboard">
-              <Button variant="ghost" size="sm">
-                Sign in
-              </Button>
-            </SignInButton>
-            <SignUpButton mode="modal" fallbackRedirectUrl="/dashboard">
-              <Button size="sm">Sign up</Button>
-            </SignUpButton>
+            <Button asChild variant="ghost" size="sm">
+              <Link href="/sign-in">Sign in</Link>
+            </Button>
+            <Button asChild size="sm">
+              <Link href="/sign-up">Sign up</Link>
+            </Button>
           </Show>
           <Show when="signed-in">
             <Button asChild variant="ghost" size="sm">

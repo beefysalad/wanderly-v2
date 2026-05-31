@@ -50,7 +50,7 @@ export function DataPage() {
     dataUpdatedAt: usersUpdatedAt,
   } = useAllUsers()
 
-  const users = data?.users ?? []
+  const users = useMemo(() => data?.users ?? [], [data?.users])
 
   const withAvatarCount = useMemo(
     () => users.filter((user) => Boolean(user.imageUrl)).length,
@@ -115,7 +115,9 @@ export function DataPage() {
           description={
             isHealthError
               ? "The API health check could not be reached."
-              : (health?.message ?? "Waiting for the latest backend status.")
+              : health?.timestamp
+                ? `Last checked ${new Date(health.timestamp).toLocaleTimeString()}`
+                : "Waiting for the latest backend status."
           }
           icon={<RiServerLine className="size-4" />}
         />
@@ -306,11 +308,11 @@ export function DataPage() {
                   </div>
                   <Separator />
                   <StatusBlock
-                    label="Backend message"
+                    label="Backend timestamp"
                     value={
                       isHealthError
                         ? "Health endpoint unavailable"
-                        : (health?.message ?? "No message returned")
+                        : (health?.timestamp ?? "No timestamp returned")
                     }
                   />
                 </>
