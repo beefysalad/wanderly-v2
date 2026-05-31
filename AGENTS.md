@@ -241,7 +241,7 @@ apps/api/src/
 
 ### Auth
 
-- Protect all routes except webhooks with `ClerkGuard`.
+- Protect all routes except webhooks and the public root health endpoint (`GET /`) with `ClerkGuard`.
 - Extract `clerkId` from the JWT via `@CurrentUser()` decorator — never trust a user-supplied `userId` in the request body.
 - Clerk `user.created` / `user.deleted` webhooks (verified via svix) create/delete the `User` row in Postgres. No `/sync` endpoint.
 
