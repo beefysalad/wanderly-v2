@@ -144,7 +144,7 @@ export function SignUpForm() {
 
         {/* Code input */}
         <View className="gap-2">
-          <Text className="text-xs font-bold uppercase tracking-wider text-neutral-500">
+          <Text className="text-xs font-bold tracking-wider text-neutral-500 uppercase">
             Verification code
           </Text>
           <Input
@@ -255,7 +255,7 @@ export function SignUpForm() {
 
       <OAuthButtons onError={setServerError} />
 
-      <View className="flex-row items-center justify-center gap-1 pt-2">
+      <View className="flex-row items-center justify-center gap-1">
         <Text className="text-sm text-neutral-500">
           Already have an account?
         </Text>

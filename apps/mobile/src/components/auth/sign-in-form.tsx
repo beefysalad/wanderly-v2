@@ -144,7 +144,7 @@ export function SignInForm() {
       <OAuthButtons onError={setServerError} />
 
       {/* Sign up link */}
-      <View className="flex-row items-center justify-center gap-1 pt-2">
+      <View className="flex-row items-center justify-center gap-1">
         <Text className="text-sm text-neutral-500">New to Wanderly?</Text>
         <TouchableOpacity
           onPress={() => router.replace("/(auth)/sign-up")}

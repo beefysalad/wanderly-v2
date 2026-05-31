@@ -28,39 +28,19 @@
 
 ---
 
-## 2. Groups
+## 2. Trips
+
+Wanderly is trip-first. Users can create and plan a **solo trip** without joining or creating a group. If friends join later, the same Trip can become a collaborative group trip by attaching it to a group.
 
 | Feature | Tier | Notes |
 |---|---|---|
-| Create group (name, emoji, color) | 🟢 | |
-| Unique 6-char join code | 🟢 | |
-| Join group via code | 🟢 | |
-| Join group via deep link | 🟢 | `wanderly://join/ABC123` — Filipino users share links in Messenger/Viber, not type codes |
-| Member roles (Owner, Member) | 🟢 | Owner can edit group, remove members, delete group. No Admin tier — adds complexity without solving a real user problem |
-| Remove member (owner only) | 🟢 | |
-| Leave group | 🟢 | |
-| Delete group (owner only) | 🟢 | |
-| Edit group details | 🟢 | |
-| Group chat | 🔵 | Will not beat WhatsApp/Messenger. Wanderly is the structured layer on top of those apps, not a replacement |
-| Real-time member presence | 🔵 | No functional value without chat |
-| Open/public groups | 🔵 | Different product entirely |
-
-> **Positioning**: Wanderly does itineraries, budgets, and splitting. WhatsApp handles the banter. Complementary, not competing.
-
----
-
-## 3. Trips
-
-Users can have **solo trips** (no group) or **group trips**. A solo trip is just a Trip with no group attached — plan alone first, create a group and link it later if needed.
-
-| Feature | Tier | Notes |
-|---|---|---|
-| Create trip (name, dates, destination) | 🟢 | `groupId` is optional — supports solo trips |
-| Solo trip mode | 🟢 | No group required. Natural acquisition loop: plan solo → invite friends → create group |
+| Create trip (name, dates, destination) | 🟢 | Primary creation flow. `groupId` is optional and not requested by default |
+| Solo trip mode | 🟢 | Base case for the product. No group required to create, view, budget, or generate an itinerary |
+| Attach trip to group | 🟢 | Converts an existing solo trip into a group trip without recreating itinerary, budget, or expenses |
 | Trip statuses: Planning / Completed / Cancelled | 🟢 | 3 statuses only. No "Finalized" (no clear owner), no "Ongoing/Active" (unnecessary state) |
-| Multiple trips per group | 🟢 | |
+| Multiple trips per group | 🟢 | A group can collaborate on more than one trip, but Trips remain the top-level home surface |
 | Edit / delete trip | 🟢 | |
-| "Who's in?" RSVP per trip | 🟢 | Per-member status: Going / Maybe / Can't make it. Prevents planning for people who won't show up |
+| "Who's in?" RSVP per trip | 🟢 | Group-trip only. Per-member status: Going / Maybe / Can't make it |
 | Trip templates (save & clone) | 🟡 | V2 retention feature — needs completed trips first |
 | Pre-departure checklist (AI gap scan) | 🟡 | V2 — needs validated itinerary usage first |
 | Post-trip recap (AI summary) | 🟡 | V2 — needs completed trips |
@@ -68,6 +48,31 @@ Users can have **solo trips** (no group) or **group trips**. A solo trip is just
 | Trip wishlist / bucket list | 🔵 | |
 
 > **Cut**: PNG export — removed. ICS export demoted to V2 (Filipino friend groups screenshot to Messenger, not sync to Google Calendar).
+
+---
+
+## 3. Collaboration & Sharing
+
+Groups are the collaboration layer for trips, not the starting point of the product. A user can create a trip alone, then create or join a group when planning becomes collaborative.
+
+| Feature | Tier | Notes |
+|---|---|---|
+| Create group (name, emoji, color) | 🟢 | Secondary action from home or from a trip's sharing/collaboration flow |
+| Unique 6-char join code | 🟢 | |
+| Join group via code | 🟢 | Secondary action, not the primary home CTA |
+| Join group via deep link | 🟢 | `wanderly://join/ABC123` — Filipino users share links in Messenger/Viber, not type codes |
+| Attach existing trip to group | 🟢 | Lets solo planning become group planning without duplicating Trip data |
+| Member roles (Owner, Member) | 🟢 | Owner can edit group, remove members, delete group. No Admin tier — adds complexity without solving a real user problem |
+| Remove member (owner only) | 🟢 | |
+| Leave group | 🟢 | |
+| Delete group (owner only) | 🟢 | |
+| Edit group details | 🟢 | |
+| Text-based trip summary | 🟢 | Paste-ready for Messenger/Viber: trip name, dates, destination, key activities, per-person cost estimate |
+| Group chat | 🔵 | Will not beat WhatsApp/Messenger. Wanderly is the structured layer on top of those apps, not a replacement |
+| Real-time member presence | 🔵 | No functional value without chat |
+| Open/public groups | 🔵 | Different product entirely |
+
+> **Positioning**: Wanderly is the structured trip workspace. WhatsApp and Messenger handle conversation; Wanderly holds the itinerary, budget, expenses, RSVPs, and shareable trip summary.
 
 ---
 
@@ -93,20 +98,23 @@ Users can have **solo trips** (no group) or **group trips**. A solo trip is just
 
 | Feature | Tier | Notes |
 |---|---|---|
+| Single total budget field on Trip | 🟢 | Solo-first base case: a simple trip budget before any group split exists |
+| Budget estimate per trip | 🟢 | AI-assisted estimate can be used by solo trips and group trips |
 | Add expense (amount, description, category, date) | 🟢 | |
 | Expense categories (accommodation, food, transport, activities, other) | 🟢 | |
-| Split evenly among selected members | 🟢 | |
-| Split by custom amounts | 🟢 | Promoted from V2 — not all trips are equal-split situations |
-| Notes/context per split | 🟢 | Reduces the "bakit ganun kalaki?" Messenger argument |
+| Solo expense tracking | 🟢 | Actuals against the trip budget without requiring splits |
+| Trip spend summary | 🟢 | Total spent, remaining budget, and category totals. Every expense belongs to a Trip whether solo or group |
+| Split evenly among selected members | 🟢 | Group-trip only |
+| Split by custom amounts | 🟢 | Group-trip only. Promoted from V2 — not all trips are equal-split situations |
+| Notes/context per split | 🟢 | Group-trip only. Reduces the "bakit ganun kalaki?" Messenger argument |
 | Payment methods (Cash, Bank Transfer, Maya, GCash) | 🟢 | PH-focused |
-| QR code upload for payment proof | 🟢 | GCash/Maya QR sharing is how Filipino users settle debts |
-| Payment confirmation flow (submit → confirm/reject) | 🟢 | Digital "pakita mo screenshot" |
-| Payment history log | 🟢 | |
-| Debt simplification (settle up) | 🟢 | Promoted from V2 — core value of expense splitting. A owes B, B owes C → A pays C directly |
-| Per-person balance summary (text-based) | 🟢 | Who owes whom, how much. Plain text list, not a chart |
-| Single total budget field on Trip | 🟢 | Simple "budget: ₱5,000 per head" instead of itemized planned expenses |
+| QR code upload for payment proof | 🟢 | Group-trip settlement. GCash/Maya QR sharing is how Filipino users settle debts |
+| Payment confirmation flow (submit → confirm/reject) | 🟢 | Group-trip settlement. Digital "pakita mo screenshot" |
+| Payment history log | 🟢 | Group-trip settlement history |
+| Debt simplification (settle up) | 🟢 | Group-trip only. A owes B, B owes C → A pays C directly |
+| Per-person balance summary (text-based) | 🟢 | Group-trip only. Who owes whom, how much. Plain text list, not a chart |
 | Split by percentage | 🟡 | V2 — less common than custom amounts |
-| Budget vs actual tracking per category | 🟡 | V2 |
+| Category budget limits vs actual tracking | 🟡 | V2 |
 | Budget alerts (80% spent push) | 🟡 | V2 |
 | Per-trip expense breakdown chart | 🟡 | V2 — text summary ships first |
 | Multi-currency support | 🟡 | V2 — add when international trip usage is confirmed. PHP only at launch |
@@ -115,6 +123,7 @@ Users can have **solo trips** (no group) or **group trips**. A solo trip is just
 
 > **Cut**: PLANNED expense type removed from MVP. Budget is a single field on Trip. Expense tracking is actuals only at launch. `ExpenseType` enum not needed until V2 budget forecasting.
 > **Cut**: Split by percentage, multi-currency for MVP.
+> **Positioning**: Budget starts as "my trip budget" with trip spend and category actuals, then expands into "our split expenses" only when the trip has collaborators. The shared base stays the same: every expense belongs to a Trip.
 
 ---
 
@@ -133,11 +142,13 @@ Users can have **solo trips** (no group) or **group trips**. A solo trip is just
 
 ### Itinerary generation flow
 
-1. User fills: destination, dates, group size, budget, interests, travel style (collected here, not onboarding)
-2. NestJS `POST /ai/itinerary` calls Claude Sonnet with structured system prompt
+1. User starts from a Trip workspace and fills: destination, dates, budget, interests, travel style, pace, and optional group size
+2. NestJS `POST /ai/itinerary` calls Claude Sonnet with a structured prompt scoped to that Trip
 3. Claude returns JSON array of activities (day, time, title, location, notes, estimated cost, category)
-4. Backend validates with Zod, bulk-inserts as `Activity` rows
-5. Group sees a fully-populated itinerary they can edit and reorder
+4. Backend validates with Zod, bulk-inserts as `Activity` rows for the Trip, and updates AI budget estimate fields where applicable
+5. Trip workspace shows the itinerary; if this is a group trip, members can edit and reorder it from the same workspace
+
+For solo trips, AI generation is still the core "wow" moment. For group trips, the same Trip workspace becomes the shared source of truth for members.
 
 ---
 
@@ -177,10 +188,9 @@ Users can have **solo trips** (no group) or **group trips**. A solo trip is just
 
 | Feature | Tier | Notes |
 |---|---|---|
-| Text-based trip summary | 🟢 | Paste-ready for Messenger/Viber: trip name, dates, destination, key activities, per-person cost estimate |
 | ICS calendar export | 🟡 | V2 |
 
-> **Cut**: PNG/image export removed. Text summary is zero infra, instantly shareable to any chat app.
+> **Cut**: PNG/image export removed. Text summary lives in Collaboration & Sharing and is zero infra, instantly shareable to any chat app.
 
 ---
 
@@ -275,7 +285,7 @@ GET   /users/me
 PATCH /users/me
 DELETE /users/me
 
-# Groups
+# Groups / Collaboration
 GET   /groups
 POST  /groups
 GET   /groups/:id
@@ -292,6 +302,7 @@ POST  /trips
 GET   /trips/:id
 PATCH /trips/:id
 DELETE /trips/:id
+POST  /trips/:id/attach-group            { groupId }
 GET   /groups/:groupId/trips             trips for a specific group
 
 # Trip RSVP
@@ -357,7 +368,7 @@ model User {
   updatedAt   DateTime    @updatedAt
 
   groups        GroupMember[]
-  trips         Trip[]         @relation("TripCreator")
+  trips         Trip[]         @relation("TripCreator") // solo + group trips created by this user
   tripRsvps     TripRsvp[]
   paidExpenses  Expense[]      @relation("PaidBy")
   splits        ExpenseSplit[]
@@ -397,7 +408,8 @@ model GroupMember {
 enum MemberRole { OWNER MEMBER }
 
 // ─── Trips ───────────────────────────────────────────────────────────────────
-// groupId is optional — null means solo trip
+// groupId is optional — null means solo trip. Attaching a group upgrades the
+// same Trip into a collaborative workspace.
 
 model Trip {
   id          String     @id @default(cuid())
@@ -573,7 +585,7 @@ apps/mobile/
 │   │   │   └── sign-up.tsx
 │   │   ├── (tabs)/
 │   │   │   ├── _layout.tsx            # Bottom tabs
-│   │   │   ├── index.tsx              # Home — solo trips + group list
+│   │   │   ├── index.tsx              # Home — Your Trips
 │   │   │   └── profile.tsx
 │   │   ├── trip/
 │   │   │   └── [tripId]/
@@ -620,20 +632,27 @@ Clerk session?
   Yes → Home
 
 Home
-  ├── My Solo Trips (trips with no group)
-  │     → Trip Detail (Activities | Expenses | AI Plan)
-  └── My Groups
-        → Group Detail
-            → Trip Card → Trip Detail (Activities | Expenses | AI Plan)
-            → Members screen (incl. RSVP status per trip)
-        → Join group (enter code or tap link)
-        → Create group
+  └── Your Trips
+        ├── Mixed solo/group trip cards
+        ├── Primary CTA: New trip
+        ├── Secondary CTA: Join trip/group
+        └── Trip Card → Trip Detail (Activities | Expenses | AI Plan | Share)
+
+Trip Detail
+  ├── Activities
+  ├── Expenses + Budget
+  ├── AI Plan
+  └── Share / Collaborate
+        ├── Solo trip: create group or attach to existing group
+        └── Group trip: members, RSVP, join link/code
 
 Profile
   → Edit profile, travel style (set here if not yet), interests
   → Past trips (solo + group)
   → Notification settings
 ```
+
+Home must not default to a group hero. Groups are reachable as secondary collaboration actions after or alongside trip creation.
 
 ### Axios + Clerk token interceptor
 
@@ -777,22 +796,25 @@ EXPO_PUBLIC_API_URL=http://localhost:3001
 2. NestJS skeleton — PrismaService, ClerkGuard, health check
 3. Clerk webhook handler (user.created / user.deleted)
 4. Users module
-5. Groups + Members module
-6. Trips module (solo + group, RSVP)
-7. Activities module (incl. reorder endpoint)
-8. Expenses + Splits + PaymentLogs module (incl. balance/settle-up endpoint)
-9. Notifications module
-10. Upload module (Cloudinary)
-11. AI module — itinerary generation + budget estimation
-12. Expo — Auth flow (sign in, sign up, 1-step onboarding)
-13. Expo — Bottom tabs shell + home screen (solo trips + groups)
-14. Expo — Group screens (create, join, members, RSVP)
-15. Expo — Trip + Activity screens (calendar, list, drag reorder)
-16. Expo — Expense screens (add, split, QR, confirm, balance summary)
-17. Expo — AI Plan screen (itinerary generation + budget estimate)
-18. Expo — Push notifications
-19. Admin endpoints
+5. Trips module (solo creation/detail first, optional `groupId` later)
+6. Activities module (incl. reorder endpoint)
+7. AI module — itinerary generation + budget estimation into Trip workspace
+8. Expo — Auth flow (sign in, sign up, 1-step onboarding)
+9. Expo — Bottom tabs shell + Your Trips home screen
+10. Expo — New trip flow + Trip detail shell
+11. Expo — Trip + Activity screens (calendar, list, drag reorder)
+12. Expo — AI Plan screen (itinerary generation + budget estimate)
+13. Expo — Budget + solo expense tracking
+14. Groups + Members module
+15. Trip collaboration attachment + RSVP
+16. Expo — Join trip/group, group members, attach trip to group
+17. Expenses + Splits + PaymentLogs module (group splitting, balance/settle-up endpoint)
+18. Expo — Group expense screens (split, QR, confirm, balance summary)
+19. Notifications module
+20. Upload module (Cloudinary)
+21. Expo — Push notifications
+22. Admin endpoints
 
 ---
 
-*Spec v3.0 — May 2026*
+*Spec v3.1 — May 2026*
