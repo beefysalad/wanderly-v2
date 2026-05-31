@@ -102,7 +102,7 @@ function TripButton({
           },
           style,
         ]}
-        className={className}
+        className={cn("active:opacity-90", className)}
       >
         <AccentFill
           style={{
@@ -122,7 +122,7 @@ function TripButton({
     <Pressable
       onPress={onPress}
       style={[base, style]}
-      className={cn(SURFACE[variant], className)}
+      className={cn(SURFACE[variant], "active:opacity-80", className)}
     >
       {content}
     </Pressable>

@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient"
-import { useColorScheme } from "react-native"
+import { useColorScheme } from "nativewind"
 
 /**
  * The faint violet "dusk" glow bleeding from the top of every screen —
@@ -7,8 +7,8 @@ import { useColorScheme } from "react-native"
  * on light surfaces the flat background already reads correctly.
  */
 function ScreenGlow() {
-  const scheme = useColorScheme()
-  if (scheme !== "dark") return null
+  const { colorScheme } = useColorScheme()
+  if (colorScheme !== "dark") return null
   return (
     <LinearGradient
       colors={["#16131F", "rgba(11,12,16,0)"]}

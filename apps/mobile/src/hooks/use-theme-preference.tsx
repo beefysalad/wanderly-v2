@@ -28,12 +28,16 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     let active = true
-    SecureStore.getItemAsync(STORAGE_KEY).then((stored) => {
-      if (active && isThemePreference(stored)) {
-        setPref(stored)
-        setColorScheme(stored)
-      }
-    })
+    SecureStore.getItemAsync(STORAGE_KEY)
+      .then((stored) => {
+        if (active && isThemePreference(stored)) {
+          setPref(stored)
+          setColorScheme(stored)
+        }
+      })
+      .catch((error: unknown) => {
+        console.error("Failed to load theme preference:", error)
+      })
     return () => {
       active = false
     }
