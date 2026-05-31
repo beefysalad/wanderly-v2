@@ -2,7 +2,6 @@ import {
   RiDashboardLine,
   RiDatabase2Line,
   RiFlashlightLine,
-  RiLayoutGridLine,
   RiPulseLine,
   RiSettings3Line,
   RiShieldUserLine,
@@ -16,14 +15,9 @@ const dashboardNavItems = [
     label: "Overview",
   },
   {
-    href: "/components",
-    icon: RiLayoutGridLine,
-    label: "Components",
-  },
-  {
     href: "/users",
     icon: RiUserReceived2Line,
-    label: "Users",
+    label: "Accounts",
   },
   {
     href: "/data",

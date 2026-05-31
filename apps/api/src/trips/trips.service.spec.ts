@@ -100,9 +100,7 @@ describe('TripsService', () => {
       }),
     };
 
-    service = new TripsService(
-      tripsRepository as unknown as TripsRepository,
-    );
+    service = new TripsService(tripsRepository as unknown as TripsRepository);
   });
 
   it('creates a solo trip owned by the authenticated user when groupId is omitted', async () => {
@@ -138,9 +136,9 @@ describe('TripsService', () => {
       groupId: 'group_1',
     };
 
-    await expect(service.createTrip('clerk_user_1', input)).rejects.toBeInstanceOf(
-      ForbiddenException,
-    );
+    await expect(
+      service.createTrip('clerk_user_1', input),
+    ).rejects.toBeInstanceOf(ForbiddenException);
 
     expect(tripsRepository.createTrip).not.toHaveBeenCalled();
   });

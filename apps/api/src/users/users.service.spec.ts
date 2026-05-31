@@ -1,4 +1,4 @@
-import { ForbiddenException, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import type { UsersRepository } from './users.repository';
 
@@ -18,10 +18,7 @@ describe('UsersService profile endpoints', () => {
   let usersRepository: jest.Mocked<
     Pick<
       UsersRepository,
-      | 'deleteByClerkId'
-      | 'findProfileByClerkId'
-      | 'getAllUsers'
-      | 'updateProfileByClerkId'
+      'deleteByClerkId' | 'findProfileByClerkId' | 'updateProfileByClerkId'
     >
   >;
   let service: UsersService;
@@ -30,7 +27,6 @@ describe('UsersService profile endpoints', () => {
     usersRepository = {
       deleteByClerkId: jest.fn().mockResolvedValue(undefined),
       findProfileByClerkId: jest.fn().mockResolvedValue(profile),
-      getAllUsers: jest.fn().mockResolvedValue({ users: [profile] }),
       updateProfileByClerkId: jest.fn().mockResolvedValue(profile),
     };
     service = new UsersService(usersRepository as unknown as UsersRepository);
@@ -68,21 +64,5 @@ describe('UsersService profile endpoints', () => {
     await service.deleteCurrentUser('user_123');
 
     expect(usersRepository.deleteByClerkId).toHaveBeenCalledWith('user_123');
-  });
-
-  it('returns all users for admin users', async () => {
-    await expect(
-      service.getAllUsers({ clerkId: 'admin_123', isAdmin: true }),
-    ).resolves.toEqual({ users: [profile] });
-
-    expect(usersRepository.getAllUsers).toHaveBeenCalledTimes(1);
-  });
-
-  it('rejects all-user access for non-admin users', async () => {
-    await expect(
-      service.getAllUsers({ clerkId: 'user_123', isAdmin: false }),
-    ).rejects.toBeInstanceOf(ForbiddenException);
-
-    expect(usersRepository.getAllUsers).not.toHaveBeenCalled();
   });
 });

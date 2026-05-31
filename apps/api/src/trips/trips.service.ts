@@ -40,10 +40,7 @@ const RSVP_STATUS_BY_INPUT: Record<RsvpStatusInput, RsvpStatus> = {
 export class TripsService {
   constructor(private readonly tripsRepository: TripsRepository) {}
 
-  async createTrip(
-    clerkId: string,
-    input: CreateTripRequest,
-  ): Promise<Trip> {
+  async createTrip(clerkId: string, input: CreateTripRequest): Promise<Trip> {
     const user = await this.getUserOrThrow(clerkId);
     const groupId = input.groupId ?? null;
 
@@ -108,7 +105,9 @@ export class TripsService {
     await this.assertTripAccess(trip, user.id);
 
     if (trip.createdById !== user.id) {
-      throw new ForbiddenException('Only the trip creator can delete this trip');
+      throw new ForbiddenException(
+        'Only the trip creator can delete this trip',
+      );
     }
 
     await this.tripsRepository.deleteTrip(tripId);

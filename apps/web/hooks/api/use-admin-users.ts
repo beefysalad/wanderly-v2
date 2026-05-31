@@ -1,19 +1,21 @@
 import { useAuth } from "@clerk/nextjs"
 import { useQuery } from "@tanstack/react-query"
-import type { GetAllUsersResponse } from "@workspace/shared"
+import type { GetAdminUsersResponse } from "@workspace/shared"
 
-import { getAllUsers } from "@/lib/api/users"
+import { getAdminUsers } from "@/lib/api/admin-users"
 
-export function useAllUsers() {
+function useAdminUsers() {
   const { getToken, isLoaded, isSignedIn } = useAuth()
 
-  return useQuery<GetAllUsersResponse>({
-    queryKey: ["users", "all"],
+  return useQuery<GetAdminUsersResponse>({
+    queryKey: ["admin", "users"],
     enabled: isLoaded && isSignedIn,
     queryFn: async () => {
       const token = await getToken()
       if (!token) throw new Error("No token found")
-      return getAllUsers(token)
+      return getAdminUsers(token)
     },
   })
 }
+
+export { useAdminUsers }

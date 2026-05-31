@@ -10,11 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
-import type {
-  CurrentUserResponse,
-  GetAllUsersResponse,
-  UserProfile,
-} from '@workspace/shared';
+import type { CurrentUserResponse, UserProfile } from '@workspace/shared';
 import {
   CurrentUser,
   type CurrentUser as CurrentUserPayload,
@@ -71,12 +67,5 @@ export class UsersController {
     @CurrentUser() currentUser: CurrentUserPayload,
   ): Promise<void> {
     await this.usersService.deleteCurrentUser(currentUser.clerkId);
-  }
-
-  @Get('all')
-  async getAllUsers(
-    @CurrentUser() currentUser: CurrentUserPayload,
-  ): Promise<GetAllUsersResponse> {
-    return await this.usersService.getAllUsers(currentUser);
   }
 }

@@ -19,7 +19,7 @@ async function getCurrentDashboardUser(): Promise<DashboardUser> {
       [user?.firstName, user?.lastName].filter(Boolean).join(" ") ||
       user?.username ||
       primaryEmail?.emailAddress ||
-      "Nexion user",
+      "Wanderly admin",
     email: primaryEmail?.emailAddress ?? "Signed in",
   }
 }

@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { UserButton } from "@clerk/nextjs"
-import { RiFlashlightLine } from "@remixicon/react"
+import { RiShieldUserLine } from "@remixicon/react"
 
 import {
   Sidebar,
@@ -33,24 +33,26 @@ function DashboardSidebar() {
           <SidebarMenuItem className="group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
             <SidebarMenuButton
               asChild
-              tooltip="Nexion"
+              tooltip="Wanderly Admin"
               className="group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0!"
             >
               <Link href="/dashboard">
                 {/* Expanded: icon + text */}
                 <span className="bg-sidebar-primary text-sidebar-primary-foreground flex size-7 shrink-0 items-center justify-center rounded-lg group-data-[collapsible=icon]:hidden">
-                  <RiFlashlightLine className="size-5" />
+                  <RiShieldUserLine className="size-5" />
                 </span>
                 <span className="grid min-w-0 leading-tight group-data-[collapsible=icon]:hidden">
-                  <span className="truncate font-semibold">Nexion</span>
+                  <span className="truncate font-semibold">
+                    Wanderly Admin
+                  </span>
                   <span className="text-sidebar-foreground/70 truncate text-xs">
-                    Workspace
+                    Accounts console
                   </span>
                 </span>
 
-                {/* Collapsed: just "N" */}
+                {/* Collapsed: just "W" */}
                 <span className="bg-sidebar-primary text-sidebar-primary-foreground hidden size-10 items-center justify-center rounded-full text-lg font-black group-data-[collapsible=icon]:flex">
-                  N
+                  W
                 </span>
               </Link>
             </SidebarMenuButton>
@@ -60,7 +62,7 @@ function DashboardSidebar() {
 
       <SidebarContent className="group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:gap-0">
         <SidebarGroup className="group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:pt-0">
-          <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+          <SidebarGroupLabel>Admin</SidebarGroupLabel>
           <SidebarGroupContent className="group-data-[collapsible=icon]:w-full">
             <SidebarMenu className="group-data-[collapsible=icon]:items-center">
               {dashboardNavItems.map((item, index) => {

@@ -63,9 +63,7 @@ describe('TripsController', () => {
       updateTrip: jest.fn().mockResolvedValue(trip),
     };
 
-    controller = new TripsController(
-      tripsService as unknown as TripsService,
-    );
+    controller = new TripsController(tripsService as unknown as TripsService);
   });
 
   it('delegates list reads with the current Clerk subject', async () => {
@@ -81,10 +79,7 @@ describe('TripsController', () => {
 
     await expect(controller.createTrip(currentUser, input)).resolves.toBe(trip);
 
-    expect(tripsService.createTrip).toHaveBeenCalledWith(
-      'clerk_user_1',
-      input,
-    );
+    expect(tripsService.createTrip).toHaveBeenCalledWith('clerk_user_1', input);
   });
 
   it('delegates group trip listing with current user authorization context', async () => {

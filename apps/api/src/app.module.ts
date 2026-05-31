@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { AdminModule } from './admin/admin.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RateLimitModule } from './common/rate-limit/rate-limit.module';
@@ -11,6 +12,7 @@ import { WebhooksModule } from './webhooks/webhooks.module';
   imports: [
     RateLimitModule,
     PrismaModule,
+    AdminModule,
     UsersModule,
     TripsModule,
     WebhooksModule,

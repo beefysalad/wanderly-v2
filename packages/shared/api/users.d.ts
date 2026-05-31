@@ -36,7 +36,3 @@ export type User = {
   email: string
   imageUrl: string | null
 }
-
-export type GetAllUsersResponse = {
-  users: User[]
-}
