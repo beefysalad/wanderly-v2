@@ -1,11 +1,10 @@
 import * as Linking from "expo-linking"
 import * as WebBrowser from "expo-web-browser"
 import { useSSO } from "@clerk/expo"
-import { View } from "react-native"
+import { ActivityIndicator, Pressable, View } from "react-native"
 import { useState } from "react"
 
 import { AppleLogo } from "@/components/auth/apple-logo"
-import { Button } from "@/components/ui/button"
 import { GoogleLogo } from "@/components/auth/google-logo"
 import { Text } from "@/components/ui/text"
 
@@ -17,12 +16,11 @@ type Props = {
 
 export function OAuthButtons({ onError }: Props) {
   const { startSSOFlow } = useSSO()
-  const [loadingGoogle, setLoadingGoogle] = useState(false)
-  const [loadingApple, setLoadingApple] = useState(false)
+  const [loading, setLoading] = useState<"google" | "apple" | null>(null)
 
   async function handleGoogle() {
     try {
-      setLoadingGoogle(true)
+      setLoading("google")
       const { createdSessionId, setActive } = await startSSOFlow({
         strategy: "oauth_google",
         redirectUrl: Linking.createURL("/"),
@@ -32,13 +30,13 @@ export function OAuthButtons({ onError }: Props) {
     } catch {
       onError?.("Google sign in failed. Please try again.")
     } finally {
-      setLoadingGoogle(false)
+      setLoading(null)
     }
   }
 
   async function handleApple() {
     try {
-      setLoadingApple(true)
+      setLoading("apple")
       const { createdSessionId, setActive } = await startSSOFlow({
         strategy: "oauth_apple",
         redirectUrl: Linking.createURL("/"),
@@ -48,34 +46,47 @@ export function OAuthButtons({ onError }: Props) {
     } catch {
       onError?.("Apple sign in failed. Please try again.")
     } finally {
-      setLoadingApple(false)
+      setLoading(null)
     }
   }
 
   return (
-    <View className="flex-row gap-3">
-      <Button
-        className="flex-1"
-        onPress={handleGoogle}
-        loading={loadingGoogle}
-        loadingColor="#208AEF"
-        size="sm"
-        variant="outline"
-      >
-        <GoogleLogo />
-        <Text>Google</Text>
-      </Button>
+    <View className="gap-4">
+      <View className="flex-row items-center gap-3">
+        <View className="h-px flex-1 bg-neutral-200" />
+        <Text className="text-xs font-medium uppercase tracking-wider text-neutral-400">
+          or continue with
+        </Text>
+        <View className="h-px flex-1 bg-neutral-200" />
+      </View>
 
-      <Button
-        className="flex-1"
-        onPress={handleApple}
-        loading={loadingApple}
-        size="sm"
-        variant="default"
-      >
-        <AppleLogo />
-        <Text>Apple</Text>
-      </Button>
+      <View className="flex-row items-center justify-center gap-3">
+        <Pressable
+          accessibilityLabel="Continue with Google"
+          disabled={loading !== null}
+          onPress={handleGoogle}
+          className="h-12 w-12 items-center justify-center rounded-full border border-neutral-200 bg-neutral-50 active:scale-[0.94] active:bg-neutral-100"
+        >
+          {loading === "google" ? (
+            <ActivityIndicator color="#208AEF" />
+          ) : (
+            <GoogleLogo size={20} />
+          )}
+        </Pressable>
+
+        <Pressable
+          accessibilityLabel="Continue with Apple"
+          disabled={loading !== null}
+          onPress={handleApple}
+          className="h-12 w-12 items-center justify-center rounded-full bg-black active:scale-[0.94] active:opacity-80"
+        >
+          {loading === "apple" ? (
+            <ActivityIndicator color="#FFFFFF" />
+          ) : (
+            <AppleLogo color="#FFFFFF" size={20} />
+          )}
+        </Pressable>
+      </View>
     </View>
   )
 }

@@ -41,8 +41,8 @@ const INTERESTS: {
     value: "culture",
     icon: Landmark,
     label: "Culture",
-    activeClass: "border-amber-400/60 bg-amber-500/20",
-    iconClass: "text-amber-300",
+    activeClass: "border-accent/60 bg-accent/20",
+    iconClass: "text-accent",
   },
   {
     value: "nightlife",
@@ -127,7 +127,7 @@ export function OnboardingStepInterests({ onFinish, isLoading }: Props) {
                   : "border-white/10 bg-white/5",
               ].join(" ")}
               style={{
-                shadowColor: isSelected ? "#f59e0b" : "transparent",
+                shadowColor: isSelected ? "#FF6B5B" : "transparent",
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: isSelected ? 0.12 : 0,
                 shadowRadius: 4,
@@ -144,7 +144,7 @@ export function OnboardingStepInterests({ onFinish, isLoading }: Props) {
               </Text>
               {isSelected && (
                 <View className="ml-auto h-4 w-4 items-center justify-center rounded-full bg-white/20">
-                  <Icon as={Check} className="text-amber-200" size={10} />
+                  <Icon as={Check} className="text-accent" size={10} />
                 </View>
               )}
             </TouchableOpacity>
@@ -155,7 +155,7 @@ export function OnboardingStepInterests({ onFinish, isLoading }: Props) {
       {/* Selection count */}
       {selected.size > 0 && (
         <View className="flex-row items-center gap-2">
-          <View className="h-2 w-2 rounded-full bg-amber-300" />
+          <View className="h-2 w-2 rounded-full bg-accent" />
           <Text className="text-sm font-medium text-slate-400">
             {selected.size} interest{selected.size > 1 ? "s" : ""} selected
           </Text>
