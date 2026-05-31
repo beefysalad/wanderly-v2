@@ -1,13 +1,14 @@
 import { useAuth, useSignIn } from "@clerk/expo"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "expo-router"
+import { Lock, Mail } from "lucide-react-native"
 import { Controller, useForm } from "react-hook-form"
 import { TouchableOpacity, View } from "react-native"
 import { useState } from "react"
 
+import { AuthField } from "@/components/auth/auth-field"
 import { OAuthButtons } from "@/components/auth/oauth-buttons"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Text } from "@/components/ui/text"
 import { signInSchema, type SignInValues } from "@/lib/validations/auth"
 
@@ -16,7 +17,6 @@ export function SignInForm() {
   const { signIn } = useSignIn()
   const router = useRouter()
   const [serverError, setServerError] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
 
   const {
     control,
@@ -79,71 +79,45 @@ export function SignInForm() {
   return (
     <View className="gap-5">
       {/* Email */}
-      <View className="gap-2">
-        <Text className="text-xs font-bold uppercase text-neutral-500">
-          Email address
-        </Text>
-        <Controller
-          control={control}
-          name="email"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              className="border-neutral-200 bg-neutral-50 text-black"
-              placeholder="you@example.com"
-              autoCapitalize="none"
-              keyboardType="email-address"
-              autoComplete="email"
-              textContentType="emailAddress"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-        />
-        {errors.email && (
-          <Text className="text-xs font-medium text-red-600">
-            {errors.email.message}
-          </Text>
+      <Controller
+        control={control}
+        name="email"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <AuthField
+            label="Email address"
+            icon={Mail}
+            placeholder="you@example.com"
+            autoCapitalize="none"
+            keyboardType="email-address"
+            autoComplete="email"
+            textContentType="emailAddress"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            error={errors.email?.message}
+          />
         )}
-      </View>
+      />
 
       {/* Password */}
-      <View className="gap-2">
-        <View className="flex-row items-center justify-between">
-          <Text className="text-xs font-bold uppercase tracking-wider text-neutral-500">
-            Password
-          </Text>
-          <TouchableOpacity
-            onPress={() => setShowPassword(!showPassword)}
-            hitSlop={8}
-          >
-            <Text className="text-sm font-semibold text-black">
-              {showPassword ? "Hide" : "Show"}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <Controller
-          control={control}
-          name="password"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <Input
-              className="border-neutral-200 bg-neutral-50 text-black"
-              placeholder="Your password"
-              secureTextEntry={!showPassword}
-              autoComplete="password"
-              textContentType="password"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-        />
-        {errors.password && (
-          <Text className="text-xs font-medium text-red-600">
-            {errors.password.message}
-          </Text>
+      <Controller
+        control={control}
+        name="password"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <AuthField
+            label="Password"
+            icon={Lock}
+            placeholder="Your password"
+            secureToggle
+            autoComplete="password"
+            textContentType="password"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            error={errors.password?.message}
+          />
         )}
-      </View>
+      />
 
       {/* Server error */}
       {serverError ? (

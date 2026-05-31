@@ -6,6 +6,7 @@ import { useState } from "react"
 
 import { AppleLogo } from "@/components/auth/apple-logo"
 import { GoogleLogo } from "@/components/auth/google-logo"
+import { Text } from "@/components/ui/text"
 
 WebBrowser.maybeCompleteAuthSession()
 
@@ -50,32 +51,42 @@ export function OAuthButtons({ onError }: Props) {
   }
 
   return (
-    <View className="flex-row items-center justify-center gap-3">
-      <Pressable
-        accessibilityLabel="Continue with Google"
-        disabled={loading !== null}
-        onPress={handleGoogle}
-        className="h-12 w-12 items-center justify-center rounded-full border border-neutral-200 bg-neutral-50"
-      >
-        {loading === "google" ? (
-          <ActivityIndicator color="#208AEF" />
-        ) : (
-          <GoogleLogo size={20} />
-        )}
-      </Pressable>
+    <View className="gap-4">
+      <View className="flex-row items-center gap-3">
+        <View className="h-px flex-1 bg-neutral-200" />
+        <Text className="text-xs font-medium uppercase tracking-wider text-neutral-400">
+          or continue with
+        </Text>
+        <View className="h-px flex-1 bg-neutral-200" />
+      </View>
 
-      <Pressable
-        accessibilityLabel="Continue with Apple"
-        disabled={loading !== null}
-        onPress={handleApple}
-        className="h-12 w-12 items-center justify-center rounded-full bg-black"
-      >
-        {loading === "apple" ? (
-          <ActivityIndicator color="#FFFFFF" />
-        ) : (
-          <AppleLogo color="#FFFFFF" size={20} />
-        )}
-      </Pressable>
+      <View className="flex-row items-center justify-center gap-3">
+        <Pressable
+          accessibilityLabel="Continue with Google"
+          disabled={loading !== null}
+          onPress={handleGoogle}
+          className="h-12 w-12 items-center justify-center rounded-full border border-neutral-200 bg-neutral-50 active:scale-[0.94] active:bg-neutral-100"
+        >
+          {loading === "google" ? (
+            <ActivityIndicator color="#208AEF" />
+          ) : (
+            <GoogleLogo size={20} />
+          )}
+        </Pressable>
+
+        <Pressable
+          accessibilityLabel="Continue with Apple"
+          disabled={loading !== null}
+          onPress={handleApple}
+          className="h-12 w-12 items-center justify-center rounded-full bg-black active:scale-[0.94] active:opacity-80"
+        >
+          {loading === "apple" ? (
+            <ActivityIndicator color="#FFFFFF" />
+          ) : (
+            <AppleLogo color="#FFFFFF" size={20} />
+          )}
+        </Pressable>
+      </View>
     </View>
   )
 }

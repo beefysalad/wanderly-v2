@@ -17,6 +17,14 @@ import { Text } from "@/components/ui/text"
 
 WebBrowser.maybeCompleteAuthSession()
 
+// textShadow has no NativeWind utility; inline style keeps white copy legible
+// across the brighter carousel slides (palms, coast) without darkening them.
+const TEXT_SHADOW = {
+  textShadowColor: "rgba(0,0,0,0.35)",
+  textShadowOffset: { height: 1, width: 0 },
+  textShadowRadius: 14,
+} as const
+
 /** 01 · Sign in — full-bleed welcome landing. */
 export function AuthLanding() {
   const router = useRouter()
@@ -58,7 +66,10 @@ export function AuthLanding() {
       <SafeAreaView edges={["top", "bottom"]} className="flex-1">
         <View className="flex-1 justify-between px-6 pb-7 pt-14">
           <Animated.View entering={FadeIn.duration(700)}>
-            <Text className="text-[58px] font-extrabold leading-[0.92] text-white">
+            <Text
+              style={TEXT_SHADOW}
+              className="text-[58px] font-extrabold leading-[0.92] text-white"
+            >
               Wanderly
             </Text>
           </Animated.View>
@@ -68,10 +79,16 @@ export function AuthLanding() {
               entering={FadeInDown.duration(650).delay(150)}
               className="mb-6"
             >
-              <Text className="max-w-[330px] text-[31px] font-extrabold leading-[1.08] text-white">
+              <Text
+                style={TEXT_SHADOW}
+                className="max-w-[330px] text-[31px] font-extrabold leading-[1.08] text-white"
+              >
                 Plan the trip. Keep the story.
               </Text>
-              <Text className="mt-3 max-w-[295px] text-base leading-relaxed text-white/70">
+              <Text
+                style={TEXT_SHADOW}
+                className="mt-3 max-w-[295px] text-base leading-relaxed text-white/70"
+              >
                 Build solo plans, group itineraries, budgets, and travel
                 memories from one place.
               </Text>
@@ -84,7 +101,7 @@ export function AuthLanding() {
               <Pressable
                 onPress={() => router.push("/(auth)/sign-up")}
                 disabled={loading !== null}
-                className="h-14 flex-row items-center justify-center gap-2.5 rounded-full bg-white"
+                className="h-14 flex-row items-center justify-center gap-2.5 rounded-full bg-white active:scale-[0.97] active:opacity-90"
               >
                 <Text className="text-[17px] font-bold text-black">
                   Get started
@@ -96,7 +113,7 @@ export function AuthLanding() {
                 <Pressable
                   onPress={() => handleSSO("oauth_google")}
                   disabled={loading !== null}
-                  className="h-12 flex-1 flex-row items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10"
+                  className="h-12 flex-1 flex-row items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 active:scale-[0.97] active:bg-white/20"
                 >
                   {loading === "google" ? (
                     <ActivityIndicator color="#fff" />
@@ -113,7 +130,7 @@ export function AuthLanding() {
                 <Pressable
                   onPress={() => handleSSO("oauth_apple")}
                   disabled={loading !== null}
-                  className="h-12 flex-1 flex-row items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10"
+                  className="h-12 flex-1 flex-row items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 active:scale-[0.97] active:bg-white/20"
                 >
                   {loading === "apple" ? (
                     <ActivityIndicator color="#fff" />
@@ -130,7 +147,7 @@ export function AuthLanding() {
 
               <Pressable
                 onPress={() => router.push("/(auth)/sign-in")}
-                className="mt-1 flex-row justify-center py-1"
+                className="mt-1 flex-row justify-center py-1 active:opacity-60"
               >
                 <Text className="text-[13.5px] text-white/70">
                   Already exploring?{" "}

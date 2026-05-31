@@ -1,9 +1,18 @@
 import { LinearGradient } from "expo-linear-gradient"
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native"
+import Animated, { FadeInDown } from "react-native-reanimated"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 import { AuthLandingImageCarousel } from "@/components/auth/auth-landing-image-carousel"
 import { Text } from "@/components/ui/text"
+
+// textShadow has no NativeWind utility; inline style keeps white copy legible
+// across the brighter carousel slides without darkening the gradient.
+const TEXT_SHADOW = {
+  textShadowColor: "rgba(0,0,0,0.35)",
+  textShadowOffset: { height: 1, width: 0 },
+  textShadowRadius: 14,
+} as const
 
 type AuthScreenShellProps = {
   children: React.ReactNode
@@ -40,7 +49,10 @@ export function AuthScreenShell({
               edges={["top"]}
               className="flex-1 justify-between px-6 pb-24 pt-6"
             >
-              <Text className="text-[42px] font-extrabold leading-none text-white">
+              <Text
+                style={TEXT_SHADOW}
+                className="text-[42px] font-extrabold leading-none text-white"
+              >
                 Wanderly
               </Text>
 
@@ -48,10 +60,16 @@ export function AuthScreenShell({
                 <Text className="text-xs font-bold uppercase tracking-[0.24em] text-white/70">
                   {eyebrow}
                 </Text>
-                <Text className="text-[35px] font-extrabold leading-[1.02] text-white">
+                <Text
+                  style={TEXT_SHADOW}
+                  className="text-[35px] font-extrabold leading-[1.02] text-white"
+                >
                   {title}
                 </Text>
-                <Text className="max-w-[315px] text-base leading-relaxed text-white/75">
+                <Text
+                  style={TEXT_SHADOW}
+                  className="max-w-[315px] text-base leading-relaxed text-white/75"
+                >
                   {subtitle}
                 </Text>
               </View>
@@ -66,13 +84,18 @@ export function AuthScreenShell({
               borderTopRightRadius: 42,
             }}
           >
+            <View className="items-center pb-1 pt-3">
+              <View className="h-1.5 w-11 rounded-full bg-neutral-200" />
+            </View>
             <ScrollView
               className="flex-1"
-              contentContainerClassName="grow justify-center px-7 pb-7 pt-7"
+              contentContainerClassName="grow justify-center px-7 pb-7 pt-4"
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
             >
-              {children}
+              <Animated.View entering={FadeInDown.duration(500).delay(120)}>
+                {children}
+              </Animated.View>
             </ScrollView>
           </SafeAreaView>
         </View>

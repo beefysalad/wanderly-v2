@@ -3,11 +3,13 @@ import { useEffect, useState } from "react"
 import { View } from "react-native"
 import Animated, {
   Easing,
+  LinearTransition,
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withTiming,
 } from "react-native-reanimated"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 const SLIDE_DURATION_MS = 4800
 const FADE_DURATION_MS = 900
@@ -23,6 +25,7 @@ const LANDING_IMAGES: ImageSource[] = [
 ]
 
 function AuthLandingImageCarousel() {
+  const insets = useSafeAreaInsets()
   const [activeIndex, setActiveIndex] = useState(0)
 
   // Continuous, ping-ponging Ken Burns drift. Because it never resets, the
@@ -82,6 +85,23 @@ function AuthLandingImageCarousel() {
           style={{ height: "100%", width: "100%" }}
         />
       </Animated.View>
+
+      <View
+        style={{ top: insets.top + 14 }}
+        className="absolute left-0 right-0 flex-row justify-center gap-1.5"
+      >
+        {LANDING_IMAGES.map((_, index) => (
+          <Animated.View
+            key={index}
+            layout={LinearTransition.duration(320)}
+            className={
+              index === activeIndex
+                ? "h-1.5 w-5 rounded-full bg-white"
+                : "h-1.5 w-1.5 rounded-full bg-white/40"
+            }
+          />
+        ))}
+      </View>
     </View>
   )
 }
