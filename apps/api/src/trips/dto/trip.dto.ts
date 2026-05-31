@@ -9,7 +9,10 @@ import type {
 const decimalStringSchema = z
   .string()
   .trim()
-  .regex(/^\d+(\.\d{1,2})?$/, 'Expected a non-negative decimal amount');
+  .regex(
+    /^\d{1,10}(\.\d{1,2})?$/,
+    'Expected a non-negative decimal amount up to 10 digits before the decimal point',
+  );
 
 const budgetSchema = z
   .union([
