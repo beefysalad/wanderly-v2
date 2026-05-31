@@ -42,8 +42,8 @@ export function AiInput() {
       <View className="flex-1 px-5">
         <ScreenHeader
           onBack={() => router.back()}
-          title="Plan with AI"
-          subtitle="A full day-by-day plan in ~30s"
+          title="Plan this trip"
+          subtitle="Generate an itinerary into this trip workspace"
         />
 
         <ScrollView
@@ -80,7 +80,9 @@ export function AiInput() {
                   Just me
                 </Text>
               </View>
-              <Text className="mt-1 text-xs text-wl-text-2">Solo trip</Text>
+              <Text className="mt-1 text-xs text-wl-text-2">
+                Group size optional
+              </Text>
             </GlassCard>
           </View>
 
@@ -112,7 +114,7 @@ export function AiInput() {
             full
             onPress={() => router.push("/trips/ai-generating")}
           >
-            Generate my itinerary
+            Generate trip itinerary
           </TripButton>
         </ScrollView>
       </View>

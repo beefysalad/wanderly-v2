@@ -1,5 +1,5 @@
-import { TripsHomeGroup } from "@/components/trips/screens/trips-home-group"
+import { TripsHome } from "@/components/trips/screens/trips-home"
 
 export default function TripsHomeScreen() {
-  return <TripsHomeGroup />
+  return <TripsHome />
 }

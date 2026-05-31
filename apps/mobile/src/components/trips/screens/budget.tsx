@@ -1,7 +1,7 @@
 import {
   Bed,
-  CheckCircle2,
   type LucideIcon,
+  Plane,
   Plus,
   Receipt,
   Users,
@@ -39,7 +39,7 @@ const CATEGORIES: [string, string, LucideIcon][] = [
   ["Tours", "₱5.6k", Waves],
 ]
 
-/** 10 · Budget & split / settle up. */
+/** 10 · Budget — trip spend first, collaboration settlement second. */
 export function Budget() {
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-background">
@@ -51,9 +51,9 @@ export function Budget() {
               Budget
             </Text>
             <View className="mt-px flex-row items-center gap-1.5">
-              <Icon as={Users} size={13} className="text-wl-text-2" />
+              <Icon as={Plane} size={13} className="text-wl-text-2" />
               <Text className="text-[13px] text-wl-text-2">
-                Palawan Barkada
+                Surf & Slow Mornings · Solo trip
               </Text>
             </View>
           </View>
@@ -69,21 +69,18 @@ export function Budget() {
         >
           <AccentFill style={{ borderRadius: 24, padding: 18 }}>
             <Text className="text-[13px] font-semibold text-white opacity-90">
-              You&apos;re owed overall
+              Trip spend
             </Text>
             <Text className="mt-1 text-4xl font-extrabold tracking-tighter text-white">
-              ₱1,240
+              ₱18,400
+            </Text>
+            <Text className="mt-1 text-[13px] font-semibold text-white opacity-85">
+              ₱11,600 remaining of ₱30,000
             </Text>
             <View className="mt-3.5 flex-row gap-2.5">
               <Pressable className="h-[38px] flex-row items-center gap-1.5 rounded-xl bg-white px-3.5">
-                <Icon
-                  as={CheckCircle2}
-                  size={16}
-                  className="text-[#E0533F]"
-                />
-                <Text className="text-sm font-bold text-[#E0533F]">
-                  Settle up
-                </Text>
+                <Icon as={Plus} size={16} className="text-[#E0533F]" />
+                <Text className="text-sm font-bold text-[#E0533F]">Expense</Text>
               </Pressable>
               <Pressable
                 style={{ backgroundColor: "rgba(255,255,255,0.16)" }}
@@ -98,7 +95,57 @@ export function Budget() {
           </AccentFill>
 
           <Text className="mb-2.5 mt-4 text-[14.5px] font-bold text-foreground">
-            Who owes whom
+            Categories
+          </Text>
+          <GlassCard>
+            <View className="flex-row items-baseline justify-between">
+              <Text className="text-xl font-extrabold text-foreground">
+                61% used
+              </Text>
+              <Text className="text-[13px] font-semibold text-wl-text-2">
+                Solo actuals
+              </Text>
+            </View>
+            <View className="mt-2.5 h-[9px] overflow-hidden rounded-md bg-wl-surface-2">
+              <AccentFill style={{ width: "61%", height: "100%" }} />
+            </View>
+            <View className="mt-3.5 flex-row gap-4">
+              {CATEGORIES.map(([label, amount, icon]) => (
+                <View key={label} className="flex-row items-center gap-1.5">
+                  <Icon as={icon} size={15} className="text-accent" />
+                  <View>
+                    <Text className="text-[13px] font-bold text-foreground">
+                      {amount}
+                    </Text>
+                    <Text className="text-[10.5px] text-wl-text-3">
+                      {label}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          </GlassCard>
+
+          <View className="mb-2.5 mt-5 flex-row items-center justify-between">
+            <Text className="text-[14.5px] font-bold text-foreground">
+              Collaboration & sharing
+            </Text>
+            <View className="flex-row items-center gap-1.5">
+              <Icon as={Users} size={13} className="text-wl-text-2" />
+              <Text className="text-[12.5px] font-semibold text-wl-text-2">
+                Group trips
+              </Text>
+            </View>
+          </View>
+
+          <GlassCard className="mb-3">
+            <Text className="text-[13.5px] font-semibold text-wl-text-2">
+              Split balances and settle-up appear once this trip has members.
+            </Text>
+          </GlassCard>
+
+          <Text className="mb-2.5 text-[14.5px] font-bold text-foreground">
+            Group settle-up preview
           </Text>
           <GlassCard className="p-0">
             {SETTLEMENTS.map((r, i) => (
@@ -137,38 +184,6 @@ export function Budget() {
                 </Text>
               </View>
             ))}
-          </GlassCard>
-
-          <Text className="mb-2.5 mt-4 text-[14.5px] font-bold text-foreground">
-            Trip spend
-          </Text>
-          <GlassCard>
-            <View className="flex-row items-baseline justify-between">
-              <Text className="text-xl font-extrabold text-foreground">
-                ₱18,400
-              </Text>
-              <Text className="text-[13px] font-semibold text-wl-text-2">
-                of ₱30,000
-              </Text>
-            </View>
-            <View className="mt-2.5 h-[9px] overflow-hidden rounded-md bg-wl-surface-2">
-              <AccentFill style={{ width: "61%", height: "100%" }} />
-            </View>
-            <View className="mt-3.5 flex-row gap-4">
-              {CATEGORIES.map(([label, amount, icon]) => (
-                <View key={label} className="flex-row items-center gap-1.5">
-                  <Icon as={icon} size={15} className="text-accent" />
-                  <View>
-                    <Text className="text-[13px] font-bold text-foreground">
-                      {amount}
-                    </Text>
-                    <Text className="text-[10.5px] text-wl-text-3">
-                      {label}
-                    </Text>
-                  </View>
-                </View>
-              ))}
-            </View>
           </GlassCard>
         </ScrollView>
       </View>
