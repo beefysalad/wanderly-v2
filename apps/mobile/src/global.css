@@ -3,50 +3,83 @@
 @tailwind utilities;
 
 /* ============================================================
-   Wanderly — "Aurora" design system
-   Cool neutral dark base · Electric-violet → coral aurora accent.
-   Dark-first; light surfaces provided for the same system.
+   Wanderly — "Deep Ocean" design system
+   Cool ocean-ink base · single confident teal accent ("the lagoon").
+   Dark-first; calm & refined (Arc / Apple-grade restraint).
+   HARD RULE: no gradients (solid fills + real depth).
+   Only sanctioned gradient: multi-color initials avatars.
    ============================================================ */
 
 @layer base {
   :root {
     /* ---- shadcn semantic tokens (HSL channels, alpha-capable) ---- */
-    --background: 240 27% 96%; /* #F4F4F8 */
-    --foreground: 228 14% 9%; /* #14151B */
+    --background: 210 21% 95%; /* #EEF1F4 */
+    --foreground: 203 51% 9%; /* #0B1822 */
     --card: 0 0% 100%;
-    --card-foreground: 228 14% 9%;
+    --card-foreground: 203 51% 9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 228 14% 9%;
-    --primary: 9 72% 56%; /* coral (strong, readable on light) #E0533F */
+    --popover-foreground: 203 51% 9%;
+    --primary: 175 84% 34%; /* teal #0E9E92 (deeper for light contrast) */
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 20% 95%;
-    --secondary-foreground: 228 14% 9%;
-    --muted: 240 20% 95%;
-    --muted-foreground: 233 9% 39%; /* #5B5D6B */
-    --accent: 9 72% 56%; /* coral */
+    --secondary: 205 22% 93%;
+    --secondary-foreground: 203 51% 9%;
+    --muted: 205 22% 93%;
+    --muted-foreground: 203 16% 37%; /* #51616E */
+    --accent: 175 84% 34%; /* teal */
     --accent-foreground: 0 0% 100%;
-    --destructive: 4 80% 60%;
+    --destructive: 9 71% 60%;
     --destructive-foreground: 0 0% 100%;
-    --border: 228 28% 90%;
-    --input: 228 28% 90%;
-    --ring: 9 72% 56%;
+    --border: 203 33% 90%;
+    --input: 203 33% 90%;
+    --ring: 175 84% 34%;
     --radius: 1.375rem;
 
     /* ---- raw tokens (full values, alpha-capable) ---- */
-    --wl-bg: #f4f4f8;
-    --wl-surface: rgba(255, 255, 255, 0.75);
-    --wl-surface-2: #ffffff;
-    --wl-surface-solid: #ffffff;
-    --wl-border: rgba(18, 20, 33, 0.08);
-    --wl-border-2: rgba(18, 20, 33, 0.13);
-    --wl-text: #14151b;
-    --wl-text-2: #5b5d6b;
-    --wl-text-3: #9092a0;
-    --wl-accent: #e0533f; /* coral, readable on light surfaces */
-    --wl-accent-2: #ff4d8d;
-    --wl-accent-soft: rgba(224, 83, 63, 0.12);
-    --wl-accent-line: rgba(224, 83, 63, 0.28);
-    --wl-on-accent: #ffffff;
+    /* surfaces — cool off-white, layered by elevation (NO gradients) */
+    --wl-bg: #eef1f4;
+    --wl-surface: #ffffff;
+    --wl-surface-2: #e9eef2;
+    --wl-surface-3: #dee5eb;
+    --wl-surface-hi: #d2dce4;
+    --wl-surface-solid: #ffffff; /* legacy alias */
+
+    --wl-border: rgba(9, 24, 34, 0.08);
+    --wl-border-2: rgba(9, 24, 34, 0.13);
+    --wl-border-3: rgba(9, 24, 34, 0.2);
+
+    --wl-text: #0b1822;
+    --wl-text-2: #51616e;
+    --wl-text-3: #8a98a4;
+
+    /* accent — single calm teal */
+    --wl-accent: #0e9e92; /* deeper teal for contrast on white */
+    --wl-accent-press: #0b7e75;
+    --wl-accent-ink: #ffffff; /* text on accent fills */
+    --wl-on-accent: #ffffff; /* legacy alias */
+    --wl-accent-soft: rgba(14, 158, 146, 0.12);
+    --wl-accent-line: rgba(14, 158, 146, 0.28);
+    --wl-accent-2: #e25e7e; /* reactions / live presence (pink) */
+
+    /* deep ocean support tone */
+    --wl-deep: #0c3d49;
+    --wl-deep-soft: rgba(14, 158, 146, 0.1);
+
+    /* semantics */
+    --wl-pos: #0e9e72; /* owed to you / positive */
+    --wl-neg: #e0654f; /* you owe / spend warning */
+    --wl-warn: #c98a12;
+
+    /* photo solid bases (fallback fills under photography) */
+    --tone-ocean: #0e3743;
+    --tone-island: #0b4a4a;
+    --tone-jungle: #133229;
+    --tone-dune: #0c2e3a;
+    --tone-highland: #1b2c2e;
+    --tone-sunset: #2a2336;
+
+    /* scrim over photos — SOLID flat alpha (not a gradient) */
+    --wl-scrim: rgba(5, 9, 14, 0.4);
+    --wl-scrim-strong: rgba(5, 9, 14, 0.62);
 
     --font-display:
       Onest, Inter, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji,
@@ -61,40 +94,67 @@
   }
 
   .dark:root {
-    --background: 228 18% 5%; /* #0B0C10 */
-    --foreground: 240 27% 96%; /* #F4F4F8 */
-    --card: 229 20% 10%; /* #14161E */
-    --card-foreground: 240 27% 96%;
-    --popover: 229 20% 10%;
-    --popover-foreground: 240 27% 96%;
-    --primary: 8 100% 71%; /* coral #FF7A6B */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 230 13% 16%;
-    --secondary-foreground: 240 27% 96%;
-    --muted: 230 13% 16%;
-    --muted-foreground: 232 7% 65%; /* #9FA0AD */
-    --accent: 8 100% 71%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 4 70% 58%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 228 28% 90%;
-    --input: 228 28% 90%;
-    --ring: 8 100% 71%;
+    --background: 213 42% 5%; /* #070B11 — deep ocean ink */
+    --foreground: 205 41% 93%; /* #EAF1F8 */
+    --card: 213 30% 9%; /* #0F151E */
+    --card-foreground: 205 41% 93%;
+    --popover: 213 30% 9%;
+    --popover-foreground: 205 41% 93%;
+    --primary: 175 66% 52%; /* teal #34D6C8 */
+    --primary-foreground: 173 81% 8%; /* deep teal-black #042521 */
+    --secondary: 214 27% 13%;
+    --secondary-foreground: 205 41% 93%;
+    --muted: 214 27% 13%;
+    --muted-foreground: 209 16% 63%; /* #93A1B0 */
+    --accent: 175 66% 52%;
+    --accent-foreground: 173 81% 8%;
+    --destructive: 8 100% 74%;
+    --destructive-foreground: 173 81% 8%;
+    --border: 213 30% 14%;
+    --input: 213 30% 14%;
+    --ring: 175 66% 52%;
 
     /* raw tokens — dark */
-    --wl-bg: #0b0c10;
-    --wl-surface: rgba(255, 255, 255, 0.05);
-    --wl-surface-2: rgba(255, 255, 255, 0.09);
-    --wl-surface-solid: #14161e;
-    --wl-border: rgba(255, 255, 255, 0.1);
-    --wl-border-2: rgba(255, 255, 255, 0.16);
-    --wl-text: #f4f4f8;
-    --wl-text-2: #9fa0ad;
-    --wl-text-3: #65666f;
-    --wl-accent: #ff7a6b;
-    --wl-accent-2: #ff4d8d;
-    --wl-accent-soft: rgba(255, 122, 107, 0.15);
-    --wl-accent-line: rgba(255, 122, 107, 0.34);
-    --wl-on-accent: #ffffff;
+    /* surfaces — cool ocean ink, layered by elevation (NO gradients) */
+    --wl-bg: #070b11; /* app background — deep ocean ink */
+    --wl-surface: #0f151e; /* +1 card */
+    --wl-surface-2: #161e2a; /* +2 input / secondary */
+    --wl-surface-3: #202a38; /* +3 pressed / tertiary */
+    --wl-surface-hi: #2a3849; /* hover / track fill */
+    --wl-surface-solid: #0f151e; /* legacy alias */
+
+    --wl-border: rgba(255, 255, 255, 0.07);
+    --wl-border-2: rgba(255, 255, 255, 0.12);
+    --wl-border-3: rgba(255, 255, 255, 0.18);
+
+    --wl-text: #eaf1f8; /* soft cool white */
+    --wl-text-2: #93a1b0;
+    --wl-text-3: #5c6b7b;
+
+    /* accent — single calm teal (the "lagoon") */
+    --wl-accent: #34d6c8;
+    --wl-accent-press: #25bcb0;
+    --wl-accent-ink: #042521; /* text on accent fills (deep teal-black) */
+    --wl-on-accent: #042521; /* legacy alias */
+    --wl-accent-soft: rgba(52, 214, 200, 0.13);
+    --wl-accent-line: rgba(52, 214, 200, 0.3);
+    --wl-accent-2: #ff6b8a; /* reactions / live presence (pink) */
+
+    --wl-deep: #0c3d49;
+    --wl-deep-soft: rgba(20, 110, 128, 0.22);
+
+    --wl-pos: #3fd9b0; /* owed to you / positive */
+    --wl-neg: #ff8a7a; /* you owe / spend warning (warm, not red-alarm) */
+    --wl-warn: #f5c451;
+
+    --tone-ocean: #0e3743;
+    --tone-island: #0b4a4a;
+    --tone-jungle: #133229;
+    --tone-dune: #0c2e3a;
+    --tone-highland: #1b2c2e;
+    --tone-sunset: #2a2336;
+
+    --wl-scrim: rgba(5, 9, 14, 0.46);
+    --wl-scrim-strong: rgba(5, 9, 14, 0.66);
   }
 }

@@ -44,10 +44,10 @@ export function OnboardingStepTravelStyle({ onNext }: Props) {
   return (
     <View className="flex-1 gap-7">
       <View className="gap-2">
-        <Text className="text-[27px] font-extrabold leading-tight tracking-tight text-white">
+        <Text className="text-[27px] font-extrabold leading-tight tracking-tight text-foreground">
           How do you{"\n"}travel?
         </Text>
-        <Text className="text-[14.5px] leading-relaxed text-white/60">
+        <Text className="text-[14.5px] leading-relaxed text-wl-text-2">
           This shapes your AI itineraries and budget estimates — you can change
           it any time.
         </Text>
@@ -60,51 +60,46 @@ export function OnboardingStepTravelStyle({ onNext }: Props) {
             <Pressable
               key={option.value}
               onPress={() => setSelected(option.value)}
-              style={
+              className={
                 isSelected
-                  ? {
-                      backgroundColor: "rgba(255,122,107,0.15)",
-                      borderColor: "rgba(255,122,107,0.34)",
-                      shadowColor: "#FF6B5B",
-                      shadowOpacity: 0.4,
-                      shadowRadius: 16,
-                      shadowOffset: { width: 0, height: 8 },
-                      elevation: 8,
-                    }
-                  : {
-                      backgroundColor: "rgba(255,255,255,0.05)",
-                      borderColor: "rgba(255,255,255,0.1)",
-                    }
+                  ? "flex-row items-center gap-3.5 rounded-[22px] border border-wl-accent-line bg-wl-accent-soft p-4"
+                  : "flex-row items-center gap-3.5 rounded-[22px] border border-wl-border bg-wl-surface p-4"
               }
-              className="flex-row items-center gap-3.5 rounded-[22px] border p-4"
             >
               <View
-                style={{
-                  backgroundColor: isSelected
-                    ? "#FF7A6B"
-                    : "rgba(255,255,255,0.08)",
-                }}
-                className="h-[52px] w-[52px] items-center justify-center rounded-2xl"
+                className={
+                  isSelected
+                    ? "h-[52px] w-[52px] items-center justify-center rounded-2xl bg-accent"
+                    : "h-[52px] w-[52px] items-center justify-center rounded-2xl bg-wl-surface-2"
+                }
               >
-                <Icon as={option.icon} size={26} className="text-white" />
+                <Icon
+                  as={option.icon}
+                  size={26}
+                  className={isSelected ? "text-accent-foreground" : "text-wl-text-2"}
+                />
               </View>
               <View className="flex-1">
-                <Text className="text-[17px] font-bold text-white">
+                <Text className="text-[17px] font-bold text-foreground">
                   {option.label}
                 </Text>
-                <Text className="mt-0.5 text-[13px] leading-snug text-white/55">
+                <Text className="mt-0.5 text-[13px] leading-snug text-wl-text-2">
                   {option.description}
                 </Text>
               </View>
               <View
-                style={{
-                  backgroundColor: isSelected ? "#FF7A6B" : "transparent",
-                  borderColor: isSelected ? "#FF7A6B" : "rgba(255,255,255,0.25)",
-                }}
-                className="h-6 w-6 items-center justify-center rounded-full border-2"
+                className={
+                  isSelected
+                    ? "h-6 w-6 items-center justify-center rounded-full border-2 border-accent bg-accent"
+                    : "h-6 w-6 items-center justify-center rounded-full border-2 border-wl-border-3"
+                }
               >
                 {isSelected && (
-                  <Icon as={Check} size={14} className="text-white" />
+                  <Icon
+                    as={Check}
+                    size={14}
+                    className="text-accent-foreground"
+                  />
                 )}
               </View>
             </Pressable>

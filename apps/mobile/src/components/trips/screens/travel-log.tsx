@@ -10,6 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 
 import { Icon } from "@/components/ui/icon"
 import { Text } from "@/components/ui/text"
+import { Photos, type PhotoKey } from "@/constants/theme"
 
 import { GlassCard } from "../ui/glass-card"
 import { Photo } from "../ui/photo"
@@ -21,11 +22,20 @@ const STATS: [string, string][] = [
   ["38", "places"],
 ]
 
-const TRIPS = [
+const TRIPS: {
+  t: string
+  l: string
+  tone: "island" | "highland"
+  photo: PhotoKey
+  d: string
+  days: number
+  photos: number
+}[] = [
   {
     t: "El Nido Island Life",
     l: "Palawan",
-    tone: "island" as const,
+    tone: "island",
+    photo: "elnido",
     d: "Mar 2025",
     days: 6,
     photos: 142,
@@ -33,7 +43,8 @@ const TRIPS = [
   {
     t: "Sagada Highlands",
     l: "Mountain Province",
-    tone: "jungle" as const,
+    tone: "highland",
+    photo: "sagada",
     d: "Jan 2025",
     days: 4,
     photos: 89,
@@ -61,7 +72,12 @@ export function TravelLog() {
           showsVerticalScrollIndicator={false}
         >
           <GlassCard className="overflow-hidden rounded-3xl p-0">
-            <Photo tone="sunset" className="p-[18px] pb-4">
+            <Photo
+              tone="sunset"
+              src={Photos.sunset}
+              scrim="strong"
+              className="p-[18px] pb-4"
+            >
               <Text className="text-[12.5px] font-bold tracking-wide text-white opacity-90">
                 2025 IN TRAVEL
               </Text>
@@ -93,7 +109,11 @@ export function TravelLog() {
                 key={x.t}
                 className="flex-row items-center gap-3 rounded-[20px] p-2.5"
               >
-                <Photo tone={x.tone} className="h-20 w-20 rounded-2xl">
+                <Photo
+                  tone={x.tone}
+                  src={Photos[x.photo]}
+                  className="h-20 w-20 rounded-2xl"
+                >
                   <View
                     style={{ backgroundColor: "rgba(10,10,15,0.5)" }}
                     className="absolute bottom-1.5 right-1.5 h-[22px] flex-row items-center gap-1 rounded-full px-2"

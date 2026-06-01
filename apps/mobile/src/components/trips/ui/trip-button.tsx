@@ -35,14 +35,14 @@ const SURFACE: Record<TripButtonVariant, string> = {
   ghost: "border border-wl-border-2 bg-transparent",
 }
 const LABEL: Record<TripButtonVariant, string> = {
-  primary: "text-white",
+  primary: "text-accent-foreground",
   solid: "text-accent-foreground",
   soft: "text-wl-accent",
   glass: "text-foreground",
   ghost: "text-wl-text-2",
 }
 
-/** Design-system button. `primary` wears the aurora gradient + glow. */
+/** Design-system button. `primary` wears the solid teal accent + soft glow. */
 function TripButton({
   children,
   variant = "primary",
@@ -94,8 +94,8 @@ function TripButton({
           {
             borderRadius: radius,
             alignSelf: full ? "stretch" : "flex-start",
-            shadowColor: "#FF6B5B",
-            shadowOpacity: 0.5,
+            shadowColor: "#34D6C8",
+            shadowOpacity: 0.35,
             shadowRadius: 18,
             shadowOffset: { width: 0, height: 10 },
             elevation: 8,
