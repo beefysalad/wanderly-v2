@@ -1,17 +1,14 @@
 import {
   BadRequestException,
-  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { createClerkClient } from '@clerk/backend';
 import type {
   CurrentUserResponse,
-  GetAllUsersResponse,
   UpdateUserProfileRequest,
   UserProfile,
 } from '@workspace/shared';
-import type { CurrentUser } from '../common/decorators/current-user.decorator';
 import { UsersRepository } from './users.repository';
 
 @Injectable()
@@ -47,14 +44,6 @@ export class UsersService {
       name,
       imageUrl: clerkUser.imageUrl || null,
     });
-  }
-
-  async getAllUsers(currentUser: CurrentUser): Promise<GetAllUsersResponse> {
-    if (!currentUser.isAdmin) {
-      throw new ForbiddenException('Admin access is required');
-    }
-
-    return await this.usersRepository.getAllUsers();
   }
 
   async getCurrentUser(clerkId: string): Promise<UserProfile> {

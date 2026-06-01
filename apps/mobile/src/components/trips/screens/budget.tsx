@@ -68,19 +68,19 @@ export function Budget() {
           showsVerticalScrollIndicator={false}
         >
           <AccentFill style={{ borderRadius: 24, padding: 18 }}>
-            <Text className="text-[13px] font-semibold text-white opacity-90">
+            <Text className="text-[13px] font-semibold text-accent-foreground opacity-90">
               Trip spend
             </Text>
-            <Text className="mt-1 text-4xl font-extrabold tracking-tighter text-white">
+            <Text className="mt-1 text-4xl font-extrabold tracking-tighter text-accent-foreground">
               ₱18,400
             </Text>
-            <Text className="mt-1 text-[13px] font-semibold text-white opacity-85">
+            <Text className="mt-1 text-[13px] font-semibold text-accent-foreground opacity-85">
               ₱11,600 remaining of ₱30,000
             </Text>
             <View className="mt-3.5 flex-row gap-2.5">
               <Pressable className="h-[38px] flex-row items-center gap-1.5 rounded-xl bg-white px-3.5">
-                <Icon as={Plus} size={16} className="text-[#E0533F]" />
-                <Text className="text-sm font-bold text-[#E0533F]">Expense</Text>
+                <Icon as={Plus} size={16} className="text-wl-accent" />
+                <Text className="text-sm font-bold text-wl-accent">Expense</Text>
               </Pressable>
               <Pressable
                 style={{ backgroundColor: "rgba(255,255,255,0.16)" }}
@@ -176,8 +176,8 @@ export function Budget() {
                 <Text
                   className={
                     r.owe
-                      ? "text-[15px] font-extrabold text-wl-accent-2"
-                      : "text-[15px] font-extrabold text-accent"
+                      ? "text-[15px] font-extrabold text-wl-neg"
+                      : "text-[15px] font-extrabold text-wl-pos"
                   }
                 >
                   {r.amount}

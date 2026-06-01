@@ -1,6 +1,5 @@
 import { useUser } from "@clerk/expo"
 import { useRouter } from "expo-router"
-import { LinearGradient } from "expo-linear-gradient"
 import { Alert, ScrollView, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { useState } from "react"
@@ -45,25 +44,18 @@ export default function OnboardingScreen() {
   }
 
   return (
-    <View className="flex-1 bg-[#0B0C10]">
-      <LinearGradient
-        colors={["#16131F", "rgba(11,12,16,0)"]}
-        start={{ x: 0.5, y: 0 }}
-        end={{ x: 0.5, y: 1 }}
-        pointerEvents="none"
-        style={{ position: "absolute", top: 0, left: 0, right: 0, height: 360 }}
-      />
+    <View className="flex-1 bg-background">
       <SafeAreaView edges={["top", "bottom"]} className="flex-1">
         {/* Segmented progress */}
         <View className="flex-row gap-1.5 px-6 pt-5">
           {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
             <View
               key={i}
-              style={{
-                backgroundColor:
-                  i < step ? "#FF7A6B" : "rgba(255,255,255,0.12)",
-              }}
-              className="h-1 flex-1 rounded-full"
+              className={
+                i < step
+                  ? "h-1 flex-1 rounded-full bg-accent"
+                  : "h-1 flex-1 rounded-full bg-wl-surface-2"
+              }
             />
           ))}
         </View>

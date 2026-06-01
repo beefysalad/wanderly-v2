@@ -33,7 +33,11 @@ export default function RootLayout({
       )}
     >
       <body className="min-h-svh overflow-x-hidden">
-        <ClerkProvider>
+        <ClerkProvider
+          afterSignOutUrl="/sign-in"
+          signInUrl="/sign-in"
+          signUpUrl="/sign-up"
+        >
           <NextTopLoader
             color="var(--primary)"
             showSpinner={false}

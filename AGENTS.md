@@ -249,6 +249,7 @@ apps/api/src/
 
 - Prisma schema lives at `apps/api/prisma/schema.prisma`.
 - Run `npm run db:generate -w api` after schema changes.
+- For local schema migrations, run `npx prisma migrate dev` from `apps/api`; do not hand-write `migration.sql`. If migration generation fails, stop and report the error.
 - Do not run `npm run db:migrate:deploy` unless the user asks — tell them the command instead.
 - Prisma calls stay in repositories. Do not use `$queryRaw` for simple reads that Prisma can express.
 

@@ -1,5 +1,11 @@
 export type { ApiHealthResponse } from "./api/health"
 export type {
+  AdminUser,
+  AdminUserDetail,
+  GetAdminUsersResponse,
+  UpdateAdminUserRequest,
+} from "./api/admin-users"
+export type {
   AttachTripToGroupRequest,
   CreateTripRequest,
   RsvpStatus,
@@ -13,7 +19,6 @@ export type {
 } from "./api/trips"
 export type {
   CurrentUserResponse,
-  GetAllUsersResponse,
   TravelStyle,
   UpdateUserProfileRequest,
   User,

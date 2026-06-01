@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { Icon } from "@/components/ui/icon"
 import { Text } from "@/components/ui/text"
+import { Photos } from "@/constants/theme"
 
 import { AccentFill } from "../ui/accent-fill"
 import { DayPill } from "../ui/day-pill"
@@ -36,7 +37,12 @@ export function TripDetailGroup() {
 
   return (
     <View className="flex-1 bg-background">
-      <Photo tone="island" className="absolute inset-x-0 top-0 h-[210px]" />
+      <Photo
+        tone="island"
+        src={Photos.elnido}
+        scrim
+        className="absolute inset-x-0 top-0 h-[210px]"
+      />
       <View
         style={{ top: insets.top + 6 }}
         className="absolute inset-x-[18px] z-10 flex-row items-center justify-between"
@@ -147,7 +153,7 @@ export function TripDetailGroup() {
       <Pressable
         style={{
           bottom: insets.bottom + 24,
-          shadowColor: "#FF6B5B",
+          shadowColor: "#34D6C8",
           shadowOpacity: 0.5,
           shadowRadius: 16,
           shadowOffset: { width: 0, height: 10 },
@@ -166,7 +172,7 @@ export function TripDetailGroup() {
             borderColor: "rgba(255,255,255,0.25)",
           }}
         >
-          <Icon as={Plus} size={26} className="text-white" />
+          <Icon as={Plus} size={26} className="text-accent-foreground" />
         </AccentFill>
       </Pressable>
     </View>

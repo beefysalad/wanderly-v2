@@ -53,8 +53,14 @@ describe('AppController (e2e)', () => {
   });
 
   it('/webhooks/clerk (POST) uses a looser endpoint limit for webhook retries', async () => {
-    await request(app.getHttpServer()).post('/webhooks/clerk').send({}).expect(400);
+    await request(app.getHttpServer())
+      .post('/webhooks/clerk')
+      .send({})
+      .expect(400);
 
-    await request(app.getHttpServer()).post('/webhooks/clerk').send({}).expect(400);
+    await request(app.getHttpServer())
+      .post('/webhooks/clerk')
+      .send({})
+      .expect(400);
   });
 });

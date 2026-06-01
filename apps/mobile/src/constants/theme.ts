@@ -7,38 +7,65 @@ import '@/global.css';
 
 import { Platform } from 'react-native';
 
+/** "Deep Ocean" theme colors — teal accent on cool ocean-ink surfaces. */
 export const Colors = {
   light: {
-    text: '#14151B',
-    background: '#F4F4F8',
+    text: '#0B1822',
+    background: '#EEF1F4',
     backgroundElement: '#FFFFFF',
-    backgroundSelected: '#E7E6F0',
-    textSecondary: '#5B5D6B',
-    accent: '#8466F0',
+    backgroundSelected: '#E9EEF2',
+    textSecondary: '#51616E',
+    accent: '#0E9E92',
   },
   dark: {
-    text: '#F4F4F8',
-    background: '#0B0C10',
-    backgroundElement: '#14161E',
-    backgroundSelected: '#1C1E29',
-    textSecondary: '#9FA0AD',
-    accent: '#9B7CFF',
+    text: '#EAF1F8',
+    background: '#070B11',
+    backgroundElement: '#0F151E',
+    backgroundSelected: '#161E2A',
+    textSecondary: '#93A1B0',
+    accent: '#34D6C8',
   },
 } as const;
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 
-/** Tinted mesh-gradient "photo" placeholders used for destinations. */
+/**
+ * Solid tone bases that sit under real destination photography (and stand in
+ * as a graceful fallback when no image is present). No gradients — single
+ * cool fills per the Deep Ocean system.
+ */
 export const PhotoTones = {
-  sunset: ['#FFB36B', '#FF5C8A', '#6B3FA0'],
-  ocean: ['#6EE7E0', '#2E6FE0', '#2348A8'],
-  island: ['#BDF3D8', '#4FD1C5', '#1C6FA8'],
-  jungle: ['#C7F06B', '#16A34A', '#14564A'],
-  night: ['#6D5CFF', '#FF6B8A', '#161232'],
-  dune: ['#FFD58A', '#FF8A5C', '#A14B6E'],
+  ocean: '#0E3743',
+  island: '#0B4A4A',
+  jungle: '#133229',
+  dune: '#0C2E3A',
+  highland: '#1B2C2E',
+  sunset: '#2A2336',
+  night: '#2A2336',
 } as const;
 
 export type PhotoTone = keyof typeof PhotoTones;
+
+/**
+ * Stock destination photography (swappable placeholders). Real images fade in
+ * over the solid {@link PhotoTones} base via the `<Photo src>` prop.
+ */
+export const Photos = {
+  siargao:
+    'https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1000&q=70',
+  elnido:
+    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1000&q=70',
+  coron:
+    'https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1000&q=70',
+  anilao:
+    'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1000&q=70',
+  sagada:
+    'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?auto=format&fit=crop&w=1000&q=70',
+  sunset:
+    'https://images.unsplash.com/photo-1495954484750-af469f2f9be5?auto=format&fit=crop&w=1000&q=70',
+} as const;
+
+export type PhotoKey = keyof typeof Photos;
 
 export const Fonts = Platform.select({
   ios: {

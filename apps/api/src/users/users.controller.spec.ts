@@ -8,11 +8,6 @@ describe('UsersController', () => {
     isAdmin: false,
   };
 
-  const adminUser = {
-    clerkId: 'admin_123',
-    isAdmin: true,
-  };
-
   const profile = {
     id: 'db_user_1',
     clerkId: 'user_123',
@@ -28,10 +23,7 @@ describe('UsersController', () => {
   let usersService: jest.Mocked<
     Pick<
       UsersService,
-      | 'deleteCurrentUser'
-      | 'getAllUsers'
-      | 'getCurrentUser'
-      | 'updateCurrentUser'
+      'deleteCurrentUser' | 'getCurrentUser' | 'updateCurrentUser'
     >
   >;
   let controller: UsersController;
@@ -39,7 +31,6 @@ describe('UsersController', () => {
   beforeEach(() => {
     usersService = {
       deleteCurrentUser: jest.fn().mockResolvedValue(undefined),
-      getAllUsers: jest.fn().mockResolvedValue({ users: [] }),
       getCurrentUser: jest.fn().mockResolvedValue(profile),
       updateCurrentUser: jest.fn().mockResolvedValue(profile),
     };
@@ -82,13 +73,5 @@ describe('UsersController', () => {
       controller.deleteCurrentUser(currentUser),
     ).resolves.toBeUndefined();
     expect(usersService.deleteCurrentUser).toHaveBeenCalledWith('user_123');
-  });
-
-  it('delegates all-user reads with the current user authorization context', async () => {
-    await expect(controller.getAllUsers(adminUser)).resolves.toEqual({
-      users: [],
-    });
-
-    expect(usersService.getAllUsers).toHaveBeenCalledWith(adminUser);
   });
 });

@@ -1,4 +1,3 @@
-import { LinearGradient } from "expo-linear-gradient"
 import { useRouter } from "expo-router"
 import { Check, Wand2 } from "lucide-react-native"
 import { useEffect } from "react"
@@ -14,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 
 import { Icon } from "@/components/ui/icon"
 import { Text } from "@/components/ui/text"
+import { Photos } from "@/constants/theme"
 
 import { AccentFill } from "../ui/accent-fill"
 import { Photo } from "../ui/photo"
@@ -74,12 +74,23 @@ export function AiGenerating() {
 
   return (
     <SafeAreaView edges={["top"]} className="flex-1 bg-background">
-      <Photo tone="night" className="absolute inset-0" />
-      <LinearGradient
-        colors={["rgba(11,12,16,0.1)", "rgba(11,12,16,0.95)"]}
-        start={{ x: 0.5, y: 0.2 }}
-        end={{ x: 0.5, y: 1 }}
-        style={{ position: "absolute", inset: 0 }}
+      <Photo
+        tone="sunset"
+        src={Photos.sunset}
+        scrim="strong"
+        className="absolute inset-0"
+      />
+      {/* flat scrim (no gradient) for deep, legible chrome over the photo */}
+      <View
+        pointerEvents="none"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: "rgba(5,9,14,0.62)",
+        }}
       />
 
       <View className="flex-1 items-center px-7 pt-24">
@@ -100,7 +111,7 @@ export function AiGenerating() {
                 justifyContent: "center",
               }}
             >
-              <Icon as={Wand2} size={44} className="text-white" />
+              <Icon as={Wand2} size={44} className="text-accent-foreground" />
             </AccentFill>
           </Animated.View>
           <Animated.View
@@ -138,7 +149,11 @@ export function AiGenerating() {
               >
                 {s.done ? (
                   <View className="h-[26px] w-[26px] items-center justify-center rounded-full bg-accent">
-                    <Icon as={Check} size={15} className="text-white" />
+                    <Icon
+                      as={Check}
+                      size={15}
+                      className="text-accent-foreground"
+                    />
                   </View>
                 ) : s.active ? (
                   <Animated.View

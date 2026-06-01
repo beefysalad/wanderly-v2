@@ -10,7 +10,7 @@ import { AccentFill } from "./accent-fill"
 type HeroPillProps = {
   children: React.ReactNode
   icon?: LucideIcon
-  /** "glass" sits on a photo; "aurora" is the gradient highlight pill. */
+  /** "glass" sits on a photo; "aurora" is the solid teal highlight pill. */
   tone?: "glass" | "aurora"
 }
 
@@ -35,7 +35,12 @@ function HeroPill({ children, icon, tone = "glass" }: HeroPillProps) {
           columnGap: 6,
         }}
       >
-        {label}
+        {icon && (
+          <Icon as={icon} size={13} className="text-accent-foreground" />
+        )}
+        <Text className="text-[12.5px] font-bold text-accent-foreground">
+          {children}
+        </Text>
       </AccentFill>
     )
   }

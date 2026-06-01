@@ -18,7 +18,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 
 import { Icon } from "@/components/ui/icon"
 import { Text } from "@/components/ui/text"
-import type { PhotoTone } from "@/constants/theme"
+import { Photos, type PhotoKey, type PhotoTone } from "@/constants/theme"
 
 import { Chip } from "../ui/chip"
 import { GlassCard } from "../ui/glass-card"
@@ -35,6 +35,7 @@ type TripCard = {
   href: "/trips/detail" | "/trips/group-detail"
   mode: "Solo" | "Group"
   tone: PhotoTone
+  photo?: PhotoKey
   status: string
   spend: string
   memberNames?: string[]
@@ -47,6 +48,7 @@ const FEATURED_TRIP: TripCard = {
   href: "/trips/detail",
   mode: "Solo",
   tone: "ocean",
+  photo: "siargao",
   status: "in 12 days",
   spend: "₱18.4k spent",
 }
@@ -59,6 +61,7 @@ const TRIPS: TripCard[] = [
     href: "/trips/group-detail",
     mode: "Group",
     tone: "island",
+    photo: "elnido",
     status: "6 going",
     spend: "₱62.8k shared",
     memberNames: ["Jan Cruz", "Bea Lim", "Kiko Tan"],
@@ -70,6 +73,7 @@ const TRIPS: TripCard[] = [
     href: "/trips/detail",
     mode: "Solo",
     tone: "jungle",
+    photo: "coron",
     status: "draft",
     spend: "Budget unset",
   },
@@ -80,6 +84,7 @@ const TRIPS: TripCard[] = [
     href: "/trips/group-detail",
     mode: "Group",
     tone: "dune",
+    photo: "anilao",
     status: "4 invited",
     spend: "₱9.2k shared",
     memberNames: ["Mika Santos", "Rey Go"],
@@ -136,7 +141,12 @@ function TripsHome() {
         >
           <Pressable onPress={() => router.push(FEATURED_TRIP.href)}>
             <GlassCard className="overflow-hidden rounded-[26px] p-0">
-              <Photo tone={FEATURED_TRIP.tone} className="h-[188px]">
+              <Photo
+                tone={FEATURED_TRIP.tone}
+                src={FEATURED_TRIP.photo ? Photos[FEATURED_TRIP.photo] : null}
+                scrim
+                className="h-[188px]"
+              >
                 <View className="absolute inset-x-3.5 top-3.5 flex-row items-start justify-between">
                   <HeroPill icon={User}>Solo trip</HeroPill>
                   <HeroPill tone="aurora">{FEATURED_TRIP.status}</HeroPill>
@@ -210,6 +220,7 @@ function TripsHome() {
                 <GlassCard className="flex-row items-center gap-3 rounded-[20px] p-2.5">
                   <Photo
                     tone={trip.tone}
+                    src={trip.photo ? Photos[trip.photo] : null}
                     className="h-[66px] w-[66px] rounded-[15px]"
                   />
                   <View className="min-w-0 flex-1">

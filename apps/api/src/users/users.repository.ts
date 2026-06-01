@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import type {
+  AdminUser,
+  AdminUserDetail,
   CurrentUserResponse,
-  GetAllUsersResponse,
   TravelStyle,
+  UpdateAdminUserRequest,
   UpdateUserProfileRequest,
   UserProfile,
 } from '@workspace/shared';
@@ -92,7 +94,18 @@ export class UsersRepository {
       },
     });
   }
-  async getAllUsers(): Promise<GetAllUsersResponse> {
+
+  async findAdminUserById(id: string): Promise<AdminUserDetail | null> {
+    const user = await this.prisma.db.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return user ? this.toAdminUserDetail(user) : null;
+  }
+
+  async getAdminUsers(): Promise<AdminUser[]> {
     const users = await this.prisma.db.user.findMany({
       select: {
         id: true,
@@ -100,17 +113,75 @@ export class UsersRepository {
         email: true,
         name: true,
         photoUrl: true,
+        travelStyle: true,
+        hasCompletedOnboarding: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
       },
     });
 
+    return users.map((user) => ({
+      id: user.id,
+      clerkId: user.clerkId,
+      email: user.email,
+      name: user.name,
+      imageUrl: user.photoUrl,
+      travelStyle: user.travelStyle,
+      hasCompletedOnboarding: user.hasCompletedOnboarding,
+      createdAt: user.createdAt.toISOString(),
+      updatedAt: user.updatedAt.toISOString(),
+    }));
+  }
+
+  async updateAdminUserById(
+    id: string,
+    input: UpdateAdminUserRequest,
+  ): Promise<AdminUserDetail | null> {
+    const existingUser = await this.prisma.db.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!existingUser) {
+      return null;
+    }
+
+    const user = await this.prisma.db.user.update({
+      where: {
+        id,
+      },
+      data: {
+        hasCompletedOnboarding: input.hasCompletedOnboarding,
+      },
+    });
+
+    return this.toAdminUserDetail(user);
+  }
+
+  private toAdminUserDetail(user: {
+    bio: string | null;
+    clerkId: string;
+    createdAt: Date;
+    email: string;
+    hasCompletedOnboarding: boolean;
+    id: string;
+    interests: string[];
+    name: string | null;
+    photoUrl: string | null;
+    travelStyle: TravelStyle;
+    updatedAt: Date;
+  }): AdminUserDetail {
     return {
-      users: users.map((user) => ({
-        id: user.id,
-        clerkId: user.clerkId,
-        email: user.email,
-        name: user.name ?? '',
-        imageUrl: user.photoUrl,
-      })),
+      ...this.toUserProfile(user),
+      createdAt: user.createdAt.toISOString(),
+      updatedAt: user.updatedAt.toISOString(),
     };
   }
 

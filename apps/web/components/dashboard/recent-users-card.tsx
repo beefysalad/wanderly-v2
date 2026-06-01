@@ -1,6 +1,6 @@
 "use client"
 
-import { RiUser3Line } from "@remixicon/react"
+import Link from "next/link"
 import {
   Avatar,
   AvatarFallback,
@@ -13,16 +13,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card"
-import { useAllUsers } from "@/hooks/api/use-all-users"
 import { Skeleton } from "@workspace/ui/components/skeleton"
-import type { User } from "@workspace/shared"
+import type { AdminUser } from "@workspace/shared"
+
+import { useAdminUsers } from "@/hooks/api/use-admin-users"
+
+function getInitials(name: string | null, email: string): string {
+  const source = name?.trim() || email
+  return source
+    .split(/\s+/)
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase()
+}
 
 export function RecentUsersCard() {
-  const { data, isLoading } = useAllUsers()
+  const { data, isLoading } = useAdminUsers()
   const users = data?.users?.slice(0, 5) ?? []
 
   return (
-    <Card className="rounded-xl shadow-sm">
+    <Card className="rounded-lg shadow-sm">
       <CardHeader>
         <CardTitle className="text-lg">Recent Users</CardTitle>
         <CardDescription>
@@ -45,27 +56,30 @@ export function RecentUsersCard() {
             No recent users found.
           </div>
         ) : (
-          users.map((user: User) => (
-            <div key={user.id} className="flex items-center gap-4">
+          users.map((user: AdminUser) => (
+            <Link
+              href={`/users/${user.id}`}
+              key={user.id}
+              className="hover:bg-muted/50 -mx-2 flex items-center gap-4 rounded-lg px-2 py-1.5 transition-colors"
+            >
               <Avatar className="border-border/50 size-9 border">
-                <AvatarImage src={user.imageUrl ?? undefined} alt={user.name} />
+                <AvatarImage
+                  src={user.imageUrl ?? undefined}
+                  alt={user.name ?? user.email}
+                />
                 <AvatarFallback className="text-xs font-bold">
-                  {user.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")
-                    .slice(0, 2)}
+                  {getInitials(user.name, user.email)}
                 </AvatarFallback>
               </Avatar>
               <div className="min-w-0">
                 <p className="text-foreground truncate text-sm font-bold">
-                  {user.name}
+                  {user.name ?? "Unnamed user"}
                 </p>
                 <p className="text-muted-foreground truncate text-xs">
                   {user.email}
                 </p>
               </div>
-            </div>
+            </Link>
           ))
         )}
       </CardContent>
