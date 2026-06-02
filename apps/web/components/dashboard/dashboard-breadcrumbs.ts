@@ -17,7 +17,7 @@ type DashboardBreadcrumbResolver = (
 ) => string | null
 
 const staticSegmentLabels: Record<string, string> = {
-  dashboard: "Overview",
+  dashboard: "Command center",
   "error-preview": "Error Preview",
   "not-found-preview": "Not Found Preview",
 }

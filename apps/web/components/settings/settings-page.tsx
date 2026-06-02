@@ -10,12 +10,14 @@ import {
   RiMoonLine,
   RiNotification3Line,
   RiShieldCheckLine,
+  RiShutDownLine,
   RiSunLine,
   RiUser3Line,
 } from "@remixicon/react"
 
 import { BrandThemeSettings } from "@/components/dashboard/brand-theme-settings"
 import { useDashboardUser } from "@/components/dashboard/dashboard-user-provider"
+import { MobileAvailabilitySettings } from "@/components/settings/mobile-availability-settings"
 import {
   Avatar,
   AvatarFallback,
@@ -81,13 +83,9 @@ function SettingsPage() {
         <div className="space-y-1">
           <p className="text-muted-foreground text-sm">Settings</p>
           <h1 className="font-heading text-3xl font-semibold tracking-normal md:text-4xl">
-            Workspace settings
+            Operator settings
           </h1>
         </div>
-        <Button className="w-full sm:w-auto">
-          <RiCheckLine data-icon="inline-start" />
-          Save changes
-        </Button>
       </section>
 
       <Tabs defaultValue="profile" className="gap-5">
@@ -107,6 +105,10 @@ function SettingsPage() {
             <RiNotification3Line />
             Notifications
           </TabsTrigger>
+          <TabsTrigger value="mobile">
+            <RiShutDownLine />
+            App control
+          </TabsTrigger>
           <TabsTrigger value="security">
             <RiShieldCheckLine />
             Security
@@ -121,7 +123,7 @@ function SettingsPage() {
             <CardHeader>
               <CardTitle>Profile</CardTitle>
               <CardDescription>
-                Identity used across the workspace shell.
+                Identity shown in the Wanderly admin console.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -162,11 +164,11 @@ function SettingsPage() {
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="settings-workspace">
-                    Workspace name
+                    Console name
                   </FieldLabel>
                   <Input
                     id="settings-workspace"
-                    defaultValue="Nexion"
+                    defaultValue="Wanderly Ops"
                     disabled
                   />
                 </Field>
@@ -178,14 +180,14 @@ function SettingsPage() {
             <CardHeader>
               <CardTitle>Account</CardTitle>
               <CardDescription>
-                Connected authentication and billing state.
+                Connected authentication and admin access state.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {[
                 ["Authentication", "Clerk connected"],
-                ["Plan", "Development workspace"],
-                ["API sync", "Current user synced"],
+                ["Access mode", "Admin gated"],
+                ["API sync", "Operator profile synced"],
               ].map(([label, value]) => (
                 <div
                   key={label}
@@ -246,14 +248,14 @@ function SettingsPage() {
             <CardHeader>
               <CardTitle>Notifications</CardTitle>
               <CardDescription>
-                Email preferences for workspace activity.
+                Local preferences for admin activity alerts.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <FieldGroup>
                 <SettingSwitch
                   checked={weeklyDigestEnabled}
-                  description="A compact summary of workspace activity and sync status."
+                  description="A compact summary of account registry and sync status."
                   icon={RiMailLine}
                   label="Weekly digest"
                   onCheckedChange={setWeeklyDigestEnabled}
@@ -261,7 +263,7 @@ function SettingsPage() {
                 <Separator />
                 <SettingSwitch
                   checked={productUpdatesEnabled}
-                  description="New features, UI updates, and platform changes."
+                  description="Wanderly console updates and admin surface changes."
                   icon={RiNotification3Line}
                   label="Product updates"
                   onCheckedChange={setProductUpdatesEnabled}
@@ -279,12 +281,16 @@ function SettingsPage() {
           </Card>
         </TabsContent>
 
+        <TabsContent value="mobile">
+          <MobileAvailabilitySettings />
+        </TabsContent>
+
         <TabsContent value="security">
           <Card className="rounded-lg shadow-sm">
             <CardHeader>
               <CardTitle>Security</CardTitle>
               <CardDescription>
-                Session controls for the authenticated workspace.
+                Session controls for the authenticated admin console.
               </CardDescription>
             </CardHeader>
             <CardContent>

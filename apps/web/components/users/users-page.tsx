@@ -140,15 +140,15 @@ export function UsersPage() {
     <main className="flex flex-1 flex-col gap-6 p-4 md:p-8">
       <section className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div className="space-y-1">
-          <p className="text-muted-foreground text-sm">Admin</p>
+          <p className="text-muted-foreground text-sm">Operations</p>
           <h1 className="font-heading text-3xl font-semibold tracking-normal md:text-4xl">
-            Accounts
+            Account registry
           </h1>
           <p className="text-muted-foreground text-sm">
             <span className="text-foreground font-semibold">
               {users.length}
             </span>{" "}
-            synced traveler accounts available to the admin console.
+            synced traveler accounts with onboarding and OAuth state.
           </p>
         </div>
       </section>
@@ -175,7 +175,7 @@ export function UsersPage() {
           columns={columns}
           data={users}
           filterColumnId="email"
-          filterPlaceholder="Search accounts by email..."
+          filterPlaceholder="Search account registry by email..."
           noResultsMessage="No accounts found."
           pageSizeOptions={[10, 20, 50]}
         />

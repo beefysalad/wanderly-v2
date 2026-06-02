@@ -45,7 +45,7 @@ function DashboardShell({ children }: DashboardShellProps) {
                 <BreadcrumbList>
                   <BreadcrumbItem>
                     <BreadcrumbLink asChild>
-                      <Link href="/dashboard">Admin</Link>
+                      <Link href="/dashboard">Ops</Link>
                     </BreadcrumbLink>
                   </BreadcrumbItem>
                   {breadcrumbSegments.map((segment, index) => {

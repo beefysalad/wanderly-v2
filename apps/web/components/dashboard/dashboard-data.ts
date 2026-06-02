@@ -4,7 +4,7 @@ import {
   RiFlashlightLine,
   RiPulseLine,
   RiSettings3Line,
-  RiShieldUserLine,
+  RiShieldCheckLine,
   RiUserReceived2Line,
 } from "@remixicon/react"
 
@@ -12,28 +12,28 @@ const dashboardNavItems = [
   {
     href: "/dashboard",
     icon: RiDashboardLine,
-    label: "Overview",
+    label: "Command center",
   },
   {
     href: "/users",
     icon: RiUserReceived2Line,
-    label: "Accounts",
+    label: "Account registry",
   },
   {
     href: "/data",
     icon: RiDatabase2Line,
-    label: "Data",
+    label: "System health",
   },
   {
     href: "/settings",
     icon: RiSettings3Line,
-    label: "Settings",
+    label: "Operator settings",
   },
 ]
 
 const dashboardStats = [
   {
-    icon: RiShieldUserLine,
+    icon: RiShieldCheckLine,
     label: "Synced users",
     value: "1",
   },
@@ -51,7 +51,7 @@ const dashboardStats = [
 
 const dashboardActivity = [
   "Clerk user webhook received",
-  "Current user profile synced",
+  "Current operator session initialized",
   "Dashboard session initialized",
 ]
 

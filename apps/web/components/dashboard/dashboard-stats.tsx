@@ -2,7 +2,7 @@
 
 import {
   RiCheckboxCircleLine,
-  RiTimeLine,
+  RiKey2Line,
   RiUserReceived2Line,
 } from "@remixicon/react"
 import {
@@ -22,25 +22,30 @@ export function DashboardStats() {
     (user) => user.hasCompletedOnboarding
   ).length
   const pendingUsers = users.length - onboardedUsers
+  const oauthLinkedUsers = users.filter(
+    (user) => user.authProviders.length > 0
+  ).length
+  const onboardingRate =
+    users.length > 0 ? Math.round((onboardedUsers / users.length) * 100) : 0
 
   const dashboardStats = [
     {
       icon: RiUserReceived2Line,
-      label: "Synced accounts",
+      label: "Account registry",
       value: users.length.toString(),
-      detail: "Total user records",
+      detail: "Total synced Clerk users",
     },
     {
       icon: RiCheckboxCircleLine,
-      label: "Onboarded",
-      value: onboardedUsers.toString(),
-      detail: "Completed mobile setup",
+      label: "Onboarding health",
+      value: `${onboardingRate}%`,
+      detail: `${onboardedUsers} complete / ${pendingUsers} pending`,
     },
     {
-      icon: RiTimeLine,
-      label: "Pending",
-      value: pendingUsers.toString(),
-      detail: "Still in onboarding",
+      icon: RiKey2Line,
+      label: "OAuth linked",
+      value: oauthLinkedUsers.toString(),
+      detail: "Accounts linked to Google or Apple",
     },
   ]
 
@@ -52,7 +57,7 @@ export function DashboardStats() {
         return (
           <Card key={stat.label} className="rounded-lg shadow-sm">
             <CardHeader className="pb-2">
-              <CardTitle className="text-muted-foreground flex items-center gap-2 text-xs font-medium tracking-normal uppercase">
+              <CardTitle className="text-muted-foreground flex items-center gap-2 text-xs font-medium uppercase tracking-normal">
                 <Icon className="size-3.5" />
                 {stat.label}
               </CardTitle>

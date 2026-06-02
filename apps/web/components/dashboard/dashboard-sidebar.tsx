@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { UserButton } from "@clerk/nextjs"
-import { RiShieldUserLine } from "@remixicon/react"
+import { RiFlightTakeoffLine } from "@remixicon/react"
 
 import {
   Sidebar,
@@ -33,20 +33,18 @@ function DashboardSidebar() {
           <SidebarMenuItem className="group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:justify-center">
             <SidebarMenuButton
               asChild
-              tooltip="Wanderly Admin"
-              className="group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0!"
+              tooltip="Wanderly Ops"
+              className="group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:justify-center"
             >
               <Link href="/dashboard">
                 {/* Expanded: icon + text */}
                 <span className="bg-sidebar-primary text-sidebar-primary-foreground flex size-7 shrink-0 items-center justify-center rounded-lg group-data-[collapsible=icon]:hidden">
-                  <RiShieldUserLine className="size-5" />
+                  <RiFlightTakeoffLine className="size-5" />
                 </span>
                 <span className="grid min-w-0 leading-tight group-data-[collapsible=icon]:hidden">
-                  <span className="truncate font-semibold">
-                    Wanderly Admin
-                  </span>
+                  <span className="truncate font-semibold">Wanderly Ops</span>
                   <span className="text-sidebar-foreground/70 truncate text-xs">
-                    Accounts console
+                    Admin console
                   </span>
                 </span>
 
@@ -62,7 +60,7 @@ function DashboardSidebar() {
 
       <SidebarContent className="group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:gap-0">
         <SidebarGroup className="group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:pt-0">
-          <SidebarGroupLabel>Admin</SidebarGroupLabel>
+          <SidebarGroupLabel>Operations</SidebarGroupLabel>
           <SidebarGroupContent className="group-data-[collapsible=icon]:w-full">
             <SidebarMenu className="group-data-[collapsible=icon]:items-center">
               {dashboardNavItems.map((item, index) => {
@@ -97,7 +95,7 @@ function DashboardSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="shrink-0 overflow-visible group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:pt-2 group-data-[collapsible=icon]:pb-4">
+      <SidebarFooter className="shrink-0 overflow-visible group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:pb-4 group-data-[collapsible=icon]:pt-2">
         <div className="flex min-w-0 items-center gap-3 rounded-lg px-2 py-1.5 group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:overflow-visible group-data-[collapsible=icon]:p-0">
           <UserButton
             appearance={{
