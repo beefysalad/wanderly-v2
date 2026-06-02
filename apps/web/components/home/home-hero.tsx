@@ -13,18 +13,18 @@ import { Button } from "@workspace/ui/components/button"
 const OPERATIONS = [
   {
     icon: RiUser3Line,
-    label: "Accounts",
-    value: "Synced users",
+    label: "Registry",
+    value: "Synced accounts",
   },
   {
     icon: RiShieldCheckLine,
-    label: "Access",
-    value: "Admin-gated",
+    label: "OAuth",
+    value: "Google + Apple",
   },
   {
     icon: RiDatabase2Line,
-    label: "Data",
-    value: "API-backed",
+    label: "Health",
+    value: "Backend checks",
   },
 ]
 
@@ -35,15 +35,15 @@ export function HomeHero() {
         <div className="max-w-2xl space-y-8">
           <div className="space-y-4">
             <p className="text-muted-foreground text-sm font-medium">
-              Wanderly Admin
+              Wanderly Ops
             </p>
-            <h1 className="font-heading text-5xl leading-none font-semibold tracking-normal text-balance sm:text-6xl">
-              Manage the accounts behind every trip.
+            <h1 className="font-heading text-balance text-5xl font-semibold leading-none tracking-normal sm:text-6xl">
+              Operate the accounts behind every trip.
             </h1>
             <p className="text-muted-foreground max-w-xl text-base leading-7">
-              A small operations console for reviewing synced users, checking
-              backend health, and keeping admin-only workflows separate from
-              the traveler app.
+              Review traveler accounts, catch onboarding gaps, verify OAuth
+              linkage, and keep the backend identity layer visible while the
+              mobile app grows.
             </p>
           </div>
 
@@ -60,7 +60,7 @@ export function HomeHero() {
               variant="outline"
               className="h-11 rounded-lg px-5"
             >
-              <Link href="/sign-up">Create admin account</Link>
+              <Link href="/sign-up">Request console access</Link>
             </Button>
           </div>
         </div>
@@ -68,8 +68,10 @@ export function HomeHero() {
         <div className="border-border bg-card overflow-hidden rounded-lg border shadow-sm">
           <div className="border-border flex items-center justify-between border-b px-4 py-3">
             <div>
-              <p className="text-sm font-semibold">Operations</p>
-              <p className="text-muted-foreground text-xs">Admin workspace</p>
+              <p className="text-sm font-semibold">Admin console</p>
+              <p className="text-muted-foreground text-xs">
+                Wanderly account operations
+              </p>
             </div>
             <span className="rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-300">
               Ready

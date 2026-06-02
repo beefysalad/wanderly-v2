@@ -1,5 +1,9 @@
 export type { ApiHealthResponse } from "./api/health"
 export type {
+  MobileStatusResponse,
+  UpdateMobileStatusRequest,
+} from "./api/app-config"
+export type {
   AdminUser,
   AdminUserDetail,
   GetAdminUsersResponse,

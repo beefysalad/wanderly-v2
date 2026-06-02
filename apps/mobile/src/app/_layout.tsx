@@ -7,6 +7,7 @@ import * as SecureStore from "expo-secure-store"
 import { Stack } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 
+import { MaintenanceGate } from "@/components/maintenance/maintenance-gate"
 import { ThemeProvider } from "@/hooks/use-theme-preference"
 
 const queryClient = new QueryClient()
@@ -27,8 +28,10 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <ClerkLoaded>
           <ThemeProvider>
-            <Stack screenOptions={{ headerShown: false }} />
-            <PortalHost />
+            <MaintenanceGate>
+              <Stack screenOptions={{ headerShown: false }} />
+              <PortalHost />
+            </MaintenanceGate>
             <StatusBar style="auto" />
           </ThemeProvider>
         </ClerkLoaded>

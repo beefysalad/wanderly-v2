@@ -117,7 +117,7 @@ function UserDetailPage({ userId }: UserDetailPageProps) {
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0">
-              <p className="text-muted-foreground text-sm">Account detail</p>
+              <p className="text-muted-foreground text-sm">Registry detail</p>
               <h1 className="font-heading truncate text-3xl font-semibold tracking-normal">
                 {user.name ?? "Unnamed user"}
               </h1>
@@ -145,7 +145,7 @@ function UserDetailPage({ userId }: UserDetailPageProps) {
           <CardHeader>
             <CardTitle>Profile</CardTitle>
             <CardDescription>
-              Data synced from the traveler account profile.
+              Clerk identity and Wanderly profile state for this account.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-5">
@@ -183,7 +183,7 @@ function UserDetailPage({ userId }: UserDetailPageProps) {
           <CardHeader>
             <CardTitle>Controls</CardTitle>
             <CardDescription>
-              Admin-only switches for testing account state.
+              Admin-only controls for product testing and support.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-5">

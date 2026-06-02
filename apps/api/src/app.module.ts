@@ -1,17 +1,19 @@
-import { Module } from '@nestjs/common';
-import { AdminModule } from './admin/admin.module';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { RateLimitModule } from './common/rate-limit/rate-limit.module';
-import { PrismaModule } from './prisma/prisma.module';
-import { TripsModule } from './trips/trips.module';
-import { UsersModule } from './users/users.module';
-import { WebhooksModule } from './webhooks/webhooks.module';
+import { Module } from "@nestjs/common"
+import { AdminModule } from "./admin/admin.module"
+import { AppConfigModule } from "./app-config/app-config.module"
+import { AppController } from "./app.controller"
+import { AppService } from "./app.service"
+import { RateLimitModule } from "./common/rate-limit/rate-limit.module"
+import { PrismaModule } from "./prisma/prisma.module"
+import { TripsModule } from "./trips/trips.module"
+import { UsersModule } from "./users/users.module"
+import { WebhooksModule } from "./webhooks/webhooks.module"
 
 @Module({
   imports: [
     RateLimitModule,
     PrismaModule,
+    AppConfigModule,
     AdminModule,
     UsersModule,
     TripsModule,

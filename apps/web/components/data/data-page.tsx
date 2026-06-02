@@ -1,15 +1,14 @@
 "use client"
 
 import {
+  RiCheckboxCircleLine,
   RiDatabase2Line,
+  RiKey2Line,
   RiRefreshLine,
   RiServerLine,
-  RiStackLine,
-  RiUser3Line,
 } from "@remixicon/react"
 import { useMemo } from "react"
 
-import { useDashboardUser } from "@/components/dashboard/dashboard-user-provider"
 import { AuthProviderBadges } from "@/components/users/auth-provider-badges"
 import { useApiHealth } from "@/hooks/api/use-api-health"
 import { useAdminUsers } from "@/hooks/api/use-admin-users"
@@ -35,7 +34,6 @@ import {
 } from "@workspace/ui/components/table"
 
 export function DataPage() {
-  const dashboardUser = useDashboardUser()
   const {
     data: health,
     isPending: isHealthPending,
@@ -53,13 +51,22 @@ export function DataPage() {
 
   const users = useMemo(() => data?.users ?? [], [data?.users])
 
-  const withAvatarCount = useMemo(
-    () => users.filter((user) => Boolean(user.imageUrl)).length,
-    [users]
-  )
-  const withoutAvatarCount = users.length - withAvatarCount
-  const avatarCoverage =
-    users.length > 0 ? Math.round((withAvatarCount / users.length) * 100) : 0
+  const onboardedCount = users.filter(
+    (user) => user.hasCompletedOnboarding
+  ).length
+  const pendingOnboardingCount = users.length - onboardedCount
+  const oauthLinkedCount = users.filter(
+    (user) => user.authProviders.length > 0
+  ).length
+  const noOauthCount = users.length - oauthLinkedCount
+  const googleLinkedCount = users.filter((user) =>
+    user.authProviders.includes("GOOGLE")
+  ).length
+  const appleLinkedCount = users.filter((user) =>
+    user.authProviders.includes("APPLE")
+  ).length
+  const onboardingRate =
+    users.length > 0 ? Math.round((onboardedCount / users.length) * 100) : 0
   const latestSyncAt = Math.max(healthUpdatedAt, usersUpdatedAt)
   const lastUpdatedLabel =
     latestSyncAt > 0
@@ -78,13 +85,13 @@ export function DataPage() {
     <main className="flex flex-1 flex-col gap-6 p-4 md:p-8">
       <section className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div className="space-y-1">
-          <p className="text-muted-foreground text-sm">Data</p>
+          <p className="text-muted-foreground text-sm">Operations</p>
           <h1 className="font-heading text-3xl font-semibold tracking-normal md:text-4xl">
-            Data Workspace
+            System health
           </h1>
           <p className="text-muted-foreground max-w-2xl text-sm">
-            Monitor synced records, API readiness, and profile completeness
-            across the protected app surfaces.
+            Inspect backend availability, account sync, onboarding state, and
+            OAuth linkage for admin review.
           </p>
         </div>
         <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
@@ -105,7 +112,7 @@ export function DataPage() {
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard
-          title="API health"
+          title="Backend API"
           value={
             isHealthPending
               ? "Checking..."
@@ -123,22 +130,24 @@ export function DataPage() {
           icon={<RiServerLine className="size-4" />}
         />
         <MetricCard
-          title="Synced users"
+          title="Account registry"
           value={isUsersPending ? "Loading..." : users.length.toString()}
           description="Records available from the admin users endpoint."
           icon={<RiDatabase2Line className="size-4" />}
         />
         <MetricCard
-          title="Profile coverage"
-          value={isUsersPending ? "Loading..." : `${avatarCoverage}%`}
-          description={`${withAvatarCount} of ${users.length} profiles have avatars.`}
-          icon={<RiUser3Line className="size-4" />}
+          title="OAuth linked"
+          value={isUsersPending ? "Loading..." : oauthLinkedCount.toString()}
+          description={`${noOauthCount} accounts have no Google or Apple provider recorded.`}
+          icon={<RiKey2Line className="size-4" />}
         />
         <MetricCard
-          title="Current operator"
-          value={dashboardUser.name}
-          description={dashboardUser.email}
-          icon={<RiStackLine className="size-4" />}
+          title="Onboarding backlog"
+          value={
+            isUsersPending ? "Loading..." : pendingOnboardingCount.toString()
+          }
+          description={`${onboardedCount} accounts have completed mobile onboarding.`}
+          icon={<RiCheckboxCircleLine className="size-4" />}
         />
       </section>
 
@@ -146,10 +155,11 @@ export function DataPage() {
         <Card className="border-border/60">
           <CardHeader className="gap-2">
             <CardTitle className="text-base font-semibold">
-              Synced account records
+              Account registry sample
             </CardTitle>
             <CardDescription>
-              A quick read on which user records are fully hydrated for the app.
+              Identity, OAuth, and onboarding fields available to the admin
+              console.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -160,7 +170,7 @@ export function DataPage() {
                     <TableHead className="px-6 py-4">Name</TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>Provider</TableHead>
-                    <TableHead>Avatar</TableHead>
+                    <TableHead>Onboarding</TableHead>
                     <TableHead className="px-6 text-right">Clerk ID</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -178,7 +188,7 @@ export function DataPage() {
                           <Skeleton className="h-6 w-24 rounded-full" />
                         </TableCell>
                         <TableCell>
-                          <Skeleton className="h-5 w-16 rounded-full" />
+                          <Skeleton className="h-5 w-20 rounded-full" />
                         </TableCell>
                         <TableCell className="px-6 text-right">
                           <Skeleton className="ml-auto h-4 w-20" />
@@ -220,9 +230,15 @@ export function DataPage() {
                         </TableCell>
                         <TableCell>
                           <Badge
-                            variant={user.imageUrl ? "secondary" : "outline"}
+                            variant={
+                              user.hasCompletedOnboarding
+                                ? "secondary"
+                                : "outline"
+                            }
                           >
-                            {user.imageUrl ? "Present" : "Missing"}
+                            {user.hasCompletedOnboarding
+                              ? "Complete"
+                              : "Pending"}
                           </Badge>
                         </TableCell>
                         <TableCell className="px-6 text-right">
@@ -243,10 +259,11 @@ export function DataPage() {
           <Card className="border-border/60">
             <CardHeader className="gap-2">
               <CardTitle className="text-base font-semibold">
-                Profile completeness
+                Account readiness
               </CardTitle>
               <CardDescription>
-                Coverage across synced member records.
+                Users that need admin review because onboarding is incomplete or
+                OAuth linkage is missing.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-5">
@@ -261,21 +278,29 @@ export function DataPage() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">
-                        Avatar coverage
+                        Onboarding completion
                       </span>
-                      <span className="font-medium">{avatarCoverage}%</span>
+                      <span className="font-medium">{onboardingRate}%</span>
                     </div>
-                    <Progress value={avatarCoverage} className="h-2" />
+                    <Progress value={onboardingRate} className="h-2" />
                   </div>
                   <Separator />
                   <div className="grid gap-3 sm:grid-cols-2">
                     <StatusBlock
-                      label="Profiles with images"
-                      value={withAvatarCount.toString()}
+                      label="Pending onboarding"
+                      value={pendingOnboardingCount.toString()}
                     />
                     <StatusBlock
-                      label="Profiles missing images"
-                      value={withoutAvatarCount.toString()}
+                      label="No OAuth provider"
+                      value={noOauthCount.toString()}
+                    />
+                    <StatusBlock
+                      label="Google linked"
+                      value={googleLinkedCount.toString()}
+                    />
+                    <StatusBlock
+                      label="Apple linked"
+                      value={appleLinkedCount.toString()}
                     />
                   </div>
                 </>
@@ -286,10 +311,10 @@ export function DataPage() {
           <Card className="border-border/60">
             <CardHeader className="gap-2">
               <CardTitle className="text-base font-semibold">
-                Data source status
+                Backend connection
               </CardTitle>
               <CardDescription>
-                Snapshot of the live backend connection for this workspace.
+                Snapshot of the API used by the admin console.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
