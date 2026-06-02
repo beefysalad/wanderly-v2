@@ -13,6 +13,7 @@ describe('AdminUsersController', () => {
     email: 'pat@example.com',
     name: 'Patrick',
     photoUrl: null,
+    authProviders: [],
     bio: null,
     travelStyle: 'BUDGET' as const,
     interests: [],

@@ -64,11 +64,11 @@ export function AuthLanding() {
       />
 
       <SafeAreaView edges={["top", "bottom"]} className="flex-1">
-        <View className="flex-1 justify-between px-6 pb-7 pt-14">
+        <View className="flex-1 justify-between px-6 pt-14 pb-7">
           <Animated.View entering={FadeIn.duration(700)}>
             <Text
               style={TEXT_SHADOW}
-              className="text-[58px] font-extrabold leading-[0.92] text-white"
+              className="text-[58px] leading-[0.92] font-extrabold text-white"
             >
               Wanderly
             </Text>
@@ -81,7 +81,7 @@ export function AuthLanding() {
             >
               <Text
                 style={TEXT_SHADOW}
-                className="max-w-[330px] text-[31px] font-extrabold leading-[1.08] text-white"
+                className="max-w-[330px] text-[31px] leading-[1.08] font-extrabold text-white"
               >
                 Plan the trip. Keep the story.
               </Text>
@@ -106,7 +106,6 @@ export function AuthLanding() {
                 <Text className="text-[17px] font-bold text-black">
                   Get started
                 </Text>
-                <Icon as={ArrowRight} size={20} className="text-black" />
               </Pressable>
 
               <View className="flex-row gap-3">

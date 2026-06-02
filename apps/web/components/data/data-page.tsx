@@ -10,6 +10,7 @@ import {
 import { useMemo } from "react"
 
 import { useDashboardUser } from "@/components/dashboard/dashboard-user-provider"
+import { AuthProviderBadges } from "@/components/users/auth-provider-badges"
 import { useApiHealth } from "@/hooks/api/use-api-health"
 import { useAdminUsers } from "@/hooks/api/use-admin-users"
 import { Badge } from "@workspace/ui/components/badge"
@@ -158,6 +159,7 @@ export function DataPage() {
                   <TableRow className="bg-muted/20 hover:bg-muted/20">
                     <TableHead className="px-6 py-4">Name</TableHead>
                     <TableHead>Email</TableHead>
+                    <TableHead>Provider</TableHead>
                     <TableHead>Avatar</TableHead>
                     <TableHead className="px-6 text-right">Clerk ID</TableHead>
                   </TableRow>
@@ -173,6 +175,9 @@ export function DataPage() {
                           <Skeleton className="h-4 w-40" />
                         </TableCell>
                         <TableCell>
+                          <Skeleton className="h-6 w-24 rounded-full" />
+                        </TableCell>
+                        <TableCell>
                           <Skeleton className="h-5 w-16 rounded-full" />
                         </TableCell>
                         <TableCell className="px-6 text-right">
@@ -183,7 +188,7 @@ export function DataPage() {
                   ) : isUsersError ? (
                     <TableRow>
                       <TableCell
-                        colSpan={4}
+                        colSpan={5}
                         className="text-muted-foreground h-28 text-center"
                       >
                         We could not load synced user records right now.
@@ -192,7 +197,7 @@ export function DataPage() {
                   ) : users.length === 0 ? (
                     <TableRow>
                       <TableCell
-                        colSpan={4}
+                        colSpan={5}
                         className="text-muted-foreground h-28 text-center"
                       >
                         No synced records yet.
@@ -206,6 +211,12 @@ export function DataPage() {
                         </TableCell>
                         <TableCell className="text-muted-foreground">
                           {user.email}
+                        </TableCell>
+                        <TableCell>
+                          <AuthProviderBadges
+                            providers={user.authProviders}
+                            compact
+                          />
                         </TableCell>
                         <TableCell>
                           <Badge

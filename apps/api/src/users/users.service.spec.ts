@@ -1,6 +1,13 @@
 import { NotFoundException } from '@nestjs/common';
+import { createClerkClient } from '@clerk/backend';
 import { UsersService } from './users.service';
 import type { UsersRepository } from './users.repository';
+
+jest.mock('@clerk/backend', () => ({
+  createClerkClient: jest.fn(),
+}));
+
+const mockCreateClerkClient = jest.mocked(createClerkClient);
 
 describe('UsersService profile endpoints', () => {
   const profile = {
@@ -9,6 +16,7 @@ describe('UsersService profile endpoints', () => {
     email: 'pat@example.com',
     name: 'Patrick',
     photoUrl: null,
+    authProviders: [],
     bio: null,
     travelStyle: 'BUDGET' as const,
     interests: [],
@@ -18,7 +26,10 @@ describe('UsersService profile endpoints', () => {
   let usersRepository: jest.Mocked<
     Pick<
       UsersRepository,
-      'deleteByClerkId' | 'findProfileByClerkId' | 'updateProfileByClerkId'
+      | 'deleteByClerkId'
+      | 'findProfileByClerkId'
+      | 'updateProfileByClerkId'
+      | 'upsertClerkUser'
     >
   >;
   let service: UsersService;
@@ -28,8 +39,57 @@ describe('UsersService profile endpoints', () => {
       deleteByClerkId: jest.fn().mockResolvedValue(undefined),
       findProfileByClerkId: jest.fn().mockResolvedValue(profile),
       updateProfileByClerkId: jest.fn().mockResolvedValue(profile),
+      upsertClerkUser: jest.fn().mockResolvedValue({
+        id: 'db_user_1',
+        clerkId: 'user_123',
+        email: 'pat@example.com',
+        name: 'Patrick',
+        imageUrl: null,
+        authProviders: [],
+      }),
     };
+    mockCreateClerkClient.mockReset();
     service = new UsersService(usersRepository as unknown as UsersRepository);
+  });
+
+  it('syncs linked Google and Apple OAuth providers from Clerk', async () => {
+    process.env.CLERK_SECRET_KEY = 'sk_test_unit';
+    mockCreateClerkClient.mockReturnValueOnce({
+      users: {
+        getUser: jest.fn().mockResolvedValue({
+          id: 'user_123',
+          emailAddresses: [
+            {
+              id: 'email_1',
+              emailAddress: 'pat@example.com',
+            },
+          ],
+          externalAccounts: [
+            {
+              provider: 'google',
+            },
+            {
+              provider: 'oauth_apple',
+            },
+          ],
+          firstName: 'Patrick',
+          imageUrl: null,
+          lastName: null,
+          primaryEmailAddressId: 'email_1',
+          username: null,
+        }),
+      },
+    } as never);
+
+    await service.syncCurrentUser('user_123');
+
+    expect(usersRepository.upsertClerkUser).toHaveBeenCalledWith({
+      clerkId: 'user_123',
+      email: 'pat@example.com',
+      authProviders: ['GOOGLE', 'APPLE'],
+      imageUrl: null,
+      name: 'Patrick',
+    });
   });
 
   it('returns the current user profile', async () => {

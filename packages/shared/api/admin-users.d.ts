@@ -1,4 +1,4 @@
-import type { TravelStyle, UserProfile } from "./users"
+import type { AuthProvider, TravelStyle, UserProfile } from "./users"
 
 export type AdminUser = {
   id: string
@@ -6,6 +6,7 @@ export type AdminUser = {
   email: string
   name: string | null
   imageUrl: string | null
+  authProviders: AuthProvider[]
   travelStyle: TravelStyle
   hasCompletedOnboarding: boolean
   createdAt: string

@@ -8,17 +8,18 @@ datasource db {
 }
 
 model User {
-  id                     String      @id @default(cuid())
-  clerkId                String      @unique
-  email                  String      @unique
+  id                     String         @id @default(cuid())
+  clerkId                String         @unique
+  email                  String         @unique
   name                   String?
   photoUrl               String?
+  authProviders          AuthProvider[] @default([])
   bio                    String?
-  travelStyle            TravelStyle @default(BUDGET)
+  travelStyle            TravelStyle    @default(BUDGET)
   interests              String[]
-  hasCompletedOnboarding Boolean     @default(false)
-  createdAt              DateTime    @default(now())
-  updatedAt              DateTime    @updatedAt
+  hasCompletedOnboarding Boolean        @default(false)
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
 
   groups        GroupMember[]
   trips         Trip[]         @relation("TripCreator")
@@ -32,6 +33,11 @@ enum TravelStyle {
   BUDGET
   MID_RANGE
   LUXURY
+}
+
+enum AuthProvider {
+  GOOGLE
+  APPLE
 }
 
 model Group {

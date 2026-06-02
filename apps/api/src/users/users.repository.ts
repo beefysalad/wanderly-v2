@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import type {
   AdminUser,
   AdminUserDetail,
+  AuthProvider,
   CurrentUserResponse,
   TravelStyle,
   UpdateAdminUserRequest,
@@ -13,6 +14,7 @@ import { PrismaService } from '../prisma/prisma.service';
 type UpsertClerkUserInput = {
   clerkId: string;
   email: string;
+  authProviders: AuthProvider[];
   name: string;
   imageUrl: string | null;
 };
@@ -66,6 +68,7 @@ export class UsersRepository {
     const userData = {
       clerkId: input.clerkId,
       email: input.email,
+      authProviders: input.authProviders,
       name: input.name,
       photoUrl: input.imageUrl,
     };
@@ -84,6 +87,7 @@ export class UsersRepository {
       email: user.email,
       name: user.name ?? '',
       imageUrl: user.photoUrl,
+      authProviders: user.authProviders,
     };
   }
 
@@ -113,6 +117,7 @@ export class UsersRepository {
         email: true,
         name: true,
         photoUrl: true,
+        authProviders: true,
         travelStyle: true,
         hasCompletedOnboarding: true,
         createdAt: true,
@@ -129,6 +134,7 @@ export class UsersRepository {
       email: user.email,
       name: user.name,
       imageUrl: user.photoUrl,
+      authProviders: user.authProviders,
       travelStyle: user.travelStyle,
       hasCompletedOnboarding: user.hasCompletedOnboarding,
       createdAt: user.createdAt.toISOString(),
@@ -175,6 +181,7 @@ export class UsersRepository {
     interests: string[];
     name: string | null;
     photoUrl: string | null;
+    authProviders: AuthProvider[];
     travelStyle: TravelStyle;
     updatedAt: Date;
   }): AdminUserDetail {
@@ -234,6 +241,7 @@ export class UsersRepository {
     interests: string[];
     name: string | null;
     photoUrl: string | null;
+    authProviders: AuthProvider[];
     travelStyle: TravelStyle;
   }): UserProfile {
     return {
@@ -242,6 +250,7 @@ export class UsersRepository {
       email: user.email,
       name: user.name,
       photoUrl: user.photoUrl,
+      authProviders: user.authProviders,
       bio: user.bio,
       travelStyle: user.travelStyle,
       interests: user.interests,

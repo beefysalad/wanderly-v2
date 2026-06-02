@@ -14,6 +14,7 @@ describe('UsersController', () => {
     email: 'pat@example.com',
     name: 'Patrick',
     photoUrl: 'https://example.com/avatar.png',
+    authProviders: [],
     bio: 'Traveler',
     travelStyle: 'BUDGET' as const,
     interests: ['food', 'beaches'],

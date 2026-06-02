@@ -5,9 +5,14 @@ const clerkEmailAddressSchema = z.object({
   email_address: z.string().email(),
 });
 
+const clerkExternalAccountSchema = z.object({
+  provider: z.string(),
+});
+
 const clerkUserDataSchema = z.object({
   id: z.string(),
   email_addresses: z.array(clerkEmailAddressSchema).optional(),
+  external_accounts: z.array(clerkExternalAccountSchema).optional(),
   first_name: z.string().nullable().optional(),
   image_url: z.string().nullable().optional(),
   last_name: z.string().nullable().optional(),

@@ -9,6 +9,7 @@ import type {
   UpdateUserProfileRequest,
   UserProfile,
 } from '@workspace/shared';
+import { extractAuthProvidersFromExternalAccounts } from './auth-providers';
 import { UsersRepository } from './users.repository';
 
 @Injectable()
@@ -41,6 +42,9 @@ export class UsersService {
     return this.usersRepository.upsertClerkUser({
       clerkId: clerkUser.id,
       email: primaryEmail.emailAddress,
+      authProviders: extractAuthProvidersFromExternalAccounts(
+        clerkUser.externalAccounts,
+      ),
       name,
       imageUrl: clerkUser.imageUrl || null,
     });

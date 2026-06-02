@@ -18,6 +18,7 @@ export type {
   UpdateTripRsvpRequest,
 } from "./api/trips"
 export type {
+  AuthProvider,
   CurrentUserResponse,
   TravelStyle,
   UpdateUserProfileRequest,

@@ -28,6 +28,7 @@ import { Switch } from "@workspace/ui/components/switch"
 
 import { useAdminUser } from "@/hooks/api/use-admin-user"
 import { useUpdateAdminUser } from "@/hooks/api/use-update-admin-user"
+import { AuthProviderBadges } from "@/components/users/auth-provider-badges"
 
 type UserDetailPageProps = {
   userId: string
@@ -123,10 +124,17 @@ function UserDetailPage({ userId }: UserDetailPageProps) {
               <p className="text-muted-foreground truncate text-sm">
                 {user.email}
               </p>
+              <AuthProviderBadges
+                providers={user.authProviders}
+                compact
+                className="mt-2"
+              />
             </div>
           </div>
 
-          <Badge variant={user.hasCompletedOnboarding ? "secondary" : "outline"}>
+          <Badge
+            variant={user.hasCompletedOnboarding ? "secondary" : "outline"}
+          >
             {user.hasCompletedOnboarding ? "Onboarded" : "Onboarding pending"}
           </Badge>
         </div>
@@ -143,6 +151,12 @@ function UserDetailPage({ userId }: UserDetailPageProps) {
           <CardContent className="space-y-5">
             <DetailRow label="Database ID" value={user.id} mono />
             <DetailRow label="Clerk ID" value={user.clerkId} mono />
+            <div className="grid gap-1 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-4">
+              <dt className="text-muted-foreground text-sm">Auth providers</dt>
+              <dd>
+                <AuthProviderBadges providers={user.authProviders} />
+              </dd>
+            </div>
             <DetailRow
               label="Travel style"
               value={user.travelStyle.replace("_", " ").toLowerCase()}

@@ -51,6 +51,7 @@ describe('ClerkWebhooksController', () => {
         email: 'pat@example.com',
         name: 'Patrick',
         imageUrl: 'https://example.com/avatar.png',
+        authProviders: [],
       }),
     };
     controller = new ClerkWebhooksController(
@@ -75,6 +76,14 @@ describe('ClerkWebhooksController', () => {
           },
         ],
         first_name: 'Patrick',
+        external_accounts: [
+          {
+            provider: 'google',
+          },
+          {
+            provider: 'oauth_apple',
+          },
+        ],
         image_url: 'https://example.com/avatar.png',
         last_name: null,
         primary_email_address_id: 'email_1',
@@ -101,6 +110,7 @@ describe('ClerkWebhooksController', () => {
     expect(usersRepository.upsertClerkUser).toHaveBeenCalledWith({
       clerkId: 'user_123',
       email: 'pat@example.com',
+      authProviders: ['GOOGLE', 'APPLE'],
       imageUrl: 'https://example.com/avatar.png',
       name: 'Patrick',
     });
@@ -148,6 +158,7 @@ describe('ClerkWebhooksController', () => {
     expect(usersRepository.upsertClerkUser).toHaveBeenCalledWith({
       clerkId: 'user_123',
       email: 'updated@example.com',
+      authProviders: [],
       imageUrl: null,
       name: 'Updated User',
     });

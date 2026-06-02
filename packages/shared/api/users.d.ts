@@ -1,11 +1,14 @@
 export type TravelStyle = "BUDGET" | "MID_RANGE" | "LUXURY"
 
+export type AuthProvider = "GOOGLE" | "APPLE"
+
 export type UserProfile = {
   id: string
   clerkId: string
   email: string
   name: string | null
   photoUrl: string | null
+  authProviders: AuthProvider[]
   bio: string | null
   travelStyle: TravelStyle
   interests: string[]
@@ -27,6 +30,7 @@ export type CurrentUserResponse = {
   email: string
   name: string
   imageUrl: string | null
+  authProviders: AuthProvider[]
 }
 
 export type User = {
@@ -35,4 +39,5 @@ export type User = {
   name: string
   email: string
   imageUrl: string | null
+  authProviders: AuthProvider[]
 }

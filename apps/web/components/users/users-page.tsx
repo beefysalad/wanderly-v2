@@ -2,10 +2,7 @@
 
 import type { AdminUser } from "@workspace/shared"
 import type { ColumnDef } from "@tanstack/react-table"
-import {
-  RiArrowRightLine,
-  RiErrorWarningLine,
-} from "@remixicon/react"
+import { RiArrowRightLine, RiErrorWarningLine } from "@remixicon/react"
 import Link from "next/link"
 import { useMemo } from "react"
 import {
@@ -20,6 +17,7 @@ import { DataTableColumnHeader } from "@workspace/ui/components/data-table-colum
 import { Skeleton } from "@workspace/ui/components/skeleton"
 
 import { useAdminUsers } from "@/hooks/api/use-admin-users"
+import { AuthProviderBadges } from "@/components/users/auth-provider-badges"
 
 function getInitials(name: string | null, email: string): string {
   const source = name?.trim() || email
@@ -75,6 +73,15 @@ export function UsersPage() {
             </div>
           )
         },
+      },
+      {
+        accessorKey: "authProviders",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Provider" />
+        ),
+        cell: ({ row }) => (
+          <AuthProviderBadges providers={row.original.authProviders} compact />
+        ),
       },
       {
         accessorKey: "hasCompletedOnboarding",

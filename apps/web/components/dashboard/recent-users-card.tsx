@@ -17,6 +17,7 @@ import { Skeleton } from "@workspace/ui/components/skeleton"
 import type { AdminUser } from "@workspace/shared"
 
 import { useAdminUsers } from "@/hooks/api/use-admin-users"
+import { AuthProviderBadges } from "@/components/users/auth-provider-badges"
 
 function getInitials(name: string | null, email: string): string {
   const source = name?.trim() || email
@@ -71,13 +72,18 @@ export function RecentUsersCard() {
                   {getInitials(user.name, user.email)}
                 </AvatarFallback>
               </Avatar>
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-foreground truncate text-sm font-bold">
                   {user.name ?? "Unnamed user"}
                 </p>
                 <p className="text-muted-foreground truncate text-xs">
                   {user.email}
                 </p>
+                <AuthProviderBadges
+                  providers={user.authProviders}
+                  compact
+                  className="mt-2"
+                />
               </div>
             </Link>
           ))

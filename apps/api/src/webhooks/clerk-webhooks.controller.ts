@@ -12,6 +12,7 @@ import { Throttle } from '@nestjs/throttler';
 import type { RawBodyRequest } from '@nestjs/common';
 import type { Request } from 'express';
 import { createThrottleOverride } from '../common/rate-limit/rate-limit.config';
+import { extractAuthProvidersFromExternalAccounts } from '../users/auth-providers';
 import { UsersRepository } from '../users/users.repository';
 import {
   clerkWebhookEventSchema,
@@ -146,6 +147,9 @@ export class ClerkWebhooksController {
     return {
       clerkId: user.id,
       email: primaryEmail.email_address,
+      authProviders: extractAuthProvidersFromExternalAccounts(
+        user.external_accounts,
+      ),
       name,
       imageUrl: user.image_url ?? null,
     };
